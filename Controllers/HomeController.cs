@@ -10,7 +10,14 @@ namespace ASPNETapp2.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(Order passingOrder)
+        {
+            return View(passingOrder);
+        }
+
+        [HttpPost]
+        [ActionName("DisplayOrders")]
+        public ActionResult DisplayOrders(string chosenTable)
         {
             Order order = new Order();
             Meal meal = new Meal(1, "Roladki z cukinii z szynką", 12);
@@ -30,9 +37,15 @@ namespace ASPNETapp2.Controllers
             foreach (var item in order.OrderList)
             {
                 finalPrice += item.ListPositionPrice;
-            }
+            }          
             order.TotalPrice = finalPrice;
-            return View(order);
+            order.TableNumber = 1;
+            int x = Int32.Parse(chosenTable);
+            List<Order> listOfOrders = new List<Order> { order };
+
+            var passingOrder = listOfOrders.Find(item => item.TableNumber == x);
+
+            return RedirectToAction("Index", passingOrder);
         }
 
         public ActionResult AddOrder()
@@ -40,11 +53,5 @@ namespace ASPNETapp2.Controllers
             return View();
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

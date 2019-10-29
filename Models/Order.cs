@@ -17,5 +17,8 @@ namespace ASPNETapp2.Models
         private double _totalPrice;
         public double TotalPrice { get => _totalPrice; set => _totalPrice = value; }
 
+        private int _tableNumber;
+        public int TableNumber { get => _tableNumber; set => _tableNumber = value; }
+
     }
 }

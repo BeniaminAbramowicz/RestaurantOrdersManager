@@ -1,34 +1,29 @@
 ﻿@model ASPNETapp2.Models.Order
 @{
     ViewBag.Title = "Zamówienia";
+
 }
 <h2>Lista zamówień</h2>
 <br />
 Zamówienia dla stolika:
-<form>
-    <select id="viewOrders" name="viewOrders">
-        <option selected disabled hidden value="">-- Wybierz stolik --</option>
-        <option id="stolik1" value="1">Niebieskiego</option>
-        <option id="stolik2" value="2">Zielonego</option>
-        <option id="stolik3" value="3">Czerwonego</option>
-        <option id="stolik4" value="4">Żółtego</option>
-        <option id="stolik5" value="5">Fioletowego</option>
-    </select>
+<form id="chooseTable" method="post" action="/Home/DisplayOrders">
     <input type="submit" value="Wyświetl zamówienia" />
 </form>
-@{ 
-    string emptyList = "Brak zamówień dla tego stolika"; 
+<br />
+@{
+    string emptyList = "Brak zamówień dla tego stolika";
 }
-@if (Model == null)
+@if (Model.OrderId == 0 && Model.OrderList == null && Model.TableNumber == 0 && Model.TotalPrice == 0)
 {
-   <p>@emptyList</p>
+    <p>@emptyList</p>
 }
 else
 {
     <ol>
-        @foreach(var orderList in Model.OrderList)
+        @foreach (var orderItem in Model.OrderList)
         {
-            <li>@orderList.Meal.MealName</li>
+            <li>@orderItem.Meal.MealName</li>
         }
     </ol>
 }
+@Model.TableNumber

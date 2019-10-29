@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace ASP.NETapp2
+namespace ASPNETapp2
 {
     public class BundleConfig
     {

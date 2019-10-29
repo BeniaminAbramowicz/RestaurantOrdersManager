@@ -5,8 +5,9 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using ASPNETapp2.MealList;
 
-namespace ASP.NETapp2
+namespace ASPNETapp2
 {
     public class MvcApplication : System.Web.HttpApplication
     {

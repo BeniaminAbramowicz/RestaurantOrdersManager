@@ -10,9 +10,18 @@ namespace ASPNETapp2.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index(Order passingOrder)
+        public ActionResult Index()
         {
-            return View(passingOrder);
+            Order pOrder = (Order) Session["po"];
+            if(pOrder == null)
+            {
+                Order emptyOrder = new Order();
+                return View(emptyOrder);
+            }
+            else
+            {
+                return View(pOrder);
+            }         
         }
 
         [HttpPost]
@@ -44,8 +53,9 @@ namespace ASPNETapp2.Controllers
             List<Order> listOfOrders = new List<Order> { order };
 
             var passingOrder = listOfOrders.Find(item => item.TableNumber == x);
+            Session["po"] = passingOrder;
 
-            return RedirectToAction("Index", passingOrder);
+            return Redirect("Index");
         }
 
         public ActionResult AddOrder()

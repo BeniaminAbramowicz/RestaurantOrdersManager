@@ -10,20 +10,32 @@ Zamówienia dla stolika:
     <input type="submit" value="Wyświetl zamówienia" />
 </form>
 <br />
-@{
-    string emptyList = "Brak zamówień dla tego stolika";
-}
+
 @if (Model.OrderId == 0 && Model.OrderList == null && Model.TableNumber == 0 && Model.TotalPrice == 0)
 {
-    <p>@emptyList</p>
+    <h4>Brak zamówień dla tego stolika</h4>
 }
 else
 {
-    <ol>
+<table>
+    <thead>
+        <tr>
+            <th>Nazwa dania</th>
+            <th>Cena jednostkowa</th>
+            <th>Ilość</th>
+            <th>Cena całkowita</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var orderItem in Model.OrderList)
         {
-            <li>@orderItem.Meal.MealName</li>
+            <tr>
+                <td>@orderItem.Meal.MealName</td>
+                <td>@orderItem.Meal.MealUnitPrice PLN</td>
+                <td>@orderItem.Quantity</td>
+                <td>@orderItem.ListPositionPrice PLN</td>
+            </tr>
         }
-    </ol>
+    </tbody>
+</table>
 }
-@Model.TableNumber

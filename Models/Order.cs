@@ -8,11 +8,17 @@ namespace ASPNETapp2.Models
 {
     public class Order
     {
+        public enum OrderStatus
+        {
+            PendingPayment,
+            BillPaid
+        }
+
         private int _orderId;
         public int OrderId { get => _orderId; set => _orderId = value; }
 
-        private List<OrderItem> _orderList;
-        public List<OrderItem> OrderList { get => _orderList; set => _orderList = value; }
+        private List<OrderItem> _orderItems;
+        public List<OrderItem> OrderItems { get => _orderItems; set => _orderItems = value; }
 
         private double _totalPrice;
         public double TotalPrice { get => _totalPrice; set => _totalPrice = value; }
@@ -20,5 +26,7 @@ namespace ASPNETapp2.Models
         private int _tableNumber;
         public int TableNumber { get => _tableNumber; set => _tableNumber = value; }
 
+        private OrderStatus _Status;
+        public OrderStatus Status { get => _Status; set => _Status = value; }
     }
 }

@@ -1,23 +1,40 @@
-﻿@model ASPNETapp2.Models.Order
+﻿@model ASPNETapp2.Models.ListOfOrders
 @{
     ViewBag.Title = "Zamówienia";
 
 }
 <h2>Lista zamówień</h2>
 <br />
-Zamówienia dla stolika:
+
+Wyświetl zamówienia według kryterium:
 <form id="chooseTable" method="post" action="/Home/DisplayOrders">
+    <select id="chosenTable" name="chosenTable">
+        <option id="all" value="all">Wyświetl wszystkie zamówienia</option>
+        <optgroup label="Status zamówienia">
+            <option id="paid" value="billpaid">Zapłacono za zamówienie</option>
+            <option id="pending" value="pendingpayment">Oczekiwanie na zapłatę</option>
+        </optgroup>
+        <optgroup label="Nazwa stolika">
+            <option selected disabled hidden value="">-- Wybierz stolik --</option>
+            <option id="stolik1" value="1">Niebieski</option>
+            <option id="stolik2" value="2">Zielony</option>
+            <option id="stolik3" value="3">Czerwony</option>
+            <option id="stolik4" value="4">Żółty</option>
+            <option id="stolik5" value="5">Fioletowy</option>
+        </optgroup>
+    </select>
+    <br />
     <input type="submit" value="Wyświetl zamówienia" />
 </form>
 <br />
 
-@if (Model.OrderId == 0 && Model.OrderList == null && Model.TableNumber == 0 && Model.TotalPrice == 0)
+@if (Model.OrdersList == null)
 {
     <h4>Brak zamówień dla tego stolika</h4>
 }
 else
 {
-<table>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Nazwa dania</th>
@@ -27,13 +44,13 @@ else
         </tr>
     </thead>
     <tbody>
-        @foreach (var orderItem in Model.OrderList)
+        @for (int i = 0; i < Model.OrdersList.Count; i++)
         {
             <tr>
-                <td>@orderItem.Meal.MealName</td>
-                <td>@orderItem.Meal.MealUnitPrice PLN</td>
-                <td>@orderItem.Quantity</td>
-                <td>@orderItem.ListPositionPrice PLN</td>
+                <td>@Model.OrdersList[0].OrderItems[i].Meal.MealName</td>
+                <td>@Model.OrdersList[0].OrderItems[i].Meal.MealUnitPrice PLN</td>
+                <td>@Model.OrdersList[0].OrderItems[i].Quantity</td>
+                <td>@Model.OrdersList[0].OrderItems[i].ListPositionPrice PLN</td>
             </tr>
         }
     </tbody>

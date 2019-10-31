@@ -10,52 +10,62 @@ namespace ASPNETapp2.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(string criteriaOption)
         {
-            Order pOrder = (Order) Session["po"];
-            if(pOrder == null)
+            ListOfOrders resultList = new ListOfOrders();
+            List<Order> listOfOrders = new List<Order> { };
+            switch (criteriaOption)
             {
-                Order emptyOrder = new Order();
-                return View(emptyOrder);
-            }
-            else
-            {
-                return View(pOrder);
-            }         
+                case "all":
+                    listOfOrders = (List<Order>)Session["listOfOrders"];     
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+
+                case "billpaid":
+                    listOfOrders = ((List<Order>)Session["listOfOrders"]).FindAll(x => x.Status.Equals("BillPaid"));
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+
+                case "pendingpayment":
+                    listOfOrders = ((List<Order>)Session["listOfOrders"]).FindAll(x => x.Status.Equals("PendingPayment"));
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+
+                case "1":
+                    listOfOrders = ((List<Order>)Session["listOfOrders"]).FindAll(x => x.TableNumber == 1);
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+
+                case "2":
+                    listOfOrders = ((List<Order>)Session["listOfOrders"]).FindAll(x => x.TableNumber == 2);
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+
+                case "3":
+                    listOfOrders = ((List<Order>)Session["listOfOrders"]).FindAll(x => x.TableNumber == 3);
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+                
+                case "4":
+                    listOfOrders = ((List<Order>)Session["listOfOrders"]).FindAll(x => x.TableNumber == 4);
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+
+                case "5":
+                    listOfOrders = ((List<Order>)Session["listOfOrders"]).FindAll(x => x.TableNumber == 5);
+                    resultList.OrdersList = listOfOrders;
+                    return View(resultList);
+
+                default:
+                    return View(resultList);
+            }       
         }
 
         [HttpPost]
         [ActionName("DisplayOrders")]
-        public ActionResult DisplayOrders(string chosenTable)
+        public ActionResult DisplayOrders(string criteriaOption)
         {
-            Order order = new Order();
-            Meal meal = new Meal(1, "Roladki z cukinii z szynką", 12);
-            Meal meal2 = new Meal(1, "test", 12);
-            OrderItem orderItem = new OrderItem();
-            OrderItem orderItem2 = new OrderItem();
-            orderItem.Meal = meal;
-            orderItem.Quantity = 2;
-            orderItem.ListPositionPrice = orderItem.Meal.MealUnitPrice * orderItem.Quantity;
-            orderItem2.Meal = meal2;
-            orderItem2.Quantity = 2;
-            orderItem2.ListPositionPrice = orderItem2.Meal.MealUnitPrice * orderItem2.Quantity;
-            List<OrderItem> orderItems = new List<OrderItem> { orderItem, orderItem2 };
-            order.OrderId = 1;
-            order.OrderList = orderItems;
-            double finalPrice = 0;
-            foreach (var item in order.OrderList)
-            {
-                finalPrice += item.ListPositionPrice;
-            }          
-            order.TotalPrice = finalPrice;
-            order.TableNumber = 1;
-            int x = Int32.Parse(chosenTable);
-            List<Order> listOfOrders = new List<Order> { order };
-
-            var passingOrder = listOfOrders.Find(item => item.TableNumber == x);
-            Session["po"] = passingOrder;
-
-            return Redirect("Index");
+            return RedirectToAction("Index", criteriaOption);
         }
 
         public ActionResult AddOrder()

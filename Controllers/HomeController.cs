@@ -66,11 +66,5 @@ namespace ASPNETapp2.Controllers
         {
             return RedirectToAction("Index", criteriaOption);
         }
-
-        public ActionResult AddOrder()
-        {
-            return View();
-        }
-
     }
 }

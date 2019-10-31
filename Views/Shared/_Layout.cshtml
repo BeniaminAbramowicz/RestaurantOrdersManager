@@ -7,6 +7,9 @@
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/mystyles")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,21 +25,20 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Lista zamówień", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Dodaj zamówienie", "AddOrder", "Home")</li>
+                    <li>@Html.ActionLink("Dodaj zamówienie", "AddOrder", "Order")</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
         <hr />
         <footer class="container-fluid w-100 py-2 bg-dark">
             <p class="m-0 text-center text-white">Copyright &copy; 2019 by <a href="https://github.com/BeniaminAbramowicz" class="alert-link" target="_blank">Beniamin Abramowicz</a></p>
         </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
 </body>
 </html>

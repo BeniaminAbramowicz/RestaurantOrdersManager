@@ -1,0 +1,74 @@
+﻿@model ASPNETapp2.Models.AvailableMeals
+@{
+    ViewBag.Title = "Dodaj zamówienie";
+}
+<h2>@ViewBag.Title.</h2>
+
+<div id="orderForm">
+    Zamówienie dla stolika:
+    <select>
+        <option selected disabled hidden value="">-- Wybierz stolik --</option>
+        <option id="stolik1" value="1">Niebieski</option>
+        <option id="stolik2" value="2">Zielony</option>
+        <option id="stolik3" value="3">Czerwony</option>
+        <option id="stolik4" value="4">Żółty</option>
+        <option id="stolik5" value="5">Fioletowy</option>
+    </select>
+    <div id="orderItems">
+        <select id="selectMeal" name="chosenMeal">
+            @for (int i = 0; i < Model.ListOfMeals.Count; i++)
+            {
+                <option value="@Model.ListOfMeals[i].MealId">@Model.ListOfMeals[i].MealName @Model.ListOfMeals[i].MealUnitPrice PLN</option>
+            }
+        </select>
+        <input id="quantity" type="number" name="quantity" />
+        <input type="button" id="addMeal" value="Dodaj danie">
+        <table id="mealsList">
+            <thead>
+                <tr>
+                    <th>Nazwa dania:</th>
+                    <th>Cena jednostkowa:</th>
+                    <th>Ilość:</th>
+                    <th>Cena całkowita:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <input type="button" id="addOrder" value="Dodaj zamówienie" />
+</div>
+<script>
+    $(document).ready(function () {
+        $("#addMeal").click(function () {
+            var mealItemId = $('#selectMeal').val();
+            var mealQuantity = $('#quantity').val();
+            var mealItem = { MealItemId: mealItemId, MealQuantity: mealQuantity }
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: "{mealItem:" + JSON.stringify(mealItem) + "}",
+                url: "/Order/AddItem",
+                dataType: "json",
+                    var items = [];
+                    $.each(data, function (key, val) {
+                        items.push("<td>" + val + "</td>");
+                    });
+                    $("<tr/>", {
+                        html: items.join("")
+                    }).appendTo("tbody");
+                },
+                error: function (result) {
+                    alert("Wystąpił błąd");
+                }
+            });
+        });
+    });
+</script>

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ASPNETapp2.Models;
-using ASPNETapp2.MealList;
 
 namespace ASPNETapp2.Controllers
 {

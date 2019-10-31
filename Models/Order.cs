@@ -28,5 +28,6 @@ namespace ASPNETapp2.Models
 
         private OrderStatus _Status;
         public OrderStatus Status { get => _Status; set => _Status = value; }
+
     }
 }

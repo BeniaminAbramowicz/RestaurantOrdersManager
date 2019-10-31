@@ -23,4 +23,11 @@ namespace ASPNETapp2.Models
             MealUnitPrice = mealUnitPrice;
         }
     }
+
+    public static class MealsList
+    {
+        public static Meal Meal1 = new Meal(1, "Roladki z cukinii z szynką", 12);
+        public static Meal Meal2 = new Meal(2, "Kotlet schabowy z ziemniakami i mizerią", 25);
+        public static Meal Meal3 = new Meal(3, "Szarlotka z jabłkami", 14.5);
+    }
 }

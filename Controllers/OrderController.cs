@@ -28,10 +28,20 @@ namespace ASPNETapp2.Controllers
             return Json(resultData, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public ActionResult CreateOrder()
+        public ActionResult CreateOrder(Order sentOrder)
         {
-            return View();
+            double pr = 0;
+            foreach(var x in sentOrder.OrderItems)
+            {
+                pr += x.ListPositionPrice;
+            }
+
+            Order nowy = new Order(sentOrder.OrderItems, pr, sentOrder.TableNumber, Order.OrderStatus.PendingPayment);
+            List<Order> listOfOrders = (List<Order>) Session["listOfOrders"];
+            listOfOrders.Add(nowy);
+            Session["listOfOrders"] = listOfOrders;
+
+            return Redirect("AddOrder");
         }
     }
 }

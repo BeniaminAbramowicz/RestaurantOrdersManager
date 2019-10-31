@@ -5,9 +5,9 @@
 <h2>@ViewBag.Title.</h2>
 
 <div id="orderForm">
-    Zamówienie dla stolika:
-    <select>
-        <option selected disabled hidden value="">-- Wybierz stolik --</option>
+    <label for="chosenMeal">Zamówienie dla stolika:</label>
+    <select id="chosenTable" class="form-control">
+        <option selected disabled hidden value="empty">-- Wybierz stolik --</option>
         <option id="stolik1" value="1">Niebieski</option>
         <option id="stolik2" value="2">Zielony</option>
         <option id="stolik3" value="3">Czerwony</option>
@@ -15,35 +15,32 @@
         <option id="stolik5" value="5">Fioletowy</option>
     </select>
     <div id="orderItems">
-        <select id="selectMeal" name="chosenMeal">
+        <label for="chosenMeal">Danie:</label>
+        <select class="form-control" id="selectMeal" name="chosenMeal">
+            <option selected disabled hidden value="">-- Wybierz danie --</option>
             @for (int i = 0; i < Model.ListOfMeals.Count; i++)
             {
                 <option value="@Model.ListOfMeals[i].MealId">@Model.ListOfMeals[i].MealName @Model.ListOfMeals[i].MealUnitPrice PLN</option>
             }
         </select>
-        <input id="quantity" type="number" name="quantity" />
-        <input type="button" id="addMeal" value="Dodaj danie">
-        <table id="mealsList">
+        <label for="quantity">Ilość:</label>
+        <input class="form-control" id="quantity" type="number" name="quantity" />
+        <input class="btn btn-primary" type="button" id="addMeal" value="Dodaj danie">
+        <table class="table" id="mealsList">
             <thead>
-                <tr>
-                    <th>Nazwa dania:</th>
-                    <th>Cena jednostkowa:</th>
-                    <th>Ilość:</th>
-                    <th>Cena całkowita:</th>
+                <tr id="head">
+                    <th>Nazwa dania</th>
+                    <th>Cena jednostkowa</th>
+                    <th>Ilość</th>
+                    <th>Cena całkowita</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
             </tbody>
         </table>
     </div>
     <br />
-    <input type="button" id="addOrder" value="Dodaj zamówienie" />
+    <input class="btn btn-primary" type="button" id="addOrder" value="Dodaj zamówienie" />
 </div>
 <script>
     $(document).ready(function () {
@@ -57,6 +54,9 @@
                 data: "{mealItem:" + JSON.stringify(mealItem) + "}",
                 url: "/Order/AddItem",
                 dataType: "json",
+                success: function (data) {
+                    $("#quantity").val("");
+                    $("#selectMeal select").val("empty").change();
                     var items = [];
                     $.each(data, function (key, val) {
                         items.push("<td>" + val + "</td>");
@@ -65,10 +65,49 @@
                         html: items.join("")
                     }).appendTo("tbody");
                 },
-                error: function (result) {
+                error: function () {
                     alert("Wystąpił błąd");
                 }
             });
         });
+
+        $("#addOrder").click(function () {
+            var chosenTable = $("#chosenTable").val();
+            var tableHeadObject = $("#head th");
+            var tableBodyObjects = $("tbody tr");
+            var tableHeadNames = [];
+            for (var i = 0; i < tableHeadObject.length; i++){
+                tableHeadNames[i] = tableHeadObject[i].innerHTML;
+            }
+            var listOfOrderMeals = [];
+            var lista = [];
+            var temp = {};
+            for (var i = 0; i < tableBodyObjects.length; i++){
+                temp = {};
+                lista = [];
+                lista = tableBodyObjects[i].getElementsByTagName("td");
+                    for (var j = 0; j < lista.length; j++){                    
+                        temp[tableHeadNames[j]] = lista[j].innerHTML;
+                    }
+                listOfOrderMeals[i] = temp;
+            }
+            var finalData = { ListOfOrderMeals: listOfOrderMeals, ChosenTable: chosenTable };
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: "{sentOrder:" + JSON.stringify(finalData) + "}",
+                url: "/Order/CreateOrder",
+                dataType: "json",
+                success: function () {
+                    alert("Udało się");
+                },
+                error: function () {
+                    alert("Wystąpił błąd");
+                }
+            });
+
+            
+        });
+
     });
 </script>

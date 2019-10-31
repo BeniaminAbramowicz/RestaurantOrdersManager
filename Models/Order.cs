@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -29,5 +30,17 @@ namespace ASPNETapp2.Models
         private OrderStatus _Status;
         public OrderStatus Status { get => _Status; set => _Status = value; }
 
+        public static int GlobalOrderId = 0;
+        
+
+        public Order(List<OrderItem> orderItems, double totalPrice, int tableNumber, OrderStatus status)
+        {
+            OrderId = Interlocked.Increment(ref GlobalOrderId);
+            OrderItems = orderItems;
+            TotalPrice = totalPrice;
+            TableNumber = tableNumber;
+            Status = status;
+
+        }
     }
 }

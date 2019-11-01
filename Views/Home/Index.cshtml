@@ -5,55 +5,78 @@
 }
 <h2>Lista zamówień</h2>
 <br />
-
-Wyświetl zamówienia według kryterium:
-<form id="chooseTable" method="post" action="/Home/DisplayOrders">
-    <select id="chosenTable" name="chosenTable">
-        <option id="all" value="all">Wyświetl wszystkie zamówienia</option>
-        <optgroup label="Status zamówienia">
-            <option id="paid" value="billpaid">Zapłacono za zamówienie</option>
-            <option id="pending" value="pendingpayment">Oczekiwanie na zapłatę</option>
-        </optgroup>
-        <optgroup label="Nazwa stolika">
-            <option selected disabled hidden value="">-- Wybierz stolik --</option>
-            <option id="stolik1" value="1">Niebieski</option>
-            <option id="stolik2" value="2">Zielony</option>
-            <option id="stolik3" value="3">Czerwony</option>
-            <option id="stolik4" value="4">Żółty</option>
-            <option id="stolik5" value="5">Fioletowy</option>
-        </optgroup>
-    </select>
-    <br />
-    <input type="submit" value="Wyświetl zamówienia" />
-</form>
+<div id="box">
+    <p id="label">Wyświetl zamówienia według kryterium:</p>
+    <form id="chooseTable" method="post" action="/Home/DisplayOrders">
+        <select class="form-control" id="chosenTable" name="chosenTable">
+            <option selected disabled hidden value="">-- Wybierz kryterium --</option>
+            <option id="all" value="all">Wyświetl wszystkie zamówienia</option>
+            <optgroup label="Status zamówienia">
+                <option id="paid" value="billpaid">Zapłacono za zamówienie</option>
+                <option id="pending" value="pendingpayment">Oczekiwanie na zapłatę</option>
+            </optgroup>
+            <optgroup label="Nazwa stolika">
+                <option id="stolik1" value="1">Niebieski</option>
+                <option id="stolik2" value="2">Zielony</option>
+                <option id="stolik3" value="3">Czerwony</option>
+                <option id="stolik4" value="4">Żółty</option>
+                <option id="stolik5" value="5">Fioletowy</option>
+            </optgroup>
+        </select>
+        <input type="submit" class="btn btn-primary" value="Wyświetl zamówienia" />
+    </form>
+</div>
 <br />
 
 @if (Model.OrdersList == null)
 {
-    <h4>Brak zamówień dla tego stolika</h4>
+    if ((string)TempData["error"] != null)
+    {
+        <h4>@TempData["error"].ToString()</h4>
+    }
+    else
+    {
+    }
+
 }
 else
 {
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nazwa dania</th>
-            <th>Cena jednostkowa</th>
-            <th>Ilość</th>
-            <th>Cena całkowita</th>
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < Model.OrdersList.Count; i++)
-        {
-            <tr id="orderData">
-                <td colspan="4">Id zamówienia: @Model.OrdersList[0].OrderId</td>
-                <td>@Model.OrdersList[0].OrderItems[i].Meal.MealName</td>
-                <td>@Model.OrdersList[0].OrderItems[i].Meal.MealUnitPrice PLN</td>
-                <td>@Model.OrdersList[0].OrderItems[i].Quantity</td>
-                <td>@Model.OrdersList[0].OrderItems[i].ListPositionPrice PLN</td>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.OrdersList.Count; i++)
+            {
+                <tr>
+                    <td colspan="4" id="greyRow">Id zamówienia: @Model.OrdersList[i].OrderId</td>
+                </tr>
+                <tr>
+                    <th>Nazwa dania</th>
+                    <th>Cena jednostkowa</th>
+                    <th>Ilość</th>
+                    <th>Cena całkowita</th>
+                </tr>
+                for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
+                {
+
+                    <tr>
+                        <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                        <td>@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
+                        <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
+                        <td>@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="4" id="blueRow">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</td>
+                </tr>
+                <tr>
+                    <td colspan="4"><hr /></td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
 }

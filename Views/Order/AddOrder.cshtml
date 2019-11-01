@@ -73,12 +73,8 @@
 
         $("#addOrder").click(function () {
             var chosenTable = $("#chosenTable").val();
-            var tableHeadObject = $("#head th");
             var tableBodyObjects = $("tbody tr");
-            var tableHeadNames = [];
-            for (var i = 0; i < tableHeadObject.length; i++){
-                tableHeadNames[i] = tableHeadObject[i].innerHTML;
-            }
+            var tableHeadNames = ["SentMealName", "SentUnitPrice", "SentQuantity"];
             var listOfOrderMeals = [];
             var lista = [];
             var temp = {};
@@ -86,22 +82,28 @@
                 temp = {};
                 lista = [];
                 lista = tableBodyObjects[i].getElementsByTagName("td");
-                    for (var j = 0; j < lista.length; j++){                    
+                for (var j = 0; j < lista.length - 1; j++){
+                    if (j == 1) {
+                        continue;
+                    } else {
                         temp[tableHeadNames[j]] = lista[j].innerHTML;
+                    }
+
                     }
                 listOfOrderMeals[i] = temp;
             }
-            var finalData = { ListOfOrderMeals: listOfOrderMeals, ChosenTable: chosenTable };
+                
+            var finalData = { SentOrderItems: listOfOrderMeals, SentTableNumber: chosenTable };
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                data: "{sentOrder:" + JSON.stringify(finalData) + "}",
+                data: JSON.stringify(finalData),
                 url: "/Order/CreateOrder",
                 dataType: "json",
-                success: function () {
-                    alert("Udało się");
+                success: function (data) {
+                    location.href = "/Home/Index";
                 },
-                error: function () {
+                error: function (result) {
                     alert("Wystąpił błąd");
                 }
             });

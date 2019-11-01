@@ -16,5 +16,12 @@ namespace ASPNETapp2.Models
 
         private double _listPositionPrice;
         public double ListPositionPrice { get => _listPositionPrice; set => _listPositionPrice = value; }
+    
+        public OrderItem(Meal meal, int quantity, double listPositionPrice)
+        {
+            Meal = meal;
+            Quantity = quantity;
+            ListPositionPrice = listPositionPrice;
+        }
     }
 }

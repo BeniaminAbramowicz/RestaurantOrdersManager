@@ -8,6 +8,19 @@ h2 {
     text-align: center;
 }
 
-#orderData:nth-child(5){
-    background-color:grey;
+#greyRow{
+    background-color:lightgrey;
+    text-align:center;
 }
+#blueRow{
+    background-color:deepskyblue;
+    color:white;
+    text-align:center;
+}
+#box > * {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap:wrap;
+}
+

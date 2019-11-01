@@ -28,20 +28,28 @@ namespace ASPNETapp2.Controllers
             return Json(resultData, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult CreateOrder(Order sentOrder)
+        public JsonResult CreateOrder(SentOrder sentOrder)
         {
-            double pr = 0;
-            foreach(var x in sentOrder.OrderItems)
+            if (Session["ListOfOrders"] == null)
             {
-                pr += x.ListPositionPrice;
+                Session["ListOfOrders"] = new List<Order>();
             }
-
-            Order nowy = new Order(sentOrder.OrderItems, pr, sentOrder.TableNumber, Order.OrderStatus.PendingPayment);
-            List<Order> listOfOrders = (List<Order>) Session["listOfOrders"];
-            listOfOrders.Add(nowy);
-            Session["listOfOrders"] = listOfOrders;
-
-            return Redirect("AddOrder");
+            double pr = 0;
+            foreach (var x in sentOrder.SentOrderItems)
+            {
+                pr += MealsList.theList.Find(z => z.MealName.Equals(x.SentMealName)).MealUnitPrice * x.SentQuantity;
+            }
+            List<OrderItem> finalItems = new List<OrderItem>();
+            foreach (var y in sentOrder.SentOrderItems)
+            {
+                finalItems.Add(new OrderItem(MealsList.theList.Find(x => x.MealName.Equals(y.SentMealName)), y.SentQuantity, (MealsList.theList.Find(z => z.MealName.Equals(y.SentMealName)).MealUnitPrice)*y.SentQuantity));
+            }
+            Order newRecievedOrder = new Order(finalItems, pr, sentOrder.SentTableNumber, Order.OrderStatus.PendingPayment);
+            var getSessionList = (List<Order>)Session["ListOfOrders"];
+            getSessionList.Add(newRecievedOrder);
+            Session["ListOfOrders"] = getSessionList;
+            string retMsg = "success";
+            return Json(retMsg, JsonRequestBehavior.AllowGet);
         }
     }
 }

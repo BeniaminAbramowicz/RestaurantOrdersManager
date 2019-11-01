@@ -1,0 +1,51 @@
+﻿@model ASPNETapp2.Models.Order
+@using ASPNETapp2.Models
+@{
+    ViewBag.Title = "Podsumowanie zamówienia";
+}
+
+    <h2>
+        Podsumowanie zamówienia nr: @Model.OrderId <br />
+        dla stolika: @switch (Model.TableNumber)
+        {
+            case 1:
+                <span>Niebieskiego</span>
+                break;
+            case 2:
+                <span>Zielonego</span>
+                break;
+            case 3:
+                <span>Żółtego</span>
+                break;
+            case 4:
+                <span>Czerwonego</span>
+                break;
+            case 5:
+                <span>fioletowego</span>
+                break;
+        }
+    </h2>
+<br />
+<h4>Lista dań:</h4>
+<ol>
+    @for(int i = 0; i < Model.OrderItems.Count; i++)
+    {
+        if (i == Model.OrderItems.Count - 1)
+        {
+            <li>Dodatkowa pozycja: @Model.OrderItems[i].Meal.MealName | 
+                Wartość napiwku: @Model.OrderItems[i].ListPositionPrice PLN
+            </li>
+        }
+        else
+        {
+        <li>Nazwa dania: @Model.OrderItems[i].Meal.MealName | 
+            Cena jednostkowa: @Model.OrderItems[i].Meal.MealUnitPrice | 
+            Ilość: @Model.OrderItems[i].Quantity | 
+            Cena pozycji: @Model.OrderItems[i].ListPositionPrice
+        </li>
+        }
+    }
+</ol>
+<br />
+<h4>Cena zamówienia: @Model.TotalPrice PLN</h4>
+

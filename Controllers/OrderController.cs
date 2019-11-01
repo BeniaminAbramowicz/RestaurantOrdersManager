@@ -18,6 +18,7 @@ namespace ASPNETapp2.Controllers
             return View(availableMeals);
         }
 
+        [HttpPost]
         public JsonResult AddItem(MealItem mealItem)
         {
             Meal theMeal = MealsList.theList.Find(x => x.MealId == mealItem.MealItemId);
@@ -25,9 +26,10 @@ namespace ASPNETapp2.Controllers
                                    Price = theMeal.MealUnitPrice, 
                                    Quantity = mealItem.MealQuantity, 
                                    SummedPrice = theMeal.MealUnitPrice * mealItem.MealQuantity};
-            return Json(resultData, JsonRequestBehavior.AllowGet);
+            return Json(resultData);
         }
 
+        [HttpPost]
         public JsonResult CreateOrder(SentOrder sentOrder)
         {
             if (Session["ListOfOrders"] == null)
@@ -48,8 +50,45 @@ namespace ASPNETapp2.Controllers
             var getSessionList = (List<Order>)Session["ListOfOrders"];
             getSessionList.Add(newRecievedOrder);
             Session["ListOfOrders"] = getSessionList;
-            string retMsg = "success";
-            return Json(retMsg, JsonRequestBehavior.AllowGet);
+            return Json("");
+        }
+
+       [HttpPost]
+       public JsonResult RemoveOrder(int idOfOrder)
+        {
+            List<Order> currentList = (List<Order>)Session["ListOfOrders"];
+            currentList.Remove(currentList.Find(x => x.OrderId == idOfOrder));
+            Session["ListOfOrders"] = currentList;
+            return Json("");
+        }
+
+        [HttpPost]
+        public ActionResult GetSummary(int orderId)
+        {
+            TempData["orderId"] = orderId;
+            return Redirect("OrderSummary");
+        }
+        public ActionResult OrderSummary()
+        {
+            int orderId = (int)TempData["orderId"];
+            List<Order> currentList = (List<Order>)Session["ListOfOrders"];
+            Order summaryOrder = currentList.Find(x => x.OrderId == orderId);
+            if (summaryOrder.OrderItems.Exists(z => z.Meal.MealName.Equals("Napiwek 5%")))
+            {
+                TempData["orderId"] = orderId;
+                return View(summaryOrder);
+            }
+            else
+            {
+                OrderItem tipItem = new OrderItem(new Meal("Napiwek 5%"), summaryOrder.TotalPrice * 0.05);
+                summaryOrder.OrderItems.Add(tipItem);
+                summaryOrder.Status = Order.OrderStatus.BillPaid;
+                currentList[currentList.FindIndex(y => y.OrderId == orderId)] = summaryOrder;
+                Session["ListOfOrders"] = currentList;
+                TempData["orderId"] = orderId;
+                return View(summaryOrder);
+            }
+            
         }
     }
 }

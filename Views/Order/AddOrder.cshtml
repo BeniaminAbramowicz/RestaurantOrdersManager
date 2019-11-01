@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Dodaj zamówienie";
 }
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 
 <div id="orderForm">
     <label for="chosenMeal">Zamówienie dla stolika:</label>
@@ -15,43 +15,48 @@
         <option id="stolik5" value="5">Fioletowy</option>
     </select>
     <div id="orderItems">
-        <label for="chosenMeal">Danie:</label>
-        <select class="form-control" id="selectMeal" name="chosenMeal">
-            <option selected disabled hidden value="">-- Wybierz danie --</option>
-            @for (int i = 0; i < Model.ListOfMeals.Count; i++)
-            {
-                <option value="@Model.ListOfMeals[i].MealId">@Model.ListOfMeals[i].MealName @Model.ListOfMeals[i].MealUnitPrice PLN</option>
-            }
-        </select>
-        <label for="quantity">Ilość:</label>
-        <input class="form-control" id="quantity" type="number" name="quantity" />
-        <input class="btn btn-primary" type="button" id="addMeal" value="Dodaj danie">
-        <table class="table" id="mealsList">
-            <thead>
-                <tr id="head">
-                    <th>Nazwa dania</th>
-                    <th>Cena jednostkowa</th>
-                    <th>Ilość</th>
-                    <th>Cena całkowita</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div id="mealQuantityButton">
+            <label for="chosenMeal">Danie:</label>
+            <select class="form-control" id="selectMeal" name="chosenMeal">
+                <option selected disabled hidden value="">-- Wybierz danie --</option>
+                @for (int i = 0; i < Model.ListOfMeals.Count; i++)
+                {
+                    <option value="@Model.ListOfMeals[i].MealId">@Model.ListOfMeals[i].MealName @Model.ListOfMeals[i].MealUnitPrice PLN</option>
+                }
+            </select>
+            <label for="quantity">Ilość:</label>
+            <input class="form-control" id="quantity" type="number" name="quantity" />
+            <input class="btn btn-primary" type="button" id="addMeal" value="Dodaj danie">
+        </div>
+        <div id="tableButton">
+            <table class="table" id="mealsList">
+                <thead>
+                    <tr id="head">
+                        <th>Nazwa dania</th>
+                        <th>Cena jednostkowa</th>
+                        <th>Ilość</th>
+                        <th>Cena całkowita</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br />
+            <input class="btn btn-primary" type="button" id="addOrder" value="Dodaj zamówienie" />
+        </div>
     </div>
-    <br />
-    <input class="btn btn-primary" type="button" id="addOrder" value="Dodaj zamówienie" />
 </div>
 <script>
     $(document).ready(function () {
         $("#addMeal").click(function () {
+            $("#tableButton").css('visibility', 'visible');
             var mealItemId = $('#selectMeal').val();
             var mealQuantity = $('#quantity').val();
             var mealItem = { MealItemId: mealItemId, MealQuantity: mealQuantity }
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                data: "{mealItem:" + JSON.stringify(mealItem) + "}",
+                data: JSON.stringify(mealItem),
                 url: "/Order/AddItem",
                 dataType: "json",
                 success: function (data) {
@@ -100,16 +105,18 @@
                 data: JSON.stringify(finalData),
                 url: "/Order/CreateOrder",
                 dataType: "json",
-                success: function (data) {
+                success: function () {
+                    alert("Dodano zamówienie");
                     location.href = "/Home/Index";
                 },
-                error: function (result) {
+                error: function () {
                     alert("Wystąpił błąd");
                 }
-            });
-
-            
+            });          
         });
 
+        $("#chosenTable").change(function () {
+            $("#mealQuantityButton").css('visibility', 'visible');
+        });
     });
 </script>

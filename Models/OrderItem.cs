@@ -23,5 +23,10 @@ namespace ASPNETapp2.Models
             Quantity = quantity;
             ListPositionPrice = listPositionPrice;
         }
+        public OrderItem(Meal meal,double listPositionPrice)
+        {
+            Meal = meal;
+            ListPositionPrice = listPositionPrice;
+        }
     }
 }

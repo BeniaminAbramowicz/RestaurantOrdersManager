@@ -1,7 +1,7 @@
 ﻿@model ASPNETapp2.Models.ListOfOrders
-@{
+@using ASPNETapp2.Models;
+@{   
     ViewBag.Title = "Zamówienia";
-
 }
 <h2>Lista zamówień</h2>
 <br />
@@ -51,7 +51,7 @@ else
             @for (int i = 0; i < Model.OrdersList.Count; i++)
             {
                 <tr>
-                    <td colspan="4" id="greyRow">Id zamówienia: @Model.OrdersList[i].OrderId</td>
+                    <td colspan="4" id="greyRow">Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia: @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment) { <span>Oczekiwanie na zapłatę</span>} else { <span>Zapłacono</span>}</td>
                 </tr>
                 <tr>
                     <th>Nazwa dania</th>
@@ -60,7 +60,7 @@ else
                     <th>Cena całkowita</th>
                 </tr>
                 for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
-                {
+                    {
 
                     <tr>
                         <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
@@ -70,13 +70,45 @@ else
                     </tr>
                 }
                 <tr>
-                    <td colspan="4" id="blueRow">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</td>
+                    <td colspan="4" id="blueRow">
+                    Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN 
+                    <br />
+                    
+                    <form method="post" action="/Order/GetSummary">
+                        <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                        <input type="button" class="btn btn-danger" id="removeOrder" value="Usuń zamówienie" />
+                        <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
+                    </form>   
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="4"><hr /></td>
                 </tr>
-
             }
         </tbody>
     </table>
 }
+<script>
+    $(document).ready(function () {
+        $("#removeOrder").click(function () {
+            var idOfOrder = $("#orderId").val();
+            var items = { IdOfOrder: idOfOrder }
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(items),
+                url: "/Order/RemoveOrder",
+                dataType: "json",
+                success: function () {
+                    alert("Pomyślnie usunięto zamówienie");
+                    location.href = "/Home/Index";
+                },
+                error: function () {
+                    alert("Wystąpił błąd");
+                }
+            });
+
+        });
+
+    });
+</script>

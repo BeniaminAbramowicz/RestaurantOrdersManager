@@ -22,6 +22,10 @@ namespace ASPNETapp2.Models
             MealName = mealName;
             MealUnitPrice = mealUnitPrice;
         }
+        public Meal(string mealName)
+        {
+            MealName = mealName;
+        }
     }
 
     public static class MealsList

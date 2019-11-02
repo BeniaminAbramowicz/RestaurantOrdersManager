@@ -80,8 +80,8 @@ namespace ASPNETapp2.Controllers
             }
             else
             {
-                OrderItem tipItem = new OrderItem(new Meal("Napiwek 5%"), summaryOrder.TotalPrice * 0.05);
-                summaryOrder.TotalPrice = summaryOrder.TotalPrice * 1.05;  
+                OrderItem tipItem = new OrderItem(new Meal("Napiwek 5%"), Math.Round(summaryOrder.TotalPrice * 0.05, 2));
+                summaryOrder.TotalPrice = Math.Round(summaryOrder.TotalPrice * 1.05, 2);  
                 summaryOrder.OrderItems.Add(tipItem);
                 summaryOrder.Status = Order.OrderStatus.BillPaid;
                 currentList[currentList.FindIndex(y => y.OrderId == orderId)] = summaryOrder;
@@ -105,10 +105,12 @@ namespace ASPNETapp2.Controllers
         {
             List<Order> currentList = (List<Order>)Session["ListOfOrders"];
             Order order = currentList.Find(x => x.OrderId == idOfOrder);
+            order.TotalPrice = Math.Round(order.TotalPrice - order.OrderItems[order.OrderItems.FindIndex(z => z.Meal.MealName.Equals(itemName))].ListPositionPrice, 2);
             order.OrderItems.Remove(order.OrderItems.Find(y => y.Meal.MealName.Equals(itemName)));
-            currentList[order.OrderId] = order;
+            currentList[currentList.FindIndex(x => x.OrderId == idOfOrder)] = order;
             Session["ListOfOrders"] = currentList;
-            return Json("");
+            var data = new { data = order.TotalPrice };
+            return Json(data);
         }
     }
 }

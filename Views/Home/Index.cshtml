@@ -64,7 +64,7 @@ else
                 for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
                 {
                     
-                    <tr>
+                    <tr id="@i@j">
                         @if (Model.OrdersList[i].OrderItems[j].Meal.MealName == "Napiwek 5%")
                         {
                             <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
@@ -77,24 +77,24 @@ else
                             <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
                             <td>@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
                             <td>
-                                <input type="button" class="btn btn-info" id="editPosition" value="Edytuj pozycję" />
+                                <input type="button" class="btn btn-info" value="Edytuj pozycję" />
                             </td>
                             <td>
-                                <input type="button" class="btn btn-warning" id="removePosition @j" value="Usuń pozycję" onclick="RemovingPosition(@Model..OrdersList[i].OrderId, @Model.OrdersList[i].OrderItems[j].Meal.MealName)" />
+                                <input type="button" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j');">
                             </td>
                         }
                     </tr>
                 }
                 <tr>
                     <td colspan="6" id="blueRow">
-                    Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN 
-                    <br />
+                        <span id="orderTotalPrice">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</span>
+                        <br />
                     
-                    <form method="post" action="/Order/GetSummary">
-                        <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                        <input type="button" class="btn btn-danger" id="removeOrder" value="Usuń zamówienie" />
-                        <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
-                    </form>   
+                        <form method="post" action="/Order/GetSummary">
+                            <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                            <input type="button" class="btn btn-danger" id="removeOrder" value="Usuń zamówienie" />
+                            <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
+                        </form>   
                     </td>
                 </tr>
                 if(i != Model.OrdersList.Count - 1)
@@ -111,7 +111,7 @@ else
         </tbody>
     </table>
 }
-<script>
+<script type="text/javascript">
     $(document).ready(function () {
         $("#removeOrder").click(function () {
             var idOfOrder = $("#orderId").val();
@@ -130,15 +130,9 @@ else
                     alert("Wystąpił błąd");
                 }
             });
-        });
-
-        function RemovingPosition() {
-
-        }
-
-        $("#removePosition").click(function () {
-            var idOfOrder = $("#orderId").val();
-            var itemName = $("#itemName").val();
+        });     
+    });
+    function removingPosition(idOfOrder, itemName, positionNumber) {
             var items = { IdOfOrder: idOfOrder, ItemName: itemName };
             $.ajax({
                 type: "POST",
@@ -146,15 +140,16 @@ else
                 data: JSON.stringify(items),
                 url: "/Order/RemovePosition",
                 dataType: "json",
-                success: function () {
+                success: function (data) {
+                    $("#" + positionNumber).remove();
+                    $.each(data, function (key, val) {
+                        $("#orderTotalPrice").html("Cena zamówienia: " + val +  " PLN")
+                    });
                     
                 },
                 error: function () {
                     alert("Wystąpił błąd");
                 }
-
             });
-        });
-
-    });
+        }
 </script>

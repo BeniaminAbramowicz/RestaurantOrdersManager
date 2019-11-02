@@ -51,13 +51,15 @@ else
             @for (int i = 0; i < Model.OrdersList.Count; i++)
             {
                 <tr>
-                    <td colspan="4" id="greyRow">Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia: @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment) { <span>Oczekiwanie na zapłatę</span>} else { <span>Zapłacono</span>}</td>
+                    <td colspan="6" id="greyRow">Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia: @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment) { <span>Oczekiwanie na zapłatę</span>} else { <span>Zapłacono</span>}</td>
                 </tr>
                 <tr>
                     <th>Nazwa dania</th>
                     <th>Cena jednostkowa</th>
                     <th>Ilość</th>
                     <th>Cena pozycji</th>
+                    <th>Edytuj pozycję</th>
+                    <th>Usuń pozycję</th>
                 </tr>
                 for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
                 {
@@ -65,8 +67,8 @@ else
                     <tr>
                         @if (Model.OrdersList[i].OrderItems[j].Meal.MealName == "Napiwek 5%")
                         {
-                            <td colspan="2" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
-                            <td colspan="2" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+                            <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                            <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
                         }
                         else
                         {
@@ -74,12 +76,17 @@ else
                             <td>@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
                             <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
                             <td>@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+                            <td>
+                                <input type="button" class="btn btn-info" id="editPosition" value="Edytuj pozycję" />
+                            </td>
+                            <td>
+                                <input type="button" class="btn btn-warning" id="removePosition @j" value="Usuń pozycję" onclick="RemovingPosition(@Model..OrdersList[i].OrderId, @Model.OrdersList[i].OrderItems[j].Meal.MealName)" />
+                            </td>
                         }
-
                     </tr>
                 }
                 <tr>
-                    <td colspan="4" id="blueRow">
+                    <td colspan="6" id="blueRow">
                     Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN 
                     <br />
                     
@@ -90,9 +97,16 @@ else
                     </form>   
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="4"><hr /></td>
-                </tr>
+                if(i != Model.OrdersList.Count - 1)
+                {
+                    <tr>
+                        <td colspan="6"><hr /></td>
+                    </tr>
+                }
+                else
+                {
+
+                }
             }
         </tbody>
     </table>
@@ -101,7 +115,7 @@ else
     $(document).ready(function () {
         $("#removeOrder").click(function () {
             var idOfOrder = $("#orderId").val();
-            var items = { IdOfOrder: idOfOrder }
+            var items = { IdOfOrder: idOfOrder };
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
@@ -116,7 +130,30 @@ else
                     alert("Wystąpił błąd");
                 }
             });
+        });
 
+        function RemovingPosition() {
+
+        }
+
+        $("#removePosition").click(function () {
+            var idOfOrder = $("#orderId").val();
+            var itemName = $("#itemName").val();
+            var items = { IdOfOrder: idOfOrder, ItemName: itemName };
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(items),
+                url: "/Order/RemovePosition",
+                dataType: "json",
+                success: function () {
+                    
+                },
+                error: function () {
+                    alert("Wystąpił błąd");
+                }
+
+            });
         });
 
     });

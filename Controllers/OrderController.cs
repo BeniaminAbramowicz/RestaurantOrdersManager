@@ -91,5 +91,24 @@ namespace ASPNETapp2.Controllers
             }
             
         }
+
+        [HttpPost]
+        public JsonResult EditPosition(int idOfOrder)
+        {
+
+
+            return Json("");
+        }
+
+        [HttpPost]
+        public JsonResult RemovePosition(int idOfOrder, string itemName)
+        {
+            List<Order> currentList = (List<Order>)Session["ListOfOrders"];
+            Order order = currentList.Find(x => x.OrderId == idOfOrder);
+            order.OrderItems.Remove(order.OrderItems.Find(y => y.Meal.MealName.Equals(itemName)));
+            currentList[order.OrderId] = order;
+            Session["ListOfOrders"] = currentList;
+            return Json("");
+        }
     }
 }

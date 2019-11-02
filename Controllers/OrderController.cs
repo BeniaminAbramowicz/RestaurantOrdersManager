@@ -81,6 +81,7 @@ namespace ASPNETapp2.Controllers
             else
             {
                 OrderItem tipItem = new OrderItem(new Meal("Napiwek 5%"), summaryOrder.TotalPrice * 0.05);
+                summaryOrder.TotalPrice = summaryOrder.TotalPrice * 1.05;  
                 summaryOrder.OrderItems.Add(tipItem);
                 summaryOrder.Status = Order.OrderStatus.BillPaid;
                 currentList[currentList.FindIndex(y => y.OrderId == orderId)] = summaryOrder;

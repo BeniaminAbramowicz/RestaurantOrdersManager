@@ -57,16 +57,25 @@ else
                     <th>Nazwa dania</th>
                     <th>Cena jednostkowa</th>
                     <th>Ilość</th>
-                    <th>Cena całkowita</th>
+                    <th>Cena pozycji</th>
                 </tr>
                 for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
-                    {
-
+                {
+                    
                     <tr>
-                        <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
-                        <td>@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
-                        <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
-                        <td>@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+                        @if (Model.OrdersList[i].OrderItems[j].Meal.MealName == "Napiwek 5%")
+                        {
+                            <td colspan="2" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                            <td colspan="2" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+                        }
+                        else
+                        {
+                            <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                            <td>@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
+                            <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
+                            <td>@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+                        }
+
                     </tr>
                 }
                 <tr>

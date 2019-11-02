@@ -30,3 +30,6 @@ h2 {
 #tableButton {
     visibility: hidden;
 }
+h4:first-of-type{
+    text-align:center;
+}

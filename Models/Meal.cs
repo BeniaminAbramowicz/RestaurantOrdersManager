@@ -33,7 +33,16 @@ namespace ASPNETapp2.Models
         public static Meal Meal1 = new Meal(1, "Roladki z cukinii z szynką", 12);
         public static Meal Meal2 = new Meal(2, "Kotlet schabowy z ziemniakami i mizerią", 25);
         public static Meal Meal3 = new Meal(3, "Szarlotka z jabłkami", 14.5);
-        public static List<Meal> theList = new List<Meal> { Meal1, Meal2, Meal3};
+        public static List<Meal> theList = new List<Meal> 
+        { new Meal(1, "Roladki z cukinii z szynką", 12),
+          new Meal(2, "Kotlet schabowy z ziemniakami i mizerią", 25),
+          new Meal(3, "Szarlotka z jabłkami", 14.5),
+          new Meal(4, "Gofry pieczone w piekarniku", 15),
+          new Meal(5, "Tabbouleh sałatka arabska z kaszą bulgur", 30),
+          new Meal(6, "Kaszanka pieczona z kiszoną kapustą", 10),
+          new Meal(7, "Sałatka z zupek chińskich", 12),
+          new Meal(8, "Pasta z dyni do chleba", 13.5)
+    };
 
     }
 }

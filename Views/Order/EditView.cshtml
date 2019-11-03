@@ -1,0 +1,26 @@
+﻿@model ASPNETapp2.Models.ListOfOrderItems
+@{
+    ViewBag.Title = "Edycja pozycji";
+}
+@{ 
+   
+}
+<h2>Edycja pozycji</h2>
+<form method="post" action="/Order/EditPosition">
+    <label for="chosenMeal">Zmień danie:</label>
+    <select class="form-control" id="replacedMeal" name="replacedMeal">
+        @for (int i = 1; i <= Model.ItemsList.Count; i++)
+        {
+            <option value="@Model.ItemsList[i-1].Meal.MealName">@Model.ItemsList[i-1].Meal.MealName</option>
+        }
+    </select>
+    <label for="chosenMeal">Wybierz nowe danie:</label>
+    <select class="form-control" id="selectMeal" name="chosenMeal">
+        <option value="Roladki z cukinii z szynką">Roladki z cukinii z szynką</option>
+        <option value="Kotlet schabowy z ziemniakami i mizerią">Kotlet schabowy z ziemniakami i mizerią</option>
+        <option value="Szarlotka z jabłkami">Szarlotka z jabłkami</option>
+    </select>
+    <label for="quantity">Wybierz nową ilość:</label>
+    <input class="form-control" id="quantity" type="number" name="quantity" />
+    <input type="submit" class="btn btn-primary" value="Edytuj" />
+</form>

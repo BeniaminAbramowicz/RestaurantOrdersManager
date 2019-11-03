@@ -1,6 +1,6 @@
 ﻿@model ASPNETapp2.Models.ListOfOrders
 @using ASPNETapp2.Models;
-@{   
+@{
     ViewBag.Title = "Zamówienia";
 }
 <h2>Lista zamówień</h2>
@@ -9,7 +9,7 @@
     <p id="label">Wyświetl zamówienia według kryterium:</p>
     <form id="chooseTable" method="post" action="/Home/DisplayOrders">
         <select class="form-control" id="chosenTable" name="chosenTable">
-            <option selected disabled hidden value="">-- Wybierz kryterium --</option>
+            <option selected hidden value="empty">-- Wybierz kryterium --</option>
             <option id="all" value="all">Wyświetl wszystkie zamówienia</option>
             <optgroup label="Status zamówienia">
                 <option id="paid" value="billpaid">Zapłacono za zamówienie</option>
@@ -28,7 +28,7 @@
 </div>
 <br />
 
-@if (Model.OrdersList == null)
+@if (Model.OrdersList == null || Model.OrdersList.Any() == false)
 {
     if ((string)TempData["error"] != null)
     {
@@ -36,70 +36,132 @@
     }
     else
     {
+
     }
 
 }
 else
 {
-    <hr />
     <table class="table">
         <thead>
             <tr>
+                <td colspan="6"><hr /></td>
             </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < Model.OrdersList.Count; i++)
+           @for (int i = 0; i < Model.OrdersList.Count; i++)
             {
-                <tr>
-                    <td colspan="6" id="greyRow">Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia: @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment) { <span>Oczekiwanie na zapłatę</span>} else { <span>Zapłacono</span>}</td>
-                </tr>
-                <tr>
+            <tr id="first_@i">
+                <td colspan="6" id="greyRow">
+                    <b>
+                        Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia:
+                        @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
+                        {<span>Oczekiwanie na zapłatę </span>}
+                        else
+                        {
+                            <span>Zapłacono</span>
+                        }
+                        | Stolik:
+                        @switch (Model.OrdersList[i].TableNumber)
+                        {
+                            case 1:
+                                <span>Niebieski</span>
+                                break;
+                            case 2:
+                                <span>Zielony</span>
+                                break;
+                            case 3:
+                                <span>Czerwony</span>
+                                break;
+                            case 4:
+                                <span>Żółty</span>
+                                break;
+                            case 5:
+                                <span>Fioletowy</span>
+                                break;
+                        }
+                    </b>
+                    <form method="post" action="/Order/EditView">
+                        <input type="hidden" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                        <input type="submit" class="btn btn-info" value="Edytuj zamówienie" />
+                    </form>
+                </td>
+            </tr>
+            <tr id="second_@i">
+                <td colspan="6">
+                    @if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
+                    {
+
+                    }
+                    else
+                    {                       
+                            <input type="hidden" id="orderId_@i" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                            <label for="chosenMeal">Danie:</label>
+                            <select class="addInDisplay" id="selectMeal_@i" name="chosenMeal">
+                                <option selected disabled hidden value="">-- Wybierz danie --</option>
+                                @for (int k = 0; k < MealsList.theList.Count; k++)
+                                {
+                                    <option value="@MealsList.theList[k].MealId">@MealsList.theList[k].MealName @MealsList.theList[k].MealUnitPrice PLN</option>
+                                }
+                            </select>
+                            <label for="quantity">Ilość:</label>
+                            <input class="addInDisplay" id="quantity_@i" type="number" name="quantity" />
+                            <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addInDisplay(@Model.OrdersList[i].OrderId, @i)"/>                       
+                    }
+                </td>
+            </tr>
+                <tr id="third_@i">
                     <th>Nazwa dania</th>
                     <th>Cena jednostkowa</th>
                     <th>Ilość</th>
                     <th>Cena pozycji</th>
-                    <th>Edytuj pozycję</th>
                     <th>Usuń pozycję</th>
                 </tr>
                 for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
                 {
-                    
-                    <tr id="@i@j">
-                        @if (Model.OrdersList[i].OrderItems[j].Meal.MealName == "Napiwek 5%")
-                        {
-                            <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
-                            <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
-                        }
-                        else
-                        {
-                            <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
-                            <td>@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
-                            <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
-                            <td>@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
-                            <td>
-                                <input type="button" class="btn btn-info" value="Edytuj pozycję" />
-                            </td>
-                            <td>
-                                <input type="button" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j');">
-                            </td>
-                        }
-                    </tr>
+        
+        <tr id="@i@j" class="toAdd_@i">
+            @if (Model.OrdersList[i].OrderItems[j].Meal.MealName == "Napiwek 5%")
+            {
+                <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+            }
+            else
+            {
+                <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                <td id="UnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
+                <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
+                <td id="PositionUnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].ListPositionPrice PLN</td>
+
+
+                if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
+                {
+                    <td></td><td></td>
                 }
-                <tr>
+                else
+                {
+                    <td>
+                        <input type="button" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j', @i);">
+                    </td>
+                }
+
+            }
+        </tr>
+                }
+                <tr id="fourth_@i">
                     <td colspan="6" id="blueRow">
-                        <span id="orderTotalPrice">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</span>
+                        <span id="orderTotalPrice_@i">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</span>
                         <br />
-                    
                         <form method="post" action="/Order/GetSummary">
                             <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                            <input type="button" class="btn btn-danger" id="removeOrder" value="Usuń zamówienie" />
+                            <input type="button" class="btn btn-danger" value="Usuń zamówienie" onclick="removeOrder(@Model.OrdersList[i].OrderId, @i);"/>
                             <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
-                        </form>   
+                        </form>
                     </td>
                 </tr>
-                if(i != Model.OrdersList.Count - 1)
+                if (i != Model.OrdersList.Count - 1)
                 {
-                    <tr>
+                    <tr id="fifth_@i">
                         <td colspan="6"><hr /></td>
                     </tr>
                 }
@@ -112,44 +174,73 @@ else
     </table>
 }
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#removeOrder").click(function () {
-            var idOfOrder = $("#orderId").val();
-            var items = { IdOfOrder: idOfOrder };
+    function removeContent(content) {
+        window.currentValue = $("#currentValue_" + content).val();
+        $("#name_" + content).val("");
+    }
+        function addInDisplay(idOfOrder, passedValue) {
+            var mealItemId = $("#selectMeal_" + passedValue).val();
+            var mealQuantity = $("#quantity_" + passedValue).val();
+            var sendData = { MealItemId: mealItemId, MealQuantity: mealQuantity, IdOfOrder: idOfOrder };
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(items),
-                url: "/Order/RemoveOrder",
+                data: JSON.stringify(sendData),
+                url: "/Order/AddToDisplay",
                 dataType: "json",
                 success: function () {
-                    alert("Pomyślnie usunięto zamówienie");
+                    $("#quantity").val("");
+                    alert("Dodano pozycję do zamówienia");
                     location.href = "/Home/Index";
                 },
                 error: function () {
                     alert("Wystąpił błąd");
                 }
             });
-        });     
-    });
-    function removingPosition(idOfOrder, itemName, positionNumber) {
-            var items = { IdOfOrder: idOfOrder, ItemName: itemName };
-            $.ajax({
+        }
+    
+    function removingPosition(idOfOrder, itemName, complexPositionNumber, positionNumber) {
+        var items = { IdOfOrder: idOfOrder, ItemName: itemName };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(items),
+            url: "/Order/RemovePosition",
+            dataType: "json",
+            success: function (data) {
+                $("#" + complexPositionNumber).remove();
+                $.each(data, function (key, val) {
+                    $("#orderTotalPrice_" + positionNumber).text("Cena zamówienia: " + val + "PLN")
+                });
+
+            },
+            error: function () {
+                alert("Wystąpił błąd");
+            }
+        });
+    }
+    function removeOrder(idOfOrder, positionNumber) {
+        var items = { IdOfOrder: idOfOrder };
+        $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify(items),
-                url: "/Order/RemovePosition",
+                url: "/Order/RemoveOrder",
                 dataType: "json",
-                success: function (data) {
-                    $("#" + positionNumber).remove();
-                    $.each(data, function (key, val) {
-                        $("#orderTotalPrice").html("Cena zamówienia: " + val +  " PLN")
-                    });
-                    
+                success: function () {
+                    alert("Usunięto zamówienie");
+                    $("#third_" + positionNumber).nextUntil("#fifth_" + positionNumber).remove();
+                    $("#headTr").remove();
+                    $("#first_" + positionNumber).remove(); 
+                    $("#second_" + positionNumber).remove(); 
+                    $("#third_" + positionNumber).remove(); 
+                    $("#fourth_" + positionNumber).remove();
+                    $("#fifth_" + positionNumber).remove();
                 },
                 error: function () {
                     alert("Wystąpił błąd");
                 }
             });
         }
+
 </script>

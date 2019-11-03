@@ -1,4 +1,4 @@
-﻿@model ASPNETapp2.Models.AvailableMeals
+﻿
 @{
     ViewBag.Title = "Dodaj zamówienie";
 }
@@ -19,13 +19,12 @@
             <label for="chosenMeal">Danie:</label>
             <select class="form-control" id="selectMeal" name="chosenMeal">
                 <option selected disabled hidden value="">-- Wybierz danie --</option>
-                @for (int i = 0; i < Model.ListOfMeals.Count; i++)
-                {
-                    <option value="@Model.ListOfMeals[i].MealId">@Model.ListOfMeals[i].MealName @Model.ListOfMeals[i].MealUnitPrice PLN</option>
-                }
+                <option value="1">Roladki z cukinii z szynką</option>
+                <option value="2">Kotlet schabowy z ziemniakami i mizerią</option>
+                <option value="3">Szarlotka z jabłkami</option>
             </select>
             <label for="quantity">Ilość:</label>
-            <input class="form-control" id="quantity" type="number" name="quantity" />
+            <input class="form-control" id="quantity" type="number" name="quantity" min="1" required/>
             <input class="btn btn-primary" type="button" id="addMeal" value="Dodaj danie">
         </div>
         <div id="tableButton">
@@ -61,7 +60,6 @@
                 dataType: "json",
                 success: function (data) {
                     $("#quantity").val("");
-                    $("#selectMeal select").val("empty").change();
                     var items = [];
                     $.each(data, function (key, val) {
                         items.push("<td>" + val + "</td>");

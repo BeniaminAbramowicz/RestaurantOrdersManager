@@ -125,7 +125,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AvailableMeals.cs" />
+    <Compile Include="Models\ListOfOrderItems.cs" />
     <Compile Include="Models\ListOfOrders.cs" />
     <Compile Include="Models\Meal.cs" />
     <Compile Include="Models\MealItem.cs" />
@@ -172,6 +172,7 @@
     <Content Include="Views\Order\AddOrder.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Order\OrderSummary.cshtml" />
+    <Content Include="Views\Order\EditView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

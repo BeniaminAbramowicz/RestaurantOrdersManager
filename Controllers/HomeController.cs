@@ -16,7 +16,9 @@ namespace ASPNETapp2.Controllers
             string chosenTable = (string)TempData["ChosenTable"];
             switch (chosenTable)
             {
+
                 case "all":
+                case "empty":
                     if(Session["ListOfOrders"] != null)
                     {
                         listOfOrders = (List<Order>)Session["ListOfOrders"];
@@ -26,6 +28,7 @@ namespace ASPNETapp2.Controllers
                     {
                         TempData["error"] = "Brak zamówień dla tego stolika";
                     }
+                    TempData["ChosenTable"] = chosenTable;
                     return View(resultList);
 
                 case "billpaid":
@@ -38,6 +41,7 @@ namespace ASPNETapp2.Controllers
                     {
                         TempData["error"] = "Brak zamówień dla tego stolika";
                     }
+                    TempData["ChosenTable"] = chosenTable;
                     return View(resultList);
 
                 case "pendingpayment":
@@ -50,66 +54,24 @@ namespace ASPNETapp2.Controllers
                     {
                         TempData["error"] = "Brak zamówień dla tego stolika";
                     }
+                    TempData["ChosenTable"] = chosenTable;
                     return View(resultList);
 
                 case "1":
-                    if (Session["ListOfOrders"] != null)
-                    {
-                        listOfOrders = ((List<Order>)Session["ListOfOrders"]).FindAll(x => x.TableNumber == 1);
-                        resultList.OrdersList = listOfOrders;
-                    }
-                    if (!listOfOrders.Any())
-                    {
-                        TempData["error"] = "Brak zamówień dla tego stolika";
-                    }
-                    return View(resultList);
-
                 case "2":
-                    if (Session["ListOfOrders"] != null)
-                    {
-                        listOfOrders = ((List<Order>)Session["ListOfOrders"]).FindAll(x => x.TableNumber == 2);
-                        resultList.OrdersList = listOfOrders;
-                    }
-                    if (!listOfOrders.Any())
-                    {
-                        TempData["error"] = "Brak zamówień dla tego stolika";
-                    }
-                    return View(resultList);
-
                 case "3":
-                    if (Session["ListOfOrders"] != null)
-                    {
-                        listOfOrders = ((List<Order>)Session["ListOfOrders"]).FindAll(x => x.TableNumber == 3);
-                        resultList.OrdersList = listOfOrders;
-                    }
-                    if (!listOfOrders.Any())
-                    {
-                        TempData["error"] = "Brak zamówień dla tego stolika";
-                    }
-                    return View(resultList);
-
                 case "4":
-                    if (Session["ListOfOrders"] != null)
-                    {
-                        listOfOrders = ((List<Order>)Session["ListOfOrders"]).FindAll(x => x.TableNumber == 4);
-                        resultList.OrdersList = listOfOrders;
-                    }
-                    if (!listOfOrders.Any())
-                    {
-                        TempData["error"] = "Brak zamówień dla tego stolika";
-                    }
-                    return View(resultList);
-
                 case "5":
                     if (Session["ListOfOrders"] != null)
                     {
-                        listOfOrders = ((List<Order>)Session["ListOfOrders"]).FindAll(x => x.TableNumber == 5);
+                        listOfOrders = ((List<Order>)Session["ListOfOrders"]).FindAll(x => x.TableNumber ==  Int32.Parse(chosenTable));
                         resultList.OrdersList = listOfOrders;
                     }
                     if (!listOfOrders.Any())
                     {
                         TempData["error"] = "Brak zamówień dla tego stolika";
                     }
+                    TempData["ChosenTable"] = chosenTable;
                     return View(resultList);
 
                 default:

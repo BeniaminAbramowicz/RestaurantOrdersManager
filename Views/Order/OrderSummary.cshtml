@@ -1,5 +1,4 @@
 ﻿@model ASPNETapp2.Models.Order
-@using ASPNETapp2.Models
 @{
     ViewBag.Title = "Podsumowanie zamówienia";
 }
@@ -39,9 +38,9 @@
         else
         {
         <li>Nazwa dania: @Model.OrderItems[i].Meal.MealName | 
-            Cena jednostkowa: @Model.OrderItems[i].Meal.MealUnitPrice | 
+            Cena jednostkowa: @Model.OrderItems[i].Meal.MealUnitPrice PLN | 
             Ilość: @Model.OrderItems[i].Quantity | 
-            Cena pozycji: @Model.OrderItems[i].ListPositionPrice
+            Cena pozycji: @Model.OrderItems[i].ListPositionPrice PLN
         </li>
         }
     }

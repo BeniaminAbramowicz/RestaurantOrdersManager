@@ -191,11 +191,11 @@ else
                         }
                         else
                         {
-                    <form method="post" action="/Order/GetSummary" style="display:none">
-                        <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                        <input type="button" class="btn btn-danger" value="Usuń zamówienie" onclick="removeOrder(@Model.OrdersList[i].OrderId, @i);" />
-                        <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
-                    </form>
+                            <form method="post" action="/Order/GetSummary" style="display:none">
+                                <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                                <input type="button" class="btn btn-danger" value="Usuń zamówienie" onclick="removeOrder(@Model.OrdersList[i].OrderId, @i);" />
+                                <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
+                            </form>
                         }
                     </td>
                 </tr>

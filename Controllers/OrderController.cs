@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ASPNETapp2.Models;
 
@@ -115,7 +114,7 @@ namespace ASPNETapp2.Controllers
             {
                 order.OrderItems.Add(new OrderItem(theMeal, mealItem.MealQuantity, theMeal.MealUnitPrice * mealItem.MealQuantity));
             }
-            order.TotalPrice = order.TotalPrice + (theMeal.MealUnitPrice * mealItem.MealQuantity);
+            order.TotalPrice += (theMeal.MealUnitPrice * mealItem.MealQuantity);
             listOfOrders[listOfOrders.FindIndex(z => z.OrderId == idOfOrder)] = order;
             Session["ListOfOrders"] = listOfOrders;
             TempData["ChosenTable"] = chosenTable;
@@ -141,8 +140,7 @@ namespace ASPNETapp2.Controllers
             TempData["idOfOrder"] = orderId;
             List<Order> currentList = (List<Order>)Session["ListOfOrders"];
             Order order = currentList.Find(x => x.OrderId == orderId);
-            List<OrderItem> listOfItems = order.OrderItems;
-            ListOfOrderItems listOfOrderItems = new ListOfOrderItems { ItemsList = listOfItems };
+            ListOfOrderItems listOfOrderItems = new ListOfOrderItems { ItemsList = order.OrderItems };
 
             return View(listOfOrderItems);
         }

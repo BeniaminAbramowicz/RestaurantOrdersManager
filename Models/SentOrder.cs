@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace ASPNETapp2.Models
 {
@@ -9,18 +7,12 @@ namespace ASPNETapp2.Models
     {
         private List<SentOrderItem> _sentOrderItems;
         public List<SentOrderItem> SentOrderItems { get => _sentOrderItems; set => _sentOrderItems = value.OfType<SentOrderItem>().ToList(); }
-
-        private int _sentTableNumber;
-        public int SentTableNumber { get => _sentTableNumber; set => _sentTableNumber = value; }
+        public int SentTableNumber { get; set; }
     }
 
     public class SentOrderItem
     {
-        private string _sentMealName;
-        public string SentMealName { get => _sentMealName; set => _sentMealName = value; }
-
-        private int _sentQuantity;
-        public int SentQuantity { get => _sentQuantity; set => _sentQuantity = value; }
-
+        public string SentMealName { get; set; }
+        public int SentQuantity { get; set; }
     }
 }

@@ -7,7 +7,6 @@ namespace ASPNETapp2.Models
 {
     public class ListOfOrderItems
     {
-        private List<OrderItem> _itemsList;
-        public List<OrderItem> ItemsList { get => _itemsList; set => _itemsList = value; }
+        public List<OrderItem> ItemsList { get; set; }
     }
 }

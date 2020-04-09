@@ -26,17 +26,18 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Lista zamówień", "Index", "Home")</li>
                     <li>@Html.ActionLink("Dodaj zamówienie", "AddOrder", "Order")</li>
+                    <li>@Html.ActionLink("Lista dań", "MealsList", "Meal")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="height: 100%">
         @RenderBody()
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
-        <hr />
         <footer class="container-fluid w-100 py-2 bg-dark">
+            <hr />
             <p class="m-0 text-center text-white">Copyright &copy; 2019 by <a href="https://github.com/BeniaminAbramowicz" class="alert-link" target="_blank">Beniamin Abramowicz</a></p>
         </footer>
     </div>

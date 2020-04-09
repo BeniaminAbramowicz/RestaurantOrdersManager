@@ -52,7 +52,7 @@ else
             @for (int i = 0; i < Model.OrdersList.Count; i++)
             {
                 <tr id="first_@i">
-                    <td colspan="6" id="greyRow">
+                    <td colspan="6" id="grey-row">
                         <b>
                             Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia:
                             @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
@@ -178,7 +178,7 @@ else
                     </tr>
                 }
                 <tr id="fourth_@i">
-                    <td colspan="6" id="blueRow">
+                    <td colspan="6" id="blue-row">
                         <span id="orderTotalPrice_@i">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</span>
                         <br />
                         @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
@@ -214,10 +214,6 @@ else
     </table>
 }
 <script type="text/javascript">
-    function removeContent(content) {
-        window.currentValue = $("#currentValue_" + content).val();
-        $("#name_" + content).val("");
-    }
     function addInDisplay(idOfOrder, passedValue) {
         var mealItemId = $("#selectMeal_" + passedValue).val();
         var mealQuantity = $("#quantity_" + passedValue).val();

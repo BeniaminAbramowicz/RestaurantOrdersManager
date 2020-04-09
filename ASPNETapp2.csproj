@@ -122,21 +122,26 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MealController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
-    <Compile Include="Repository\DBConnection.cs" />
+    <Compile Include="Models\ListOfMealsDTO.cs" />
+    <Compile Include="Models\MealDTO.cs" />
+    <Compile Include="Repositories\DBConnection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ListOfOrderItems.cs" />
+    <Compile Include="Models\ListOfOrderItemsDTO.cs" />
     <Compile Include="Models\ListOfOrders.cs" />
     <Compile Include="Models\Meal.cs" />
-    <Compile Include="Models\MealItem.cs" />
+    <Compile Include="Models\MealItemDTO.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\SentOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\MealsRepository.cs" />
+    <Compile Include="Repositories\IMealsRepository.cs" />
+    <Compile Include="Repositories\MealsRepository.cs" />
+    <Compile Include="Services\IMealsService.cs" />
+    <Compile Include="Services\MealsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -180,6 +185,7 @@
     <Content Include="Views\Order\OrderSummary.cshtml" />
     <Content Include="Views\Order\EditView.cshtml" />
     <Content Include="sqlMap.config" />
+    <Content Include="Views\Meal\MealsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

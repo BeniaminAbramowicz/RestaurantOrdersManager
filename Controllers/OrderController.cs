@@ -14,7 +14,7 @@ namespace ASPNETapp2.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddItem(MealItem mealItem)
+        public JsonResult AddItem(MealItemDTO mealItem)
         {
             Meal theMeal = MealsList.theList.Find(x => x.MealId == mealItem.MealItemId);
             var resultData = new
@@ -100,7 +100,7 @@ namespace ASPNETapp2.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddToDisplay(MealItem mealItem, int idOfOrder)
+        public JsonResult AddToDisplay(MealItemDTO mealItem, int idOfOrder)
         {
             string chosenTable = (string)TempData["ChosenTable"];
             Meal theMeal = MealsList.theList.Find(x => x.MealId == mealItem.MealItemId);
@@ -140,7 +140,7 @@ namespace ASPNETapp2.Controllers
             TempData["idOfOrder"] = orderId;
             List<Order> currentList = (List<Order>)Session["ListOfOrders"];
             Order order = currentList.Find(x => x.OrderId == orderId);
-            ListOfOrderItems listOfOrderItems = new ListOfOrderItems { ItemsList = order.OrderItems };
+            ListOfOrderItemsDTO listOfOrderItems = new ListOfOrderItemsDTO { ItemsList = order.OrderItems };
 
             return View(listOfOrderItems);
         }

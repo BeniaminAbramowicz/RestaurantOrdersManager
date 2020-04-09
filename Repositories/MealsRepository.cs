@@ -1,9 +1,9 @@
 ﻿using ASPNETapp2.Models;
 using System.Collections.Generic;
 
-namespace ASPNETapp2.Repository
+namespace ASPNETapp2.Repositories
 {
-    public class MealsRepository
+    public class MealsRepository : IMealsRepository
     {
         public IEnumerable<Meal> FindAll()
         {
@@ -20,9 +20,12 @@ namespace ASPNETapp2.Repository
             return DBConnection.EntityMapper.QueryForObject<Meal>("GetMealByName", mealName);
         }
 
-        public void AddMeal(Meal newMeal)
+        public Meal AddMeal(MealDTO newMeal)
         {
             DBConnection.EntityMapper.Insert("AddMeal", newMeal);
+            int newMealId = DBConnection.EntityMapper.QueryForObject<int>("ReturnMeal", "");
+            
+            return FindById(newMealId);
         }
 
         public void RemoveMeal(int mealId)
@@ -30,9 +33,10 @@ namespace ASPNETapp2.Repository
             DBConnection.EntityMapper.Delete("RemoveMeal", mealId);
         }
 
-        public void UpdateMeal(Meal meal)
+        public Meal UpdateMeal(Meal meal)
         {
             DBConnection.EntityMapper.Update("UpdateMeal", meal);
+            return FindById(meal.MealId);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using ASPNETapp2.Models;
 
@@ -26,7 +25,7 @@ namespace ASPNETapp2.Controllers
                     }                  
                     if (!listOfOrders.Any())
                     {
-                        TempData["error"] = "Brak zamówień dla tego stolika";
+                        TempData["error"] = "Lista zamówień jest pusta";
                     }
                     TempData["ChosenTable"] = chosenTable;
                     return View(resultList);
@@ -39,7 +38,7 @@ namespace ASPNETapp2.Controllers
                     }
                     if (!listOfOrders.Any())
                     {
-                        TempData["error"] = "Brak zamówień dla tego stolika";
+                        TempData["error"] = "Brak zamówień z zapłaconym rachunkiem";
                     }
                     TempData["ChosenTable"] = chosenTable;
                     return View(resultList);
@@ -52,7 +51,7 @@ namespace ASPNETapp2.Controllers
                     }
                     if (!listOfOrders.Any())
                     {
-                        TempData["error"] = "Brak zamówień dla tego stolika";
+                        TempData["error"] = "Brak zamówień oczekujących na zapłatę";
                     }
                     TempData["ChosenTable"] = chosenTable;
                     return View(resultList);
@@ -75,12 +74,15 @@ namespace ASPNETapp2.Controllers
                     return View(resultList);
 
                 default:
+                    if (!listOfOrders.Any())
+                    {
+                        TempData["error"] = "Lista zamówień jest pusta";
+                    }
                     return View(resultList);
             }       
         }
 
         [HttpPost]
-        [ActionName("DisplayOrders")]
         public ActionResult DisplayOrders(string chosenTable)
         {
             TempData["ChosenTable"] = chosenTable;

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using ASPNETapp2.Models;
-
-namespace ASPNETapp2.Models
+﻿namespace ASPNETapp2.Models
 {
     public class OrderItem
     {
@@ -18,7 +12,7 @@ namespace ASPNETapp2.Models
             Quantity = quantity;
             ListPositionPrice = listPositionPrice;
         }
-        public OrderItem(Meal meal,double listPositionPrice)
+        public OrderItem(Meal meal, double listPositionPrice)
         {
             Meal = meal;
             ListPositionPrice = listPositionPrice;

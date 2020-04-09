@@ -1,8 +1,8 @@
 ﻿using IBatisNet.DataMapper;
 
-namespace ASPNETapp2.Repository
+namespace ASPNETapp2.Repositories
 {
-    class DBConnection
+    public static class DBConnection
     {
         public static ISqlMapper EntityMapper
         {

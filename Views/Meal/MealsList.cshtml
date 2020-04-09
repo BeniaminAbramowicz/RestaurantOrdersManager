@@ -1,0 +1,117 @@
+﻿@model ASPNETapp2.Models.ListOfMealsDTO
+@{
+    ViewBag.Title = "MealsList";
+}
+<div class="container meal-container">
+    <form onsubmit="addMeal(event)">
+        <label for="mealName">Nazwa dania</label>
+        <input class="form-control" type="text" id="mealName" />
+        <label for="mealUnitPrice">Cena dania</label>
+        <input class="form-control" type="text" id="mealUnitPrice" />
+        <input type="submit" class="btn btn-primary" value="Dodaj danie" />
+    </form>
+    <table id="meals-table" class="table">
+        <thead>
+            <tr>
+                <td>Nazwa dania</td>
+                <td>Cena dania</td>
+                <td>Edytuj danie</td>
+                <td>Usuń Danie</td>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.MealsList.Count; i++)
+            {
+                <tr>
+                    <td style="display: none"><input type="hidden" value="@Model.MealsList[i].MealId" /></td>
+                    <td>@Model.MealsList[i].MealName</td>
+                    <td>@String.Format("{0:0.00}", Model.MealsList[i].MealUnitPrice) PLN</td>
+                    <td><button class="btn btn-success" onclick="editMeal(event)">Edytuj pozycję</button></td>
+                    <td><button class="btn btn-danger" onclick="removeMeal(event, @Model.MealsList[i].MealId)">Usuń pozycję</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function removeMeal(event, mealId) {
+        var data = { MealId: mealId }
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: "/Meal/RemoveMeal",
+            dataType: "json",
+            success: function () {
+                alert("Pomyślnie usunięto danie z listy");
+                $(event.target).parent().parent().remove();
+            },
+            error: function () {
+                alert("Wystąpił błąd");
+            }
+        });
+    }
+
+    function addMeal(event) {
+        event.preventDefault();
+        var mealName = $("#mealName").val();
+        var mealUnitPrice = $("#mealUnitPrice").val();
+        var data = { MealName: mealName, MealUnitPrice: mealUnitPrice };
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: "/Meal/AddMeal",
+            dataType: "json",
+            success: function (data) {
+                alert("Pomyślnie dodano nowe danie do listy dań");
+                $(`<tr>
+                    <td style="display: none"><input type="hidden" value="${data.MealId}" /></td>
+                    <td>${data.MealName}</td>
+                    <td>${data.MealUnitPrice.toFixed(2)} PLN</td>
+                    <td><button class="btn btn-success" onclick="editMeal(event)">Edytuj pozycję</button></td>
+                    <td><button class="btn btn-danger" onclick="removeMeal(event, ${data.MealId})">Usuń pozycję</button></td>
+                    </tr>`)
+                .insertAfter($("tbody tr:last-child"));
+            },
+            error: function () {
+                alert("Wystąpił błąd");
+            }
+        });
+    }
+
+    function editMeal(event) {
+        $("#update-meal-form").remove();
+        $(`<tr id="update-meal-form">
+            <td><label for="editMealName">Nazwa dania</label><input type="text" class="form-control" id="editMealName"/></td>
+            <td><label for="editMealUnitPrice">Cena dania</label><input type="text" class="form-control" id="editMealUnitPrice"/></td>
+            <td colspan="2" style="vertical-align: bottom;"><button class="btn btn-primary" onclick="updateMeal(event)">Aktualizuj danie</button></td>
+            </tr>`)
+            .insertAfter($(event.target).parent().parent());
+    }
+
+    function updateMeal(event) {
+        var mealId = $(event.target).parent().parent().prev().children(":first").children(":first").val();
+        var mealName = $("#editMealName").val();
+        var mealUnitPrice = $("#editMealUnitPrice").val();
+        var data = { MealId: mealId, MealName: mealName, MealUnitPrice: mealUnitPrice };
+        $.ajax({
+            type: "PUT",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            url: "/Meal/UpdateMeal",
+            dataType: "json",
+            success: function (data) {
+                alert("Pomyślnie zaktualizowano danie");
+                $(event.target).parent().parent().prev().children(":nth-child(2)").html(data.MealName);
+                $(event.target).parent().parent().prev().children(":nth-child(3)").html(data.MealUnitPrice.toFixed(2) + " PLN");
+                $("#update-meal-form").remove();
+            },
+            error: function () {
+                alert("Wystąpił błąd");
+            }
+        });
+    }
+</script>
+

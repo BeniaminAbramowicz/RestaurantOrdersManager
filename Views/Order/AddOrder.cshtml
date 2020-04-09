@@ -15,7 +15,7 @@
         <option id="stolik5" value="5">Fioletowy</option>
     </select>
     <div id="orderItems">
-        <div id="mealQuantityButton">
+        <div id="meal-quantity-button">
             <label for="chosenMeal">Danie:</label>
             <select class="form-control" id="selectMeal" name="chosenMeal">
                 <option selected disabled hidden value="">-- Wybierz danie --</option>
@@ -32,7 +32,7 @@
             <input class="form-control" id="quantity" type="number" name="quantity" min="1" required/>
             <input class="btn btn-primary" type="button" id="addMeal" value="Dodaj danie">
         </div>
-        <div id="tableButton">
+        <div id="table-button">
             <table class="table" id="mealsList">
                 <thead>
                     <tr id="head">
@@ -53,7 +53,7 @@
 <script>
     $(document).ready(function () {
         $("#addMeal").click(function () {
-            $("#tableButton").css('visibility', 'visible');
+            $("#table-button").css('visibility', 'visible');
             var mealItemId = $('#selectMeal').val();
             var mealQuantity = $('#quantity').val();
             var mealItem = { MealItemId: mealItemId, MealQuantity: mealQuantity };
@@ -119,7 +119,7 @@
         });
 
         $("#chosenTable").change(function () {
-            $("#mealQuantityButton").css('visibility', 'visible');
+            $("#meal-quantity-button").css('visibility', 'visible');
         });
     });
 </script>

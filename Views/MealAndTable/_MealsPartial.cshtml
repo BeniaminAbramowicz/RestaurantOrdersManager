@@ -1,0 +1,34 @@
+﻿<div class="container meal-container">
+    <div form-container>
+        <form onsubmit="addMeal(event)" class="new-meal-table-form">
+            <label for="meal-name">Nazwa dania</label>
+            <input class="form-input" type="text" id="meal-name" />
+            <label for="meal-unit-price">Cena dania (PLN)</label>
+            <input class="form-input" type="text" id="meal-unit-price" />
+            <input type="submit" class="btn btn-primary" value="Dodaj danie" />
+        </form>
+    </div>
+    <table id="table" class="table">
+        <thead>
+            <tr>
+                <td>Nazwa dania</td>
+                <td>Cena dania</td>
+                <td>Edytuj danie</td>
+                <td>Usuń Danie</td>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.MealsList.Count; i++)
+            {
+                <tr>
+                    <td style="display: none"><input type="hidden" value="@Model.MealsList[i].MealId" /></td>
+                    <td>@Model.MealsList[i].MealName</td>
+                    <td>@String.Format("{0:0.00}", Model.MealsList[i].MealUnitPrice) PLN</td>
+                    <td><button class="btn btn-success" onclick="editMeal(event)">Edytuj pozycję</button></td>
+                    <td><button class="btn btn-danger" onclick="removeMeal(event, @Model.MealsList[i].MealId)">Usuń pozycję</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@Scripts.Render("~/bundles/mealdisplay");

@@ -20,23 +20,21 @@ namespace ASPNETapp2.Repositories
             return DBConnection.EntityMapper.QueryForObject<Meal>("GetMealByName", mealName);
         }
 
-        public Meal AddMeal(MealDTO newMeal)
+        public Meal Add(Meal newMeal)
         {
-            DBConnection.EntityMapper.Insert("AddMeal", newMeal);
-            int newMealId = DBConnection.EntityMapper.QueryForObject<int>("ReturnMeal", "");
-            
-            return FindById(newMealId);
+            DBConnection.EntityMapper.Insert("AddMeal", newMeal);           
+            return FindById(DBConnection.EntityMapper.QueryForObject<int>("ReturnMeal", ""));
         }
 
-        public void RemoveMeal(int mealId)
+        public void Remove(int mealId)
         {
             DBConnection.EntityMapper.Delete("RemoveMeal", mealId);
         }
 
-        public Meal UpdateMeal(Meal meal)
+        public Meal Update(Meal updatedMeal)
         {
-            DBConnection.EntityMapper.Update("UpdateMeal", meal);
-            return FindById(meal.MealId);
+            DBConnection.EntityMapper.Update("UpdateMeal", updatedMeal);
+            return FindById(updatedMeal.MealId);
         }
     }
 }

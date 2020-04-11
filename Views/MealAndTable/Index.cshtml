@@ -1,0 +1,23 @@
+﻿@model ASPNETapp2.Models.ListOfMealsAndTablesDTO
+@{
+    ViewBag.Title = "Meals and Tables";
+}
+<form method="post" action="/MealAndTable/ChooseMealsOrTables" id="choose-meal-table">
+    <div>
+        <button value="1" type="submit" id="choose-meals" name="choice">Dania</button>
+    </div>
+    <div>
+        <button value="2" type="submit" id="choose-tables" name="choice">Stoliki</button>
+    </div>
+</form>
+@switch(TempData["choice"])
+{
+    case 1:
+        Html.RenderPartial("_MealsPartial");
+        break;
+    case 2:
+        Html.RenderPartial("_TablesPartial");
+        break;
+    default:
+        break;
+}

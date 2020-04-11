@@ -12,7 +12,7 @@
     @RenderSection("scripts", required: false)
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-sticky-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -26,12 +26,12 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Lista zamówień", "Index", "Home")</li>
                     <li>@Html.ActionLink("Dodaj zamówienie", "AddOrder", "Order")</li>
-                    <li>@Html.ActionLink("Lista dań", "MealsList", "Meal")</li>
+                    <li>@Html.ActionLink("Dania i stoliki", "Index", "MealAndTable")</li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content" style="height: 100%">
+    <div class="content-container">
         @RenderBody()
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")

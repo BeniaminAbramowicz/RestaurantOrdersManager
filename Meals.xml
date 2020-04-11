@@ -15,7 +15,7 @@
       FROM meals
       WHERE mealName = #value#
     </statement>
-    <statement id="AddMeal" parameterType="ASPNETapp2.Models.MealDTO">
+    <statement id="AddMeal" parameterType="ASPNETapp2.Models.Meal">
       INSERT INTO meals (mealName, mealUnitPrice)
       VALUES(#MealName#, #MealUnitPrice#)
     </statement>
@@ -42,21 +42,4 @@
       <result property="MealUnitPrice" column="mealUnitPrice"/>
     </resultMap>
   </resultMaps>
-  <!--<statements>
-    <statement id="GetUser" parameterType="int" resultType="string" >
-      SELECT username
-      FROM Users
-      WHERE id = #value#
-    </statement>
-    <select id="GetUsersList" resultMap="test">
-      SELECT * FROM Users
-    </select>
-  </statements>
-  <resultMaps>
-    <resultMap id="test" class="ASPNETapp2.Models.UserTestModel">
-      <result property="Id" column="id" />
-      <result property="Username" column="username"/>
-      <result property="Password" column="password"/>
-    </resultMap>
-  </resultMaps>-->
 </sqlMap>

@@ -25,17 +25,17 @@ namespace ASPNETapp2.Services
         {
             return _mealsRepository.FindByName(mealName);
         }
-        public Meal AddMeal(MealDTO newMeal)
+        public Meal Add(Meal newMeal)
         {
-            return _mealsRepository.AddMeal(newMeal);
+            return _mealsRepository.Add(newMeal);
         }
-        public void RemoveMeal(int mealId)
+        public void Remove(int mealId)
         {
-            _mealsRepository.RemoveMeal(mealId);
+            _mealsRepository.Remove(mealId);
         }
-        public Meal UpdateMeal(Meal meal)
+        public Meal Update(Meal meal)
         {
-            return _mealsRepository.UpdateMeal(meal);
+            return _mealsRepository.Update(meal);
         }
     }
 }

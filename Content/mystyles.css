@@ -1,8 +1,12 @@
 ﻿body {
     width: 100%;
-    min-height: 100vh;
-    height: 100%;
+    height: 100vh;
     margin: 0px;
+    padding: 0;
+}
+
+.content-container{
+    height: 100%;
 }
 
 h2 {
@@ -39,12 +43,71 @@ h4:first-of-type{
     text-align: center;
 }
 
-#meals-table td{
+#table td{
     vertical-align: middle;
 }
 
-.meal-container{
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    width: 200rem;
+    height: 60rem;
+    padding: 1rem;
+}
+
+.new-meal-table-form {
     display: flex;
     flex-direction: column;
+    position: relative;
     align-items: center;
+    top: 0rem;
+    width: 100%;
+    min-width: 18.75rem;
+    height: auto;
+    margin: 1rem auto;
+    padding: 1rem;
+}
+
+.form-input {
+    max-width: 100vh;
+    color: black;
+    text-align: center;
+    width: 50%;
+    border-radius: 5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    outline: none;
+}
+
+.new-meal-table-form input[type=submit]{
+    margin: 1rem;
+    width: 20%;
+}
+
+#choose-meal-table{
+    display: flex;
+    justify-items: center;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
+#choose-meal-table div{
+    width: 100%;
+}
+
+#choose-meal-table div > button{
+    width: 15rem;
+    color: black;
+    border: 2px solid;
+    border-radius: 5rem;
+    outline: none;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
+.button-pressed{
+    background-color: dodgerblue;
+    color: white;
 }

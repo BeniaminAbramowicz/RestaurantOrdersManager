@@ -122,10 +122,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MealController.cs" />
+    <Compile Include="Controllers\MealAndTableController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Models\ListOfMealsAndTablesDTO.cs" />
     <Compile Include="Models\ListOfMealsDTO.cs" />
+    <Compile Include="Models\ListOfTablesDTO.cs" />
     <Compile Include="Models\MealDTO.cs" />
+    <Compile Include="Models\Table.cs" />
     <Compile Include="Repositories\DBConnection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -139,8 +142,12 @@
     <Compile Include="Models\SentOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IMealsRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\MealsRepository.cs" />
+    <Compile Include="Repositories\TablesRepository.cs" />
     <Compile Include="Services\IMealsService.cs" />
+    <Compile Include="Services\IService.cs" />
+    <Compile Include="Services\TablesService.cs" />
     <Compile Include="Services\MealsService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -167,8 +174,13 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\meal-display.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="sqlFile.xml" />
+    <Content Include="Meals.xml" />
+    <Content Include="Scripts\order-create.js" />
+    <Content Include="Scripts\order-display.js" />
+    <Content Include="Scripts\table-display.js" />
+    <Content Include="Tables.xml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -185,7 +197,9 @@
     <Content Include="Views\Order\OrderSummary.cshtml" />
     <Content Include="Views\Order\EditView.cshtml" />
     <Content Include="sqlMap.config" />
-    <Content Include="Views\Meal\MealsList.cshtml" />
+    <Content Include="Views\MealAndTable\Index.cshtml" />
+    <Content Include="Views\MealAndTable\_MealsPartial.cshtml" />
+    <Content Include="Views\MealAndTable\_TablesPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

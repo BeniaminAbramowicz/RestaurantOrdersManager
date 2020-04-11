@@ -16,11 +16,13 @@
                 <option id="pending" value="pendingpayment">Oczekiwanie na zapłatę</option>
             </optgroup>
             <optgroup label="Nazwa stolika">
-                <option id="stolik1" value="1">Niebieski</option>
-                <option id="stolik2" value="2">Zielony</option>
-                <option id="stolik3" value="3">Czerwony</option>
-                <option id="stolik4" value="4">Żółty</option>
-                <option id="stolik5" value="5">Fioletowy</option>
+                <option value="1">Niebieski</option>
+                <option value="2">Zielony</option>
+                <option value="3">Czerwony</option>
+                <option value="4">Żółty</option>
+                <option value="5">Fioletowy</option>
+                <option value="6">Pomarańczowy</option>
+                <option value="7">Turkusowy</option>
             </optgroup>
         </select>
         <input type="submit" class="btn btn-primary" value="Wyświetl zamówienia" />
@@ -212,71 +214,5 @@ else
             }
         </tbody>
     </table>
+    @Scripts.Render("~/bundles/orderdisplay");
 }
-<script type="text/javascript">
-    function addInDisplay(idOfOrder, passedValue) {
-        var mealItemId = $("#selectMeal_" + passedValue).val();
-        var mealQuantity = $("#quantity_" + passedValue).val();
-        var sendData = { MealItemId: mealItemId, MealQuantity: mealQuantity, IdOfOrder: idOfOrder };
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(sendData),
-            url: "/Order/AddToDisplay",
-            dataType: "json",
-            success: function () {
-                $("#quantity").val("");
-                alert("Dodano pozycję do zamówienia");
-                location.href = "/Home/Index";
-            },
-            error: function () {
-                alert("Wystąpił błąd");
-            }
-        });
-    }
-
-    function removingPosition(idOfOrder, itemName, complexPositionNumber, positionNumber) {
-        var items = { IdOfOrder: idOfOrder, ItemName: itemName };
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(items),
-            url: "/Order/RemovePosition",
-            dataType: "json",
-            success: function (data) {
-                $("#" + complexPositionNumber).remove();
-                $.each(data, function (key, val) {
-                    $("#orderTotalPrice_" + positionNumber).text("Cena zamówienia: " + val + "PLN")
-                });
-
-            },
-            error: function () {
-                alert("Wystąpił błąd");
-            }
-        });
-    }
-    function removeOrder(idOfOrder, positionNumber) {
-        var items = { IdOfOrder: idOfOrder };
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(items),
-            url: "/Order/RemoveOrder",
-            dataType: "json",
-            success: function () {
-                alert("Usunięto zamówienie");
-                $("#third_" + positionNumber).nextUntil("#fifth_" + positionNumber).remove();
-                $("#headTr").remove();
-                $("#first_" + positionNumber).remove();
-                $("#second_" + positionNumber).remove();
-                $("#third_" + positionNumber).remove();
-                $("#fourth_" + positionNumber).remove();
-                $("#fifth_" + positionNumber).remove();
-            },
-            error: function () {
-                alert("Wystąpił błąd");
-            }
-        });
-    }
-
-</script>

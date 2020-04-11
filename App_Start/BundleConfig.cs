@@ -14,6 +14,10 @@ namespace ASPNETapp2
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
             bundles.Add(new StyleBundle("~/Content/mystyles").Include("~/Content/mystyles.css"));
+            bundles.Add(new ScriptBundle("~/bundles/orderdisplay").Include("~/Scripts/order-display.js"));
+            bundles.Add(new ScriptBundle("~/bundles/mealdisplay").Include("~/Scripts/meal-display.js"));
+            bundles.Add(new ScriptBundle("~/bundles/tabledisplay").Include("~/Scripts/table-display.js"));
+            bundles.Add(new ScriptBundle("~/bundles/ordercreate").Include("~/Scripts/order-create.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sqlMap namespace="ASPNETapp2" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+  <statements>
+    <statement id="GetTablesList" resultMap="TablesList">
+      SELECT *
+      FROM tables
+    </statement>
+    <statement id="GetTableById" parameterType="int" resultType="ASPNETapp2.Models.Table" resultMap="TablesList">
+      SELECT *
+      FROM tables
+      WHERE tableId = #value#
+    </statement>
+    <statement id="AddTable" parameterType="ASPNETapp2.Models.Table">
+      INSERT INTO tables (tableName)
+      VALUES(#TableName#)
+    </statement>
+    <statement id="RemoveTable" parameterType="int">
+      DELETE FROM tables
+      WHERE tableId = #value#
+    </statement>
+    <statement id="UpdateTable" parameterType="ASPNETapp2.Models.Table">
+      UPDATE tables SET
+      tableName = #TableName#
+      WHERE tableId = #TableId#
+    </statement>
+    <statement id="ReturnTable" resultType="ASPNETapp2.Models.Table">
+      SELECT TOP 1 tableId
+      FROM tables
+      ORDER BY tableId DESC
+    </statement>
+  </statements>
+  <resultMaps>
+    <resultMap id="TablesList" class="ASPNETapp2.Models.Table">
+      <result property="TableId" column="tableId"/>
+      <result property="TableName" column="tableName"/>
+    </resultMap>
+  </resultMaps>
+</sqlMap>

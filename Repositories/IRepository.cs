@@ -6,6 +6,7 @@ namespace ASPNETapp2.Repositories
     {
         IEnumerable<T> FindAll();
         T FindById(int id);
+        T FindByName(string name);
         T Add(T newObject);
         void Remove(int id);
         T Update(T updatedObject);

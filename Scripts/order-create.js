@@ -29,7 +29,7 @@
     $("#addOrder").click(function () {
         var chosenTable = $("#chosenTable").val();
         var tableBodyObjects = $("tbody tr");
-        var tableHeadNames = ["SentMealName", "SentUnitPrice", "SentQuantity"];
+        var tableHeadNames = ["MealName", "UnitPrice", "Quantity"];
         var listOfOrderMeals = [];
         var lista = [];
         var temp = {};

@@ -5,7 +5,7 @@ namespace ASPNETapp2.Services
 {
     public class RestaurantFacade
     {
-        private readonly IMealsService _mealsService;
+        private readonly IService<Meal> _mealsService;
         private readonly IService<Table> _tablesService;
 
         public RestaurantFacade()
@@ -34,9 +34,9 @@ namespace ASPNETapp2.Services
             return _mealsService.Add(newMeal);
         }
 
-        public void RemoveMeal(int mealId)
+        public string RemoveMeal(int mealId)
         {
-            _mealsService.Remove(mealId);
+            return _mealsService.Remove(mealId);
         }
 
         public Meal UpdateMeal(Meal updatedMeal)
@@ -59,9 +59,9 @@ namespace ASPNETapp2.Services
             return _tablesService.Add(newTable);
         }
 
-        public void RemoveTable(int tableId)
+        public string RemoveTable(int tableId)
         {
-            _tablesService.Remove(tableId);
+            return _tablesService.Remove(tableId);
         }
 
         public Table UpdateTable(Table updatedTable)

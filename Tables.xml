@@ -10,6 +10,11 @@
       FROM tables
       WHERE tableId = #value#
     </statement>
+    <statement id="GetTableByName" parameterType="string" resultType="ASPNETapp2.Models.Table" resultMap="TablesList">
+      SELECT *
+      FROM tables
+      WHERE tableName = #value#
+    </statement>
     <statement id="AddTable" parameterType="ASPNETapp2.Models.Table">
       INSERT INTO tables (tableName)
       VALUES(#TableName#)

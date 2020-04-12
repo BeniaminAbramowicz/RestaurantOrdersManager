@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ASPNETapp2.Repositories
 {
-    public class MealsRepository : IMealsRepository
+    public class MealsRepository : IRepository<Meal>
     {
         public IEnumerable<Meal> FindAll()
         {

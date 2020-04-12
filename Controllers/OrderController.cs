@@ -29,7 +29,7 @@ namespace ASPNETapp2.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateOrder(SentOrder sentOrder)
+        public JsonResult CreateOrder(OrderDTO sentOrder)
         {
             if (Session["ListOfOrders"] == null)
             {
@@ -38,18 +38,18 @@ namespace ASPNETapp2.Controllers
             double pr = 0;
             foreach (var x in sentOrder.SentOrderItems)
             {
-                pr += MealsList.theList.Find(z => z.MealName.Equals(x.SentMealName)).MealUnitPrice * x.SentQuantity;
+                pr += MealsList.theList.Find(z => z.MealName.Equals(x.MealName)).MealUnitPrice * x.Quantity;
             }
             List<OrderItem> finalItems = new List<OrderItem>();
             foreach (var y in sentOrder.SentOrderItems)
             {
-                if (finalItems.Any(k => k.Meal.MealName.Equals(y.SentMealName))){
-                    finalItems.Find(d => d.Meal.MealName.Equals(y.SentMealName)).Quantity += y.SentQuantity;
-                    finalItems.Find(d => d.Meal.MealName.Equals(y.SentMealName)).ListPositionPrice += MealsList.theList.Find(l => l.MealName.Equals(y.SentMealName)).MealUnitPrice*y.SentQuantity;
+                if (finalItems.Any(k => k.Meal.MealName.Equals(y.MealName))){
+                    finalItems.Find(d => d.Meal.MealName.Equals(y.MealName)).Quantity += y.Quantity;
+                    finalItems.Find(d => d.Meal.MealName.Equals(y.MealName)).ListPositionPrice += MealsList.theList.Find(l => l.MealName.Equals(y.MealName)).MealUnitPrice*y.Quantity;
                 }
                 else
                 {
-                    finalItems.Add(new OrderItem(MealsList.theList.Find(x => x.MealName.Equals(y.SentMealName)), y.SentQuantity, (MealsList.theList.Find(z => z.MealName.Equals(y.SentMealName)).MealUnitPrice) * y.SentQuantity));
+                    finalItems.Add(new OrderItem(MealsList.theList.Find(x => x.MealName.Equals(y.MealName)), y.Quantity, (MealsList.theList.Find(z => z.MealName.Equals(y.MealName)).MealUnitPrice) * y.Quantity));
                 }
                 
             }

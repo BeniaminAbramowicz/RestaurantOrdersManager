@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace ASPNETapp2.Services
 {
-    public class MealsService : IMealsService
+    public class MealsService : IService<Meal>
     {
-        private readonly IMealsRepository _mealsRepository;
+        private readonly IRepository<Meal> _mealsRepository;
 
         public MealsService()
         {
@@ -27,15 +27,39 @@ namespace ASPNETapp2.Services
         }
         public Meal Add(Meal newMeal)
         {
-            return _mealsRepository.Add(newMeal);
+            Meal mealExists = FindByName(newMeal.MealName);
+            if(mealExists == null)
+            {
+                return _mealsRepository.Add(newMeal);
+            } else
+            {
+                return null;
+            }
         }
-        public void Remove(int mealId)
+        public string Remove(int mealId)
         {
-            _mealsRepository.Remove(mealId);
+            Meal mealExists = FindById(mealId);
+            if(mealExists != null)
+            {
+                _mealsRepository.Remove(mealId);
+                return "Pomyślnie usunięto posiłek";
+            }
+            else
+            {
+                return "Wybrany posiłek nie istnieje w bazie posiłków";
+            } 
         }
-        public Meal Update(Meal meal)
+        public Meal Update(Meal updatedMeal)
         {
-            return _mealsRepository.Update(meal);
+            Meal mealExists = FindById(updatedMeal.MealId);
+            if(mealExists != null)
+            {
+                return _mealsRepository.Update(updatedMeal);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

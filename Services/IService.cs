@@ -6,8 +6,9 @@ namespace ASPNETapp2.Services
     {
         IEnumerable<T> FindAll();
         T FindById(int id);
+        T FindByName(string name);
         T Add(T newObject);
-        void Remove(int id);
+        string Remove(int id);
         T Update(T updatedObject);
     }
 }

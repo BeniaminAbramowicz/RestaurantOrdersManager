@@ -32,7 +32,6 @@ function removingPosition(idOfOrder, itemName, complexPositionNumber, positionNu
             $.each(data, function (key, val) {
                 $("#orderTotalPrice_" + positionNumber).text("Cena zamówienia: " + val + "PLN")
             });
-
         },
         error: function () {
             alert("Wystąpił błąd");

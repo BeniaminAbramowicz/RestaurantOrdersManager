@@ -15,6 +15,11 @@ namespace ASPNETapp2.Repositories
             return DBConnection.EntityMapper.QueryForObject<Table>("GetTableById", tableId);
         }
 
+        public Table FindByName(string tableName)
+        {
+            return DBConnection.EntityMapper.QueryForObject<Table>("GetTableByName", tableName);
+        }
+
         public Table Add(Table newTable)
         {
             DBConnection.EntityMapper.Insert("AddTable", newTable);

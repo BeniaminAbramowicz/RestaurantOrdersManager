@@ -45,7 +45,7 @@ namespace ASPNETapp2.Controllers
             {
                 if (finalItems.Any(k => k.Meal.MealName.Equals(y.MealName))){
                     finalItems.Find(d => d.Meal.MealName.Equals(y.MealName)).Quantity += y.Quantity;
-                    finalItems.Find(d => d.Meal.MealName.Equals(y.MealName)).ListPositionPrice += MealsList.theList.Find(l => l.MealName.Equals(y.MealName)).MealUnitPrice*y.Quantity;
+                    finalItems.Find(d => d.Meal.MealName.Equals(y.MealName)).Price += MealsList.theList.Find(l => l.MealName.Equals(y.MealName)).MealUnitPrice*y.Quantity;
                 }
                 else
                 {
@@ -53,7 +53,7 @@ namespace ASPNETapp2.Controllers
                 }
                 
             }
-            Order newRecievedOrder = new Order(finalItems, pr, sentOrder.SentTableNumber, Order.OrderStatus.PendingPayment);
+            Order newRecievedOrder = new Order(finalItems, pr, new Table(sentOrder.SentTableNumber, "name"), Order.OrderStatus.PendingPayment);
             var getSessionList = (List<Order>)Session["ListOfOrders"];
             getSessionList.Add(newRecievedOrder);
             Session["ListOfOrders"] = getSessionList;
@@ -109,7 +109,7 @@ namespace ASPNETapp2.Controllers
             if(order.OrderItems.Any(k => k.Meal.MealId == mealItem.MealItemId))
             {
                 order.OrderItems.Find(j => j.Meal.MealId == mealItem.MealItemId).Quantity += mealItem.MealQuantity;
-                order.OrderItems.Find(j => j.Meal.MealId == mealItem.MealItemId).ListPositionPrice += MealsList.theList.Find(l => l.MealId == mealItem.MealItemId).MealUnitPrice * mealItem.MealQuantity;
+                order.OrderItems.Find(j => j.Meal.MealId == mealItem.MealItemId).Price += MealsList.theList.Find(l => l.MealId == mealItem.MealItemId).MealUnitPrice * mealItem.MealQuantity;
             } else
             {
                 order.OrderItems.Add(new OrderItem(theMeal, mealItem.MealQuantity, theMeal.MealUnitPrice * mealItem.MealQuantity));
@@ -127,7 +127,7 @@ namespace ASPNETapp2.Controllers
         {
             List<Order> currentList = (List<Order>)Session["ListOfOrders"];
             Order order = currentList.Find(x => x.OrderId == idOfOrder);
-            order.TotalPrice = Math.Round(order.TotalPrice - order.OrderItems[order.OrderItems.FindIndex(z => z.Meal.MealName.Equals(itemName))].ListPositionPrice, 2);
+            order.TotalPrice = Math.Round(order.TotalPrice - order.OrderItems[order.OrderItems.FindIndex(z => z.Meal.MealName.Equals(itemName))].Price, 2);
             order.OrderItems.Remove(order.OrderItems.Find(y => y.Meal.MealName.Equals(itemName)));
             currentList[currentList.FindIndex(x => x.OrderId == idOfOrder)] = order;
             Session["ListOfOrders"] = currentList;
@@ -155,11 +155,11 @@ namespace ASPNETapp2.Controllers
             {
                 if(order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity > quantity)
                 {
-                    order.OrderItems[order.OrderItems.FindIndex(g => g.Meal.MealName.Equals(chosenMeal))].ListPositionPrice -= MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * (order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity - quantity);
+                    order.OrderItems[order.OrderItems.FindIndex(g => g.Meal.MealName.Equals(chosenMeal))].Price -= MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * (order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity - quantity);
 
                 } else if(order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity < quantity)
                 {
-                    order.OrderItems[order.OrderItems.FindIndex(g => g.Meal.MealName.Equals(chosenMeal))].ListPositionPrice += MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * (quantity - order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity);
+                    order.OrderItems[order.OrderItems.FindIndex(g => g.Meal.MealName.Equals(chosenMeal))].Price += MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * (quantity - order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity);
                 } else if(order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity == quantity)
                 {
 
@@ -170,19 +170,19 @@ namespace ASPNETapp2.Controllers
             else if (order.OrderItems.Any(k => k.Meal.MealName.Equals(chosenMeal)))
             {
                 order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity += quantity;
-                order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].ListPositionPrice += MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * quantity;
+                order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Price += MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * quantity;
                 order.OrderItems.Remove(order.OrderItems[order.OrderItems.FindIndex(w => w.Meal.MealName.Equals(replacedMeal))]);
             } 
             else
             {
                 order.OrderItems[order.OrderItems.FindIndex(y => y.Meal.MealName.Equals(replacedMeal))].Meal = MealsList.theList.Find(z => z.MealName.Equals(chosenMeal));
-                order.OrderItems[order.OrderItems.FindIndex(y => y.Meal.MealName.Equals(chosenMeal))].ListPositionPrice = MealsList.theList.Find(z => z.MealName.Equals(chosenMeal)).MealUnitPrice * quantity;
+                order.OrderItems[order.OrderItems.FindIndex(y => y.Meal.MealName.Equals(chosenMeal))].Price = MealsList.theList.Find(z => z.MealName.Equals(chosenMeal)).MealUnitPrice * quantity;
                 order.OrderItems[order.OrderItems.FindIndex(y => y.Meal.MealName.Equals(chosenMeal))].Quantity = quantity;
             }
             double finalPrice = 0;
             foreach(var t in order.OrderItems)
             {
-                finalPrice += t.ListPositionPrice;
+                finalPrice += t.Price;
             }
             order.TotalPrice = Math.Round((finalPrice), 2);
             currentList[currentList.FindIndex(x => x.OrderId == idOfOrder)] = order;

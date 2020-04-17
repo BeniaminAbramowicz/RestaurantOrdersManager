@@ -5,18 +5,20 @@ namespace ASPNETapp2.Services
 {
     public class RestaurantFacade
     {
-        private readonly IService<Meal> _mealsService;
+        private readonly IExtendedService<Meal> _mealsService;
         private readonly IService<Table> _tablesService;
+        private readonly IService<Order> _ordersService;
 
         public RestaurantFacade()
         {
             _mealsService = new MealsService();
             _tablesService = new TablesService();
+            _ordersService = new OrdersService();
         }
 
-        public IEnumerable<Meal> FindAllMeals()
+        public IEnumerable<Meal> FindAllMeals(SearchCondition condition)
         {
-            return _mealsService.FindAll();
+            return _mealsService.FindAll(condition);
         }
 
         public Meal FindMealById(int mealId)
@@ -44,9 +46,9 @@ namespace ASPNETapp2.Services
             return _mealsService.Update(updatedMeal);
         }
 
-        public IEnumerable<Table> FindAllTables()
+        public IEnumerable<Table> FindAllTables(SearchCondition condition)
         {
-            return _tablesService.FindAll();
+            return _tablesService.FindAll(condition);
         }
 
         public Table FindTableById(int tableId)
@@ -67,6 +69,11 @@ namespace ASPNETapp2.Services
         public Table UpdateTable(Table updatedTable)
         {
             return _tablesService.Update(updatedTable);
+        }
+
+        public IEnumerable<Order> FindAllOrders(SearchCondition condition)
+        {
+            return _ordersService.FindAll(condition);
         }
     }
 }

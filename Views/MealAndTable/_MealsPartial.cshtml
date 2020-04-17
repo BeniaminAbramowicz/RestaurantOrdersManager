@@ -1,13 +1,11 @@
 ﻿<div class="container meal-container">
-    <div form-container>
-        <form onsubmit="addMeal(event)" class="new-meal-table-form">
-            <label for="meal-name">Nazwa dania</label>
-            <input class="form-input" type="text" id="meal-name" />
-            <label for="meal-unit-price">Cena dania (PLN)</label>
-            <input class="form-input" type="text" id="meal-unit-price" />
-            <input type="submit" class="btn btn-primary" value="Dodaj danie" />
-        </form>
-    </div>
+    <form onsubmit="addMeal(event)" class="new-meal-table-form">
+        <label for="meal-name">Nazwa dania</label>
+        <input class="form-input" type="text" id="meal-name" />
+        <label for="meal-unit-price">Cena dania (PLN)</label>
+        <input class="form-input" type="text" id="meal-unit-price" />
+        <input type="submit" class="btn btn-primary" value="Dodaj danie" />
+    </form>
     <table id="table" class="table">
         <thead>
             <tr>

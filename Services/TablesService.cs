@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 namespace ASPNETapp2.Services
 {
-    public class TablesService : IService<Table>
+    public class TablesService : IExtendedService<Table>
     {
-        private readonly IRepository<Table> _tablesRepository;
+        private readonly IExtendedRepository<Table> _tablesRepository;
 
         public TablesService()
         {
             _tablesRepository = new TablesRepository();
         }
 
-        public IEnumerable<Table> FindAll()
+        public IEnumerable<Table> FindAll(SearchCondition condition)
         {
-            return _tablesRepository.FindAll();
+            return _tablesRepository.FindAll(condition);
         }
 
         public Table FindById(int tableId)

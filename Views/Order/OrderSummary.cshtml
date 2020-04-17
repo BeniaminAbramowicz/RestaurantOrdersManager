@@ -5,7 +5,7 @@
 
     <h2>
         Podsumowanie zamówienia nr: @Model.OrderId <br />
-        dla stolika: @switch (Model.TableNumber)
+        dla stolika: @switch (Model.Table.TableId)
         {
             case 1:
                 <span>Niebieskiego</span>
@@ -20,7 +20,13 @@
                 <span>Czerwonego</span>
                 break;
             case 5:
-                <span>fioletowego</span>
+                <span>Fioletowego</span>
+                break;
+            case 6:
+                <span>Pomarańczowego</span>
+                break;
+            case 7:
+                <span>Turkusowego</span>
                 break;
         }
     </h2>
@@ -32,7 +38,7 @@
         if (i == Model.OrderItems.Count - 1)
         {
             <li>Dodatkowa pozycja: @Model.OrderItems[i].Meal.MealName | 
-                Wartość napiwku: @Model.OrderItems[i].ListPositionPrice PLN
+                Wartość napiwku: @Model.OrderItems[i].Price PLN
             </li>
         }
         else
@@ -40,7 +46,7 @@
         <li>Nazwa dania: @Model.OrderItems[i].Meal.MealName | 
             Cena jednostkowa: @Model.OrderItems[i].Meal.MealUnitPrice PLN | 
             Ilość: @Model.OrderItems[i].Quantity | 
-            Cena pozycji: @Model.OrderItems[i].ListPositionPrice PLN
+            Cena pozycji: @Model.OrderItems[i].Price PLN
         </li>
         }
     }

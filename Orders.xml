@@ -1,9 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <sqlMap namespace="ASPNETapp2" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
   <statements>
-    
+    <statement id="GetOrdersList"  parameterClass="ASPNETapp2.Models.SearchCondition" resultMap="OrderMap">
+      SELECT o.orderId, o.totalPrice, o.tableId, o.status, m.mealId, m.mealName, m.mealUnitPrice, i.quantity, i.price, t.tableName
+      FROM orders o
+      INNER JOIN  orderItems i ON i.orderId = o.orderId
+      INNER JOIN meals m ON m.mealId = i.mealId
+      INNER JOIN tables t ON t.tableId = o.tableId
+      <dynamic prepend="WHERE">
+        <isEqual property="Condition" compareValue="billpaid"> o.status = 'BillPaid'</isEqual>
+        <isEqual property="Condition" compareValue="pendingpayment"> o.status = 'PendingPayment'</isEqual>
+        <isEqual property="Condition" compareValue="1"> o.tableId = 1</isEqual>
+        <isEqual property="Condition" compareValue="2"> o.tableId = 2</isEqual>
+        <isEqual property="Condition" compareValue="3"> o.tableId = 3</isEqual>
+        <isEqual property="Condition" compareValue="4"> o.tableId = 4</isEqual>
+        <isEqual property="Condition" compareValue="5"> o.tableId = 5</isEqual>
+        <isEqual property="Condition" compareValue="6"> o.tableId = 6</isEqual>
+        <isEqual property="Condition" compareValue="7"> o.tableId = 7</isEqual>
+      </dynamic>
+    </statement>
   </statements>
   <resultMaps>
-    
+    <resultMap id="OrderMap" class="ASPNETapp2.Models.Order" groupBy="OrderId">
+      <result property="OrderId" column="orderId"/>
+      <result property="TotalPrice" column="totalPrice" />
+      <result property="Status" column="status" />
+      <result property="Table.TableId" column="tableId" />
+      <result property="Table.TableName" column="tableName" />
+      <result property="OrderItems" resultMapping="ASPNETapp2.OrderItemList" /> 
+    </resultMap>
+    <resultMap id="OrderItemList" class="ASPNETapp2.Models.OrderItem">
+      <result property="Meal.MealId" column="mealId" />
+      <result property="Meal.MealName" column="mealName" />
+      <result property="Meal.MealUnitPrice" column="mealUnitPrice" />
+      <result property="Quantity" column="quantity" />
+      <result property="Price" column="price" />
+    </resultMap>
   </resultMaps>
 </sqlMap>

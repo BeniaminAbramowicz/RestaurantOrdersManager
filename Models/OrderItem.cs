@@ -4,18 +4,19 @@
     {
         public Meal Meal { get; set; }
         public int Quantity { get; set; }
-        public double ListPositionPrice { get; set; }
+        public double Price { get; set; }
 
-        public OrderItem(Meal meal, int quantity, double listPositionPrice)
+        public OrderItem() { }
+        public OrderItem(Meal meal, int quantity, double price)
         {
             Meal = meal;
             Quantity = quantity;
-            ListPositionPrice = listPositionPrice;
+            Price = price;
         }
-        public OrderItem(Meal meal, double listPositionPrice)
+        public OrderItem(Meal meal, double price)
         {
             Meal = meal;
-            ListPositionPrice = listPositionPrice;
+            Price = price;
         }
     }
 }

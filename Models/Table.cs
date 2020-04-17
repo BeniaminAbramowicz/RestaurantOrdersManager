@@ -15,5 +15,10 @@ namespace ASPNETapp2.Models
         {
             TableName = tableName;
         }
+        public Table(int tableId, string tableName)
+        {
+            TableId = tableId;
+            TableName = tableName;
+        }
     }
 }

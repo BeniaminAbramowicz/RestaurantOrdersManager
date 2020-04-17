@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
-    $("#addMeal").click(function () {
+    $("#add-meal").click(function () {
         $("#table-button").css('visibility', 'visible');
-        var mealItemId = $('#selectMeal').val();
+        var mealItemId = $('#select-meal').val();
         var mealQuantity = $('#quantity').val();
         var mealItem = { MealItemId: mealItemId, MealQuantity: mealQuantity };
         $.ajax({
@@ -26,8 +26,8 @@
         });
     });
 
-    $("#addOrder").click(function () {
-        var chosenTable = $("#chosenTable").val();
+    $("#add-order").click(function () {
+        var chosenTable = $("#chosen-table").val();
         var tableBodyObjects = $("tbody tr");
         var tableHeadNames = ["MealName", "UnitPrice", "Quantity"];
         var listOfOrderMeals = [];
@@ -65,7 +65,7 @@
         });
     });
 
-    $("#chosenTable").change(function () {
+    $("#chosen-table").change(function () {
         $("#meal-quantity-button").css('visibility', 'visible');
     });
 });

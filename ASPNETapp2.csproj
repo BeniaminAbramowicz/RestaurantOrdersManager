@@ -128,6 +128,7 @@
     <Compile Include="Models\ListOfMealsDTO.cs" />
     <Compile Include="Models\ListOfTablesDTO.cs" />
     <Compile Include="Models\MealDTO.cs" />
+    <Compile Include="Models\SearchCondition.cs" />
     <Compile Include="Models\Table.cs" />
     <Compile Include="Repositories\DBConnection.cs" />
     <Compile Include="Global.asax.cs">
@@ -141,10 +142,14 @@
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\OrderDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IExtendedRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\MealsRepository.cs" />
+    <Compile Include="Repositories\OrdersRepository.cs" />
     <Compile Include="Repositories\TablesRepository.cs" />
+    <Compile Include="Services\IExtendedService.cs" />
     <Compile Include="Services\IService.cs" />
+    <Compile Include="Services\OrdersService.cs" />
     <Compile Include="Services\RestaurantFacade.cs" />
     <Compile Include="Services\TablesService.cs" />
     <Compile Include="Services\MealsService.cs" />

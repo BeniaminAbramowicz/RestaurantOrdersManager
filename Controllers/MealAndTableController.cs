@@ -25,13 +25,13 @@ namespace ASPNETapp2.Controllers
                 case 1:
                     ListOfMealsAndTablesDTO mealsList = new ListOfMealsAndTablesDTO()
                     {
-                        MealsList = _restaurantFacade.FindAllMeals().ToList()
+                        MealsList = _restaurantFacade.FindAllMeals(new SearchCondition()).ToList()
                     };
                     return View(mealsList);
                 case 2:
                     ListOfMealsAndTablesDTO tablesList = new ListOfMealsAndTablesDTO()
                     {
-                        TablesList = _restaurantFacade.FindAllTables().ToList()
+                        TablesList = _restaurantFacade.FindAllTables(new SearchCondition()).ToList()
                     };
                     return View(tablesList);
                 default:

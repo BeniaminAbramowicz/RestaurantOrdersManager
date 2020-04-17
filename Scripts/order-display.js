@@ -1,5 +1,5 @@
 ﻿function addInDisplay(idOfOrder, passedValue) {
-    var mealItemId = $("#selectMeal_" + passedValue).val();
+    var mealItemId = $("#select-meal_" + passedValue).val();
     var mealQuantity = $("#quantity_" + passedValue).val();
     var sendData = { MealItemId: mealItemId, MealQuantity: mealQuantity, IdOfOrder: idOfOrder };
     $.ajax({
@@ -30,7 +30,7 @@ function removingPosition(idOfOrder, itemName, complexPositionNumber, positionNu
         success: function (data) {
             $("#" + complexPositionNumber).remove();
             $.each(data, function (key, val) {
-                $("#orderTotalPrice_" + positionNumber).text("Cena zamówienia: " + val + "PLN")
+                $("#order-total-price_" + positionNumber).text("Cena zamówienia: " + val + " PLN")
             });
         },
         error: function () {

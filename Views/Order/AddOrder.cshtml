@@ -4,9 +4,9 @@
 }
 <h2>@ViewBag.Title</h2>
 
-<div id="orderForm">
+<div id="order-form">
     <label for="chosenMeal">Zamówienie dla stolika:</label>
-    <select id="chosenTable" class="form-control">
+    <select id="chosen-table" class="form-control" name="chosenMeal">
         <option selected disabled hidden value="empty">-- Wybierz stolik --</option>
         <option value="1">Niebieski</option>
         <option value="2">Zielony</option>
@@ -16,10 +16,10 @@
         <option value="6">Pomarańczowy</option>
         <option value="7">Turkusowy</option>
     </select>
-    <div id="orderItems">
+    <div id="order-items">
         <div id="meal-quantity-button">
             <label for="chosenMeal">Danie:</label>
-            <select class="form-control" id="selectMeal" name="chosenMeal">
+            <select class="form-control" id="select-meal" name="chosenMeal">
                 <option selected disabled hidden value="">-- Wybierz danie --</option>
                 <option value="1">Roladki z cukinii z szynką</option>
                 <option value="2">Kotlet schabowy z ziemniakami i mizerią</option>
@@ -32,10 +32,10 @@
             </select>
             <label for="quantity">Ilość:</label>
             <input class="form-control" id="quantity" type="number" name="quantity" min="1" required/>
-            <input class="btn btn-primary" type="button" id="addMeal" value="Dodaj danie">
+            <input class="btn btn-primary" type="button" id="add-meal" value="Dodaj danie">
         </div>
         <div id="table-button">
-            <table class="table" id="mealsList">
+            <table class="table" id="meals-list">
                 <thead>
                     <tr id="head">
                         <th>Nazwa dania</th>
@@ -48,7 +48,7 @@
                 </tbody>
             </table>
             <br />
-            <input class="btn btn-primary" type="button" id="addOrder" value="Dodaj zamówienie" />
+            <input class="btn btn-primary" type="button" id="add-order" value="Dodaj zamówienie" />
         </div>
     </div>
 </div>

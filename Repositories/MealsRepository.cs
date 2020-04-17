@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace ASPNETapp2.Repositories
 {
-    public class MealsRepository : IRepository<Meal>
+    public class MealsRepository : IExtendedRepository<Meal>
     {
-        public IEnumerable<Meal> FindAll()
+        public IEnumerable<Meal> FindAll(SearchCondition condition)
         {
-            return DBConnection.EntityMapper.QueryForList<Meal>("GetMealsList", "");
+            return DBConnection.EntityMapper.QueryForList<Meal>("GetMealsList", condition);
         }
 
         public Meal FindById(int mealId)

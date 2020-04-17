@@ -47,16 +47,6 @@ h4:first-of-type{
     vertical-align: middle;
 }
 
-.form-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    width: 200rem;
-    height: 60rem;
-    padding: 1rem;
-}
-
 .new-meal-table-form {
     display: flex;
     flex-direction: column;
@@ -110,4 +100,9 @@ h4:first-of-type{
 .button-pressed{
     background-color: dodgerblue;
     color: white;
+}
+
+#order-form{
+    margin-left: 30%;
+    margin-right: 30%;
 }

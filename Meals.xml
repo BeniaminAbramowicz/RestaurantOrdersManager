@@ -5,12 +5,12 @@
       SELECT * 
       FROM meals
     </statement>
-    <statement id="GetMealById" parameterType="int" resultType="ASPNETapp2.Models.Meal" resultMap="MealsList">
+    <statement id="GetMealById" parameterType="int" resultMap="MealsList">
       SELECT *
       FROM meals
       WHERE mealId = #value#
     </statement>
-    <statement id="GetMealByName" parameterType="string" resultType="ASPNETapp2.Models.Meal" resultMap="MealsList">
+    <statement id="GetMealByName" parameterType="string" resultMap="MealsList">
       SELECT *
       FROM meals
       WHERE mealName = #value#

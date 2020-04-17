@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 namespace ASPNETapp2.Services
 {
-    public class MealsService : IService<Meal>
+    public class MealsService : IExtendedService<Meal>
     {
-        private readonly IRepository<Meal> _mealsRepository;
+        private readonly IExtendedRepository<Meal> _mealsRepository;
 
         public MealsService()
         {
             _mealsRepository = new MealsRepository();
         }
 
-        public IEnumerable<Meal> FindAll()
+        public IEnumerable<Meal> FindAll(SearchCondition condition)
         {
-            return _mealsRepository.FindAll();
+            return _mealsRepository.FindAll(condition);
         }
         public Meal FindById(int mealId)
         {

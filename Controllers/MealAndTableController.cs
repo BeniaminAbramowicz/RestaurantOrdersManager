@@ -3,8 +3,7 @@ using System.Linq;
 using ASPNETapp2.Models;
 using System.Web.Mvc;
 using ASPNETapp2.Services;
-using System.Threading.Tasks;
-using System.Net;
+using System;
 
 namespace ASPNETapp2.Controllers
 {
@@ -19,23 +18,23 @@ namespace ASPNETapp2.Controllers
 
         public ActionResult Index()
         {
-            int? choice = (int?) TempData["choice"];
+            int? choice = Int32.Parse(TempData["choice"] == null ? "0" : TempData["choice"].ToString());
             switch (choice)
             {
                 case 1:
-                    ListOfMealsAndTablesDTO mealsList = new ListOfMealsAndTablesDTO()
+                    ListOfMealsTables mealsList = new ListOfMealsTables()
                     {
-                        MealsList = _restaurantFacade.FindAllMeals(new SearchCondition()).ToList()
+                        MealsList = _restaurantFacade.FindAllMeals(new SearchCondition("")).ToList()
                     };
                     return View(mealsList);
                 case 2:
-                    ListOfMealsAndTablesDTO tablesList = new ListOfMealsAndTablesDTO()
+                    ListOfMealsTables tablesList = new ListOfMealsTables()
                     {
-                        TablesList = _restaurantFacade.FindAllTables(new SearchCondition()).ToList()
+                        TablesList = _restaurantFacade.FindAllTables(new SearchCondition("")).ToList()
                     };
                     return View(tablesList);
                 default:
-                    ListOfMealsAndTablesDTO emptyList = new ListOfMealsAndTablesDTO()
+                    ListOfMealsTables emptyList = new ListOfMealsTables()
                     {
                         MealsList = new List<Meal>(),
                         TablesList = new List<Table>()
@@ -68,7 +67,7 @@ namespace ASPNETapp2.Controllers
         [HttpPost]
         public JsonResult AddMeal(MealDTO newMeal)
         {
-            Meal addedMeal = _restaurantFacade.AddMeal(new Meal(newMeal.MealName, newMeal.MealUnitPrice));
+            Meal addedMeal = _restaurantFacade.AddMeal(new Meal(newMeal));
             return Json(addedMeal);
         }
 

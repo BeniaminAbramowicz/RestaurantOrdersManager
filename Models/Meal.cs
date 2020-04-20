@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace ASPNETapp2.Models
+﻿namespace ASPNETapp2.Models
 {
     public class Meal
     {
@@ -9,36 +7,10 @@ namespace ASPNETapp2.Models
         public double MealUnitPrice { get; set; }
 
         public Meal() { }
-        public Meal(int mealId, string mealName, double mealUnitPrice)
+        public Meal(MealDTO mealDTO)
         {
-            MealId = mealId;
-            MealName = mealName;
-            MealUnitPrice = mealUnitPrice;
+            MealName = mealDTO.MealName;
+            MealUnitPrice = mealDTO.MealUnitPrice;
         }
-        public Meal(string mealName, double mealUnitPrice)
-        {
-            MealName = mealName;
-            MealUnitPrice = mealUnitPrice;
-        }
-        public Meal(string mealName)
-        {
-            MealName = mealName;
-        }
-    }
-
-    public static class MealsList
-    {
-        public static List<Meal> theList = new List<Meal> 
-        { 
-            new Meal(1, "Roladki z cukinii z szynką", 12),
-            new Meal(2, "Kotlet schabowy z ziemniakami i mizerią", 25),
-            new Meal(3, "Szarlotka z jabłkami", 14.5),
-            new Meal(4, "Gofry pieczone w piekarniku", 15),
-            new Meal(5, "Tabbouleh sałatka arabska z kaszą bulgur", 30),
-            new Meal(6, "Kaszanka pieczona z kiszoną kapustą", 10),
-            new Meal(7, "Sałatka z zupek chińskich", 12),
-            new Meal(8, "Pasta z dyni do chleba", 13.5)
-        };
-
     }
 }

@@ -29,7 +29,7 @@
      mealUnitPrice = #MealUnitPrice#
      WHERE mealId = #MealId#
     </statement>
-    <statement id="ReturnMeal" resultType="ASPNETapp2.Models.Meal">
+    <statement id="ReturnMeal" resultType="int">
       SELECT TOP 1 mealId 
       FROM meals 
       ORDER BY mealId DESC

@@ -28,7 +28,7 @@
       tableName = #TableName#
       WHERE tableId = #TableId#
     </statement>
-    <statement id="ReturnTable" resultType="ASPNETapp2.Models.Table">
+    <statement id="ReturnTable" resultType="int">
       SELECT TOP 1 tableId
       FROM tables
       ORDER BY tableId DESC

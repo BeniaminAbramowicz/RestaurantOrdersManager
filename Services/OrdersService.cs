@@ -4,7 +4,7 @@ using ASPNETapp2.Repositories;
 
 namespace ASPNETapp2.Services
 {
-    public class OrdersService : IService<Order>
+    public class OrdersService : IOrdersService
     {
         private readonly IRepository<Order> _ordersRepository;
 
@@ -18,22 +18,27 @@ namespace ASPNETapp2.Services
             return _ordersRepository.FindAll(condition);
         }
 
-        public Order FindById(int id)
+        public Order FindById(int orderId)
+        {
+            return _ordersRepository.FindById(orderId);
+        }
+
+        public Order Add(Order newOrder)
+        {
+            return _ordersRepository.Add(newOrder);
+        }
+
+        public string Remove(int orderId)
         {
             throw new System.NotImplementedException();
         }
 
-        public Order Add(Order newObject)
+        public Order Update(Order updatedOrder)
         {
             throw new System.NotImplementedException();
         }
 
-        public string Remove(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Order Update(Order updatedObject)
+        public void PayForOrder(int orderId)
         {
             throw new System.NotImplementedException();
         }

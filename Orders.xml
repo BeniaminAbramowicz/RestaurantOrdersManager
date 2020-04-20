@@ -19,6 +19,27 @@
         <isEqual property="Condition" compareValue="7"> o.tableId = 7</isEqual>
       </dynamic>
     </statement>
+    <statement id="GetOrderById" parameterType="int" resultMap="OrderMap">
+      SELECT o.orderId, o.totalPrice, o.tableId, o.status, m.mealId, m.mealName, m.mealUnitPrice, i.quantity, i.price, t.tableName
+      FROM orders o
+      INNER JOIN  orderItems i ON i.orderId = o.orderId
+      INNER JOIN meals m ON m.mealId = i.mealId
+      INNER JOIN tables t ON t.tableId = o.tableId
+      WHERE o.orderId = #value#
+    </statement>
+    <statement id="AddOrder" parameterType="ASPNETapp2.Models.Order">
+      INSERT INTO orders(totalPrice, status, tableId)
+      VALUES (#TotalPrice#, 'PendingPayment', #Table.TableId#)
+    </statement>
+    <statement id="AddOrderItems" parameterType="ASPNETapp2.Models.OrderItem">
+      INSERT INTO orderItems(mealId, quantity, price, orderId)
+      VALUES (#Meal.MealId#, #Quantity#, #Price#, #OrderId#)
+    </statement>
+    <statement id="ReturnOrder" resultType="int">
+      SELECT TOP 1 orderId
+      FROM orders
+      ORDER BY tableId DESC
+    </statement>
   </statements>
   <resultMaps>
     <resultMap id="OrderMap" class="ASPNETapp2.Models.Order" groupBy="OrderId">

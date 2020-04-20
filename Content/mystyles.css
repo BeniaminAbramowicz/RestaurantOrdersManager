@@ -13,14 +13,22 @@ h2 {
     text-align: center;
 }
 
-#grey-row{
+.grey-row{
     background-color: lightgrey;
     text-align: center;
 }
 
-#blue-row{
+.blue-row{
     background-color: deepskyblue;
     color: white;
+    text-align: center;
+}
+
+.blue-row > span{
+    font-size: 1.8rem;
+}
+
+.add-to-order-form{
     text-align: center;
 }
 
@@ -105,4 +113,9 @@ h4:first-of-type{
 #order-form{
     margin-left: 30%;
     margin-right: 30%;
+}
+
+.orders-table{
+    margin-left: 25%;
+    margin-right: 25%;
 }

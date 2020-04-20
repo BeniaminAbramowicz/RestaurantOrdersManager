@@ -6,8 +6,8 @@ namespace ASPNETapp2.Services
     public class RestaurantFacade
     {
         private readonly IExtendedService<Meal> _mealsService;
-        private readonly IService<Table> _tablesService;
-        private readonly IService<Order> _ordersService;
+        private readonly IExtendedService<Table> _tablesService;
+        private readonly IOrdersService _ordersService;
 
         public RestaurantFacade()
         {
@@ -74,6 +74,16 @@ namespace ASPNETapp2.Services
         public IEnumerable<Order> FindAllOrders(SearchCondition condition)
         {
             return _ordersService.FindAll(condition);
+        }
+
+        public Order FindOrderById(int orderId)
+        {
+            return _ordersService.FindById(orderId);
+        }
+
+        public Order AddOrder(Order newOrder)
+        {
+            return _ordersService.Add(newOrder);
         }
     }
 }

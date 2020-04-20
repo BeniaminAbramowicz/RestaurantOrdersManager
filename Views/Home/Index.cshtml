@@ -1,4 +1,4 @@
-﻿@model ASPNETapp2.Models.ListOfOrders
+﻿@model ASPNETapp2.Models.ListOfOrdersMealsTables
 @using ASPNETapp2.Models;
 @{
     ViewBag.Title = "Zamówienia";
@@ -16,13 +16,10 @@
                 <option id="pending" value="pendingpayment">Oczekiwanie na zapłatę</option>
             </optgroup>
             <optgroup label="Nazwa stolika">
-                <option value="1">Niebieski</option>
-                <option value="2">Zielony</option>
-                <option value="3">Czerwony</option>
-                <option value="4">Żółty</option>
-                <option value="5">Fioletowy</option>
-                <option value="6">Pomarańczowy</option>
-                <option value="7">Turkusowy</option>
+                @for(var i = 0; i < Model.TablesList.Count; i++)
+                {
+                    <option value="@Model.TablesList[i].TableId">@Model.TablesList[i].TableName</option>
+                }
             </optgroup>
         </select>
         <input type="submit" class="btn btn-primary" value="Wyświetl zamówienia" />
@@ -32,186 +29,181 @@
 
 @if (Model.OrdersList == null || Model.OrdersList.Any() == false)
 {
-    if ((string)TempData["error"] != null)
-    {
-        <h4>@TempData["error"].ToString()</h4>
-    }
-    else
-    {
-
-    }
+    <h4>Lista zamówień dla wybranej kategorii jest pusta</h4>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <td colspan="6"><hr /></td>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.OrdersList.Count; i++)
-            {
-                <tr id="first_@i">
-                    <td colspan="6" id="grey-row">
-                        <b>
-                            Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia:
+    <div class="orders-table">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td colspan="6"><hr /></td>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.OrdersList.Count; i++)
+                {
+                    <tr id="first_@i">
+                        <td colspan="6" class="grey-row">
+                            <b>
+                                Id zamówienia: @Model.OrdersList[i].OrderId | Status zamówienia:
+                                @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
+                                {<span>Oczekiwanie na zapłatę </span>}
+                                else
+                                {
+                                    <span>Zapłacono</span>
+                                }
+                                | Stolik:
+                                @switch (Model.OrdersList[i].Table.TableId)
+                                {
+                                    case 1:
+                                        <span>Niebieski</span>
+                                        break;
+                                    case 2:
+                                        <span>Zielony</span>
+                                        break;
+                                    case 3:
+                                        <span>Czerwony</span>
+                                        break;
+                                    case 4:
+                                        <span>Żółty</span>
+                                        break;
+                                    case 5:
+                                        <span>Fioletowy</span>
+                                        break;
+                                }
+                            </b>
                             @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
-                            {<span>Oczekiwanie na zapłatę </span>}
-                            else
                             {
-                                <span>Zapłacono</span>
-                            }
-                            | Stolik:
-                            @switch (Model.OrdersList[i].Table.TableId)
-                            {
-                                case 1:
-                                    <span>Niebieski</span>
-                                    break;
-                                case 2:
-                                    <span>Zielony</span>
-                                    break;
-                                case 3:
-                                    <span>Czerwony</span>
-                                    break;
-                                case 4:
-                                    <span>Żółty</span>
-                                    break;
-                                case 5:
-                                    <span>Fioletowy</span>
-                                    break;
-                            }
-                        </b>
-                        @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
-                        {
-                            <form method="post" action="/Order/EditView" style="display:inline-block">
-                                <input type="hidden" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                                <input type="submit" class="btn btn-info" value="Edytuj zamówienie" />
-                            </form>
-                        }
-                        else
-                        {
-                            <form method="post" action="/Order/EditView" style="display:none">
-                                <input type="hidden" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                                <input type="submit" class="btn btn-info" value="Edytuj zamówienie" />
-                            </form>
-                        }
-
-                    </td>
-                </tr>
-                <tr id="second_@i">
-                    <td colspan="6">
-                        @if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
-                        {
-                            <form style="display:none">
-                                <input type="hidden" id="orderId_@i" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                                <label for="chosenMeal">Danie:</label>
-                                <select class="add-in-display" id="select-meal_@i" name="chosenMeal">
-                                    <option selected disabled hidden value="">-- Wybierz danie --</option>
-                                    @for (int k = 0; k < MealsList.theList.Count; k++)
-                                    {
-                                        <option value="@MealsList.theList[k].MealId">@MealsList.theList[k].MealName @MealsList.theList[k].MealUnitPrice PLN</option>
-                                    }
-                                </select>
-                                <label for="quantity">Ilość:</label>
-                                <input class="add-in-display" id="quantity_@i" type="number" name="quantity" />
-                                <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addInDisplay(@Model.OrdersList[i].OrderId, @i)" />
-                            </form>
-                        }
-                        else
-                        {
-                            <form style="display:inline-block">
-                                <input type="hidden" id="orderId_@i" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                                <label for="chosenMeal">Danie:</label>
-                                <select class="add-in-display" id="select-meal_@i" name="chosenMeal">
-                                    <option selected disabled hidden value="">-- Wybierz danie --</option>
-                                    @for (int k = 0; k < MealsList.theList.Count; k++)
-                                    {
-                                        <option value="@MealsList.theList[k].MealId">@MealsList.theList[k].MealName @MealsList.theList[k].MealUnitPrice PLN</option>
-                                    }
-                                </select>
-                                <label for="quantity">Ilość:</label>
-                                <input class="add-in-display" id="quantity_@i" type="number" name="quantity" />
-                                <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addInDisplay(@Model.OrdersList[i].OrderId, @i)" />
-                            </form>
-                        }
-                    </td>
-                </tr>
-                <tr id="third_@i">
-                    <th>Nazwa dania</th>
-                    <th>Cena jednostkowa</th>
-                    <th>Ilość</th>
-                    <th>Cena pozycji</th>
-                    <th>Usuń pozycję</th>
-                </tr>
-                for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
-                {
-
-                    <tr id="@i@j" class="toAdd_@i">
-                        @if (Model.OrdersList[i].OrderItems[j].Meal.MealName == "Napiwek 5%")
-                        {
-                            <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
-                            <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Price PLN</td>
-                        }
-                        else
-                        {
-                            <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
-                            <td id="UnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
-                            <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
-                            <td id="PositionUnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Price PLN</td>
-
-
-                            if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
-                            {
-                                <td>
-                                    <input type="button" style="visibility:hidden" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j', @i);">
-                                </td>
-                                <td></td>
+                                <form method="post" action="/Order/EditView" style="display:inline-block">
+                                    <input type="hidden" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                                    <input type="submit" class="btn btn-info" value="Edytuj zamówienie" />
+                                </form>
                             }
                             else
                             {
-                                <td>
-                                    <input type="button" style="visibility:visible"class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j', @i);">
-                                </td>
+                                <form method="post" action="/Order/EditView" style="display:none">
+                                    <input type="hidden" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                                    <input type="submit" class="btn btn-info" value="Edytuj zamówienie" />
+                                </form>
                             }
 
-                        }
+                        </td>
                     </tr>
-                }
-                <tr id="fourth_@i">
-                    <td colspan="6" id="blue-row">
-                        <span id="order-total-price_@i">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</span>
-                        <br />
-                        @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
-                        {
-                            <form method="post" action="/Order/GetSummary" style="display:inline-block">
-                                <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                                <input type="button" class="btn btn-danger" value="Usuń zamówienie" onclick="removeOrder(@Model.OrdersList[i].OrderId, @i);" />
-                                <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
-                            </form>
-                        }
-                        else
-                        {
-                            <form method="post" action="/Order/GetSummary" style="display:none">
-                                <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
-                                <input type="button" class="btn btn-danger" value="Usuń zamówienie" onclick="removeOrder(@Model.OrdersList[i].OrderId, @i);" />
-                                <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
-                            </form>
-                        }
-                    </td>
-                </tr>
-                if (i != Model.OrdersList.Count - 1)
-                {
-                    <tr id="fifth_@i">
-                        <td colspan="6"><hr /></td>
+                    <tr id="second_@i">
+                        <td colspan="6" class="add-to-order-form">
+                            @if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
+                            {
+                                <form style="display:none">
+                                    <input type="hidden" id="orderId_@i" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                                    <label for="chosenMeal">Danie:</label>
+                                    <select class="add-in-display" id="select-meal_@i" name="chosenMeal">
+                                        <option selected disabled hidden value="">-- Wybierz danie --</option>
+                                        @for (int k = 0; k < Model.MealsList.Count; k++)
+                                        {
+                                            <option value="@Model.MealsList[k].MealId">@Model.MealsList[k].MealName | @Model.MealsList[k].MealUnitPrice PLN</option>
+                                        }
+                                    </select>
+                                    <label for="quantity">Ilość:</label>
+                                    <input class="add-in-display" id="quantity_@i" type="number" name="quantity" />
+                                    <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addInDisplay(@Model.OrdersList[i].OrderId, @i)" />
+                                </form>
+                            }
+                            else
+                            {
+                                <form style="display:inline-block">
+                                    <input type="hidden" id="orderId_@i" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                                    <label for="chosenMeal">Danie:</label>
+                                    <select class="add-in-display" id="select-meal_@i" name="chosenMeal">
+                                        <option selected disabled hidden value="">-- Wybierz danie --</option>
+                                        @for (int k = 0; k < Model.MealsList.Count; k++)
+                                        {
+                                            <option value="@Model.MealsList[k].MealId">@Model.MealsList[k].MealName @Model.MealsList[k].MealUnitPrice PLN</option>
+                                        }
+                                    </select>
+                                    <label for="quantity">Ilość:</label>
+                                    <input class="add-in-display" id="quantity_@i" type="number" name="quantity" />
+                                    <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addInDisplay(@Model.OrdersList[i].OrderId, @i)" />
+                                </form>
+                            }
+                        </td>
                     </tr>
-                }
-                else
-                {
+                    <tr id="third_@i">
+                        <th>Nazwa dania</th>
+                        <th>Cena jednostkowa</th>
+                        <th>Ilość</th>
+                        <th>Cena pozycji</th>
+                        <th>Usuń pozycję</th>
+                    </tr>
+                    for (int j = 0; j < Model.OrdersList[i].OrderItems.Count; j++)
+                    {
 
+                        <tr id="@i@j">
+                            @if (Model.OrdersList[i].OrderItems[j].Meal.MealName == "Napiwek 5%")
+                            {
+                                <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                                <td colspan="3" style="text-align:center; width:50%;">@Model.OrdersList[i].OrderItems[j].Price PLN</td>
+                            }
+                            else
+                            {
+                                <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                                <td id="UnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
+                                <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
+                                <td id="PositionUnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Price PLN</td>
+
+
+                                if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
+                                {
+                                    <td>
+                                        <input type="button" style="visibility:hidden" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j', @i);">
+                                    </td>
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <input type="button" style="visibility:visible" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j', @i);">
+                                    </td>
+                                }
+
+                            }
+                        </tr>
+                    }
+                    <tr id="fourth_@i">
+                        <td colspan="6" class="blue-row">
+                            <span id="order-total-price_@i">Cena zamówienia: @Model.OrdersList[i].TotalPrice PLN</span>
+                            <br />
+                            @if (Model.OrdersList[i].Status == Order.OrderStatus.PendingPayment)
+                            {
+                                <form method="post" action="/Order/GetSummary" style="display:inline-block">
+                                    <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                                    <input type="button" class="btn btn-danger" value="Usuń zamówienie" onclick="removeOrder(@Model.OrdersList[i].OrderId, @i);" />
+                                    <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" action="/Order/GetSummary" style="display:none">
+                                    <input type="hidden" id="orderId" name="orderId" value="@Model.OrdersList[i].OrderId" />
+                                    <input type="button" class="btn btn-danger" value="Usuń zamówienie" onclick="removeOrder(@Model.OrdersList[i].OrderId, @i);" />
+                                    <input type="submit" class="btn btn-success" id="pay" value="Zapłać" />
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                    if (i != Model.OrdersList.Count - 1)
+                    {
+                        <tr id="fifth_@i">
+                            <td colspan="6"><hr /></td>
+                        </tr>
+                    }
+                    else
+                    {
+
+                    }
                 }
-            }
-        </tbody>
-    </table>
-    @Scripts.Render("~/bundles/orderdisplay");
+            </tbody>
+        </table>
+    </div>
+    @Scripts.Render("~/bundles/orderdisplay")
 }

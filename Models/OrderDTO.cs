@@ -5,14 +5,8 @@ namespace ASPNETapp2.Models
 {
     public class OrderDTO
     {
-        private List<OrderItemDTO> _sentOrderItems;
-        public List<OrderItemDTO> SentOrderItems { get => _sentOrderItems; set => _sentOrderItems = value.OfType<OrderItemDTO>().ToList(); }
-        public int SentTableNumber { get; set; }
-    }
-
-    public class OrderItemDTO
-    {
-        public string MealName { get; set; }
-        public int Quantity { get; set; }
+        private List<OrderItemDTO> _orderItems;
+        public List<OrderItemDTO> OrderItems { get => _orderItems; set => _orderItems = value.OfType<OrderItemDTO>().ToList(); }
+        public int TableNumber { get; set; }
     }
 }

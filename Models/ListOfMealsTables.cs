@@ -2,7 +2,7 @@
 
 namespace ASPNETapp2.Models
 {
-    public class ListOfMealsAndTablesDTO
+    public class ListOfMealsTables
     {
         public List<Meal> MealsList { get; set; }
         public List<Table> TablesList { get; set; }

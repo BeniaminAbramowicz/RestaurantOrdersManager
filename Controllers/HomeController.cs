@@ -20,7 +20,7 @@ namespace ASPNETapp2.Controllers
             SearchCondition empty = new SearchCondition("");
             ListOfOrdersMealsTables indexList = new ListOfOrdersMealsTables()
             {
-                TablesList = _restaurantFacade.FindAllTables(empty).ToList()
+                TablesList = _restaurantFacade.FindAllTables(empty).ResponseList.ToList()
             };
             string chosenTable = "";
             if (TempData["ChosenTable"] != null)
@@ -32,16 +32,16 @@ namespace ASPNETapp2.Controllers
             {
                 case "all":
                 case "empty":
-                    indexList.OrdersList = _restaurantFacade.FindAllOrders(empty).ToList();
-                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ToList();
+                    indexList.OrdersList = _restaurantFacade.FindAllOrders(empty).ResponseList.ToList();
+                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ResponseList.ToList();
                     return View(indexList);
                 case "billpaid":
-                    indexList.OrdersList = _restaurantFacade.FindAllOrders(tableCondition).ToList();
-                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ToList();
+                    indexList.OrdersList = _restaurantFacade.FindAllOrders(tableCondition).ResponseList.ToList();
+                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ResponseList.ToList();
                     return View(indexList);
                 case "pendingpayment":
-                    indexList.OrdersList = _restaurantFacade.FindAllOrders(tableCondition).ToList();
-                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ToList();
+                    indexList.OrdersList = _restaurantFacade.FindAllOrders(tableCondition).ResponseList.ToList();
+                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ResponseList.ToList();
                     return View(indexList);
                 case "1":
                 case "2":
@@ -50,8 +50,8 @@ namespace ASPNETapp2.Controllers
                 case "5":
                 case "6":
                 case "7":
-                    indexList.OrdersList = _restaurantFacade.FindAllOrders(tableCondition).ToList();
-                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ToList();
+                    indexList.OrdersList = _restaurantFacade.FindAllOrders(tableCondition).ResponseList.ToList();
+                    indexList.MealsList = _restaurantFacade.FindAllMeals(empty).ResponseList.ToList();
                     return View(indexList);
                 default:
                     return View(indexList);

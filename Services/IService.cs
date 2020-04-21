@@ -3,12 +3,12 @@ using ASPNETapp2.Models;
 
 namespace ASPNETapp2.Services
 {
-    public interface IService<T>
+    public interface IService<T,K>
     {
-        IEnumerable<T> FindAll(SearchCondition condition);
+        T FindAll(SearchCondition condition);
         T FindById(int id);
-        T Add(T newObject);
-        string Remove(int id);
-        T Update(T updatedObject);
+        T Add(K newObject);
+        T Remove(int id);
+        T Update(K updatedObject);
     }
 }

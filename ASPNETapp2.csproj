@@ -127,6 +127,7 @@
     <Compile Include="Models\ListOfMealsTables.cs" />
     <Compile Include="Models\MealDTO.cs" />
     <Compile Include="Models\OrderItemDTO.cs" />
+    <Compile Include="Models\ResponseObject.cs" />
     <Compile Include="Models\SearchCondition.cs" />
     <Compile Include="Models\Table.cs" />
     <Compile Include="Repositories\DBConnection.cs" />
@@ -136,7 +137,6 @@
     <Compile Include="Models\ListOfOrderItemsDTO.cs" />
     <Compile Include="Models\ListOfOrdersMealsTables.cs" />
     <Compile Include="Models\Meal.cs" />
-    <Compile Include="Models\MealItemDTO.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\OrderDTO.cs" />

@@ -1,6 +1,6 @@
 ﻿namespace ASPNETapp2.Services
 {
-    interface IExtendedService<T> : IService<T>
+    interface IExtendedService<T,K> : IService<T,K>
     {
         T FindByName(string name);
     }

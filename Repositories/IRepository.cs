@@ -3,12 +3,12 @@ using ASPNETapp2.Models;
 
 namespace ASPNETapp2.Repositories
 {
-    public interface IRepository<T>
+    public interface IRepository<T,K>
     {
-        IEnumerable<T> FindAll(SearchCondition condition);
+        T FindAll(SearchCondition condition);
         T FindById(int id);
-        T Add(T newObject);
-        void Remove(int id);
-        T Update(T updatedObject);
+        T Add(K newObject);
+        T Remove(int id);
+        T Update(K updatedObject);
     }
 }

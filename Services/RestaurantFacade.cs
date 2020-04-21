@@ -5,8 +5,8 @@ namespace ASPNETapp2.Services
 {
     public class RestaurantFacade
     {
-        private readonly IExtendedService<Meal> _mealsService;
-        private readonly IExtendedService<Table> _tablesService;
+        private readonly IExtendedService<ResponseObject<Meal>,Meal> _mealsService;
+        private readonly IExtendedService<ResponseObject<Table>, Table> _tablesService;
         private readonly IOrdersService _ordersService;
 
         public RestaurantFacade()
@@ -16,72 +16,72 @@ namespace ASPNETapp2.Services
             _ordersService = new OrdersService();
         }
 
-        public IEnumerable<Meal> FindAllMeals(SearchCondition condition)
+        public ResponseObject<Meal> FindAllMeals(SearchCondition condition)
         {
             return _mealsService.FindAll(condition);
         }
 
-        public Meal FindMealById(int mealId)
+        public ResponseObject<Meal> FindMealById(int mealId)
         {
             return _mealsService.FindById(mealId);
         }
 
-        public Meal FindMealByName(string mealName)
+        public ResponseObject<Meal> FindMealByName(string mealName)
         {
             return _mealsService.FindByName(mealName);
         }
 
-        public Meal AddMeal(Meal newMeal)
+        public ResponseObject<Meal> AddMeal(Meal newMeal)
         {
             return _mealsService.Add(newMeal);
         }
 
-        public string RemoveMeal(int mealId)
+        public ResponseObject<Meal> RemoveMeal(int mealId)
         {
             return _mealsService.Remove(mealId);
         }
 
-        public Meal UpdateMeal(Meal updatedMeal)
+        public ResponseObject<Meal> UpdateMeal(Meal updatedMeal)
         {
             return _mealsService.Update(updatedMeal);
         }
 
-        public IEnumerable<Table> FindAllTables(SearchCondition condition)
+        public ResponseObject<Table> FindAllTables(SearchCondition condition)
         {
             return _tablesService.FindAll(condition);
         }
 
-        public Table FindTableById(int tableId)
+        public ResponseObject<Table> FindTableById(int tableId)
         {
             return _tablesService.FindById(tableId);
         }
 
-        public Table AddTable(Table newTable)
+        public ResponseObject<Table> AddTable(Table newTable)
         {
             return _tablesService.Add(newTable);
         }
 
-        public string RemoveTable(int tableId)
+        public ResponseObject<Table> RemoveTable(int tableId)
         {
             return _tablesService.Remove(tableId);
         }
 
-        public Table UpdateTable(Table updatedTable)
+        public ResponseObject<Table> UpdateTable(Table updatedTable)
         {
             return _tablesService.Update(updatedTable);
         }
 
-        public IEnumerable<Order> FindAllOrders(SearchCondition condition)
+        public ResponseObject<Order> FindAllOrders(SearchCondition condition)
         {
             return _ordersService.FindAll(condition);
         }
 
-        public Order FindOrderById(int orderId)
+        public ResponseObject<Order> FindOrderById(int orderId)
         {
             return _ordersService.FindById(orderId);
         }
 
-        public Order AddOrder(Order newOrder)
+        public ResponseObject<Order> AddOrder(Order newOrder)
         {
             return _ordersService.Add(newOrder);
         }

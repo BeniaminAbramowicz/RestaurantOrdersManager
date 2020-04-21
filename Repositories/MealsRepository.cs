@@ -1,40 +1,129 @@
 ﻿using ASPNETapp2.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ASPNETapp2.Repositories
 {
-    public class MealsRepository : IExtendedRepository<Meal>
+    public class MealsRepository : IExtendedRepository<ResponseObject<Meal>, Meal>
     {
-        public IEnumerable<Meal> FindAll(SearchCondition condition)
+        public ResponseObject<Meal> FindAll(SearchCondition condition)
         {
-            return DBConnection.EntityMapper.QueryForList<Meal>("GetMealsList", condition);
+            try
+            {
+                IEnumerable<Meal> mealsList = DBConnection.EntityMapper.QueryForList<Meal>("GetMealsList", condition);
+                if(mealsList == null || !mealsList.Any())
+                {
+                    return new ResponseObject<Meal>(){ Message = "List of meals is empty" };
+                }
+                else
+                {
+                    return new ResponseObject<Meal>() { ResponseList = mealsList };
+                }
+            }
+            catch
+            {
+                return new ResponseObject<Meal> { Message = "There was an error processing the request. Try again later" };
+            } 
         }
 
-        public Meal FindById(int mealId)
+        public ResponseObject<Meal> FindById(int mealId)
         {
-            return DBConnection.EntityMapper.QueryForObject<Meal>("GetMealById", mealId);
+            try
+            {
+                ResponseObject<Meal> mealResponse = new ResponseObject<Meal>() 
+                { 
+                    ResponseData = DBConnection.EntityMapper.QueryForObject<Meal>("GetMealById", mealId) 
+                };
+                if(mealResponse.ResponseData == null)
+                {
+                    mealResponse.Message = "Meal with a given id doesn't exist in database";
+                    return mealResponse;
+                }
+                else
+                {
+                    return mealResponse;
+                }
+            }
+            catch
+            {
+                return new ResponseObject<Meal>(){ Message = "There was an error processing the request. Try again later" };
+            }
         }
 
-        public Meal FindByName(string mealName)
+        public ResponseObject<Meal> FindByName(string mealName)
         {
-            return DBConnection.EntityMapper.QueryForObject<Meal>("GetMealByName", mealName);
+            try
+            {
+                ResponseObject<Meal> mealResponse = new ResponseObject<Meal>()
+                {
+                    ResponseData = DBConnection.EntityMapper.QueryForObject<Meal>("GetMealByName", mealName)
+                };
+                if (mealResponse.ResponseData == null)
+                {
+                    mealResponse.Message = "Meal with a given name doesn't exist in database";
+                    return mealResponse;
+                }
+                else
+                {
+                    return mealResponse;
+                }
+            }
+            catch
+            {
+                return new ResponseObject<Meal>(){ Message = "There was an error processing the request. Try again later" };
+            }
         }
 
-        public Meal Add(Meal newMeal)
+        public ResponseObject<Meal> Add(Meal newMeal)
         {
-            DBConnection.EntityMapper.Insert("AddMeal", newMeal);           
-            return FindById(DBConnection.EntityMapper.QueryForObject<int>("ReturnMeal", ""));
+            try
+            {
+                DBConnection.EntityMapper.Insert("AddMeal", newMeal);
+                ResponseObject<Meal> mealResponse = new ResponseObject<Meal>()
+                {
+                    ResponseData = FindById(DBConnection.EntityMapper.QueryForObject<int>("ReturnMeal", "")).ResponseData
+                };
+                return mealResponse;
+            }
+            catch
+            {
+                return new ResponseObject<Meal>(){ Message = "There was an error while adding new meal. Try again later" };
+            }
         }
 
-        public void Remove(int mealId)
+        public ResponseObject<Meal> Remove(int mealId)
         {
-            DBConnection.EntityMapper.Delete("RemoveMeal", mealId);
+            try
+            {
+                DBConnection.EntityMapper.Delete("RemoveMeal", mealId);
+                ResponseObject<Meal> response = new ResponseObject<Meal>()
+                {
+                    Message = "Successfully removed the meal"
+                };
+                return response;
+            }
+            catch
+            {
+                return new ResponseObject<Meal>(){ Message = "There was an error while removing the meal. Try again later" };
+            }
         }
 
-        public Meal Update(Meal updatedMeal)
+        public ResponseObject<Meal> Update(Meal updatedMeal)
         {
-            DBConnection.EntityMapper.Update("UpdateMeal", updatedMeal);
-            return FindById(updatedMeal.MealId);
+            try
+            {
+                DBConnection.EntityMapper.Update("UpdateMeal", updatedMeal);
+                ResponseObject<Meal> mealResponse = new ResponseObject<Meal>()
+                {
+                    ResponseData = FindById(updatedMeal.MealId).ResponseData
+                };
+                mealResponse.Message = "Successfully updated the meal";
+                return mealResponse;
+            }
+            catch
+            {
+                return new ResponseObject<Meal>() { Message = "There was an error while updating the meal. Try again later" };
+            }
         }
     }
 }

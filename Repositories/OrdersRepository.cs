@@ -1,58 +1,137 @@
 ﻿using ASPNETapp2.Models;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace ASPNETapp2.Repositories
 {
     public class OrdersRepository : IOrdersRepository
     {
-        public IEnumerable<Order> FindAll(SearchCondition condition)
+        public ResponseObject<Order> FindAll(SearchCondition condition)
         {
-            return DBConnection.EntityMapper.QueryForList<Order>("GetOrdersList", condition);
-        }
-
-        public Order FindById(int orderId)
-        {
-            return DBConnection.EntityMapper.QueryForObject<Order>("GetOrderById", orderId);
-        }
-
-        public Order Add(Order newOrder)
-        {
-            DBConnection.EntityMapper.BeginTransaction();
-            DBConnection.EntityMapper.Insert("AddOrder", newOrder);
-            int newOrderId = DBConnection.EntityMapper.QueryForObject<int>("ReturnOrder", "");
-            for(var i = 0; i < newOrder.OrderItems.Count; i++)
+            try
             {
-                newOrder.OrderItems[i].OrderId = newOrderId;
-                DBConnection.EntityMapper.Insert("AddOrderItems", newOrder.OrderItems[i]);
+                IEnumerable<Order> ordersList = DBConnection.EntityMapper.QueryForList<Order>("GetOrdersList", condition);
+                if (ordersList == null || !ordersList.Any())
+                {
+                    return new ResponseObject<Order>() { Message = "List of orders is empty" };
+                }
+                else
+                {
+                    return new ResponseObject<Order>() { ResponseList = ordersList };
+                }
             }
-            DBConnection.EntityMapper.CommitTransaction();
-            return FindById(newOrderId);
-        }
-
-        public void Remove(int orderId)
-        {
-            DBConnection.EntityMapper.BeginTransaction();
-            DBConnection.EntityMapper.Delete("RemoveOrderItems", orderId);
-            DBConnection.EntityMapper.Delete("RemoveOrder", orderId);
-            DBConnection.EntityMapper.CommitTransaction();
-        }
-
-        public Order Update(Order updatedOrder)
-        {
-            DBConnection.EntityMapper.BeginTransaction();
-            DBConnection.EntityMapper.Update("UpdateOrder", updatedOrder);
-            foreach(var orderItem in updatedOrder.OrderItems)
+            catch
             {
-                DBConnection.EntityMapper.Update("UpdateOrderItem", orderItem);
+                return new ResponseObject<Order>() { Message = "There was an error processing the request. Try again later" };
             }
-            DBConnection.EntityMapper.CommitTransaction();
-            return FindById(updatedOrder.OrderId);
         }
 
-        public void PayForOrder(int orderId)
+        public ResponseObject<Order> FindById(int orderId)
         {
-            DBConnection.EntityMapper.Update("PayForOrder", orderId);
+            try
+            {
+                ResponseObject<Order> orderResponse = new ResponseObject<Order>()
+                {
+                    ResponseData = DBConnection.EntityMapper.QueryForObject<Order>("GetOrderById", orderId)
+                }; 
+                if (orderResponse.ResponseData == null)
+                {
+                    orderResponse.Message = "Order with a given id doesn't exist in database";
+                    return orderResponse;
+                }
+                else
+                {
+                    return orderResponse;
+                }
+            }
+            catch
+            {
+                return new ResponseObject<Order>() { Message = "There was an error processing the request. Try again later" };
+            }
+        }
+
+        public ResponseObject<Order> Add(Order newOrder)
+        {
+            try
+            {
+                DBConnection.EntityMapper.BeginTransaction();
+                DBConnection.EntityMapper.Insert("AddOrder", newOrder);
+                int newOrderId = DBConnection.EntityMapper.QueryForObject<int>("ReturnOrder", "");
+                for (var i = 0; i < newOrder.OrderItems.Count; i++)
+                {
+                    newOrder.OrderItems[i].OrderId = newOrderId;
+                    DBConnection.EntityMapper.Insert("AddOrderItems", newOrder.OrderItems[i]);
+                }
+                DBConnection.EntityMapper.CommitTransaction();
+                ResponseObject<Order> orderResponse = new ResponseObject<Order>()
+                {
+                    ResponseData = FindById(newOrderId).ResponseData
+                };
+                orderResponse.Message = "Successfully added the Order";
+                return orderResponse;
+            }
+            catch
+            {
+                DBConnection.EntityMapper.RollBackTransaction();
+                return new ResponseObject<Order>() { Message = "There was an error while adding new order. Try again later" };
+            } 
+        }
+
+        public ResponseObject<Order> Remove(int orderId)
+        {
+            try
+            {
+                DBConnection.EntityMapper.BeginTransaction();
+                DBConnection.EntityMapper.Delete("RemoveOrderItems", orderId);
+                DBConnection.EntityMapper.Delete("RemoveOrder", orderId);
+                DBConnection.EntityMapper.CommitTransaction();
+                ResponseObject<Order> response = new ResponseObject<Order>()
+                {
+                    Message = "Successfully removed the order"
+                };
+                return response;
+            }
+            catch
+            {
+                return new ResponseObject<Order>() { Message = "There was an error while removing the order. Try again later" };
+            } 
+        }
+
+        public ResponseObject<Order> Update(Order updatedOrder)
+        {
+            try
+            {
+                DBConnection.EntityMapper.BeginTransaction();
+                DBConnection.EntityMapper.Update("UpdateOrder", updatedOrder);
+                foreach (var orderItem in updatedOrder.OrderItems)
+                {
+                    DBConnection.EntityMapper.Update("UpdateOrderItem", orderItem);
+                }
+                DBConnection.EntityMapper.CommitTransaction();
+                ResponseObject<Order> orderResponse = new ResponseObject<Order>()
+                {
+                    ResponseData = FindById(updatedOrder.OrderId).ResponseData
+                };
+                return orderResponse;
+            }
+            catch
+            {
+                return new ResponseObject<Order>() { Message = "There was an error while updating the order. Try again later" };
+            }
+            
+        }
+
+        public ResponseObject<Order> PayForOrder(int orderId)
+        {
+            try
+            {
+                DBConnection.EntityMapper.Update("PayForOrder", orderId);
+                return new ResponseObject<Order>() { Message = "Order status has been changed to Paid" };
+            }
+            catch
+            {
+                return new ResponseObject<Order>() { Message = "There was an error while updating status of the order. Try again later" };
+            } 
         }
     }
 }

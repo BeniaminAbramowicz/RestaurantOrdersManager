@@ -1,70 +1,78 @@
 ﻿using ASPNETapp2.Models;
 using ASPNETapp2.Repositories;
-using System.Collections.Generic;
 
 namespace ASPNETapp2.Services
 {
-    public class TablesService : IExtendedService<Table>
+    public class TablesService : IExtendedService<ResponseObject<Table>,Table>
     {
-        private readonly IExtendedRepository<Table> _tablesRepository;
+        private readonly IExtendedRepository<ResponseObject<Table>,Table> _tablesRepository;
 
         public TablesService()
         {
             _tablesRepository = new TablesRepository();
         }
 
-        public IEnumerable<Table> FindAll(SearchCondition condition)
+        public ResponseObject<Table> FindAll(SearchCondition condition)
         {
             return _tablesRepository.FindAll(condition);
         }
 
-        public Table FindById(int tableId)
+        public ResponseObject<Table> FindById(int tableId)
         {
             return _tablesRepository.FindById(tableId);
         }
 
-        public Table FindByName(string tableName)
+        public ResponseObject<Table> FindByName(string tableName)
         {
             return _tablesRepository.FindByName(tableName);
         }
 
-        public Table Add(Table newTable)
+        public ResponseObject<Table> Add(Table newTable)
         {
-            Table tableExists = FindByName(newTable.TableName);
-            if (tableExists == null)
+            ResponseObject<Table> tableExists = new ResponseObject<Table>()
+            {
+                ResponseData = FindByName(newTable.TableName).ResponseData
+            };
+            if (tableExists.ResponseData == null)
             {
                 return _tablesRepository.Add(newTable);
             }
             else
             {
-                return null;
+                return new ResponseObject<Table>() { Message = "Table already exists in the database" };
             }
         }
 
-        public string Remove(int tableId)
+        public ResponseObject<Table> Remove(int tableId)
         {
-            Table mealExists = FindById(tableId);
-            if (mealExists != null)
+            ResponseObject<Table> tableExists = new ResponseObject<Table>()
+            {
+                ResponseData = FindById(tableId).ResponseData
+            };
+            if (tableExists.ResponseData != null)
             {
                 _tablesRepository.Remove(tableId);
-                return "Pomyślnie usunięto stolik";
+                return new ResponseObject<Table>() { Message = "Successfully removed the table" };
             }
             else
             {
-                return "Wybrany stolik nie istnieje w bazie stolików";
+                return new ResponseObject<Table>() { Message = "Chosen table doesn't exist in the database" };
             }
         }
 
-        public Table Update(Table updatedTable)
+        public ResponseObject<Table> Update(Table updatedTable)
         {
-            Table tableExists = FindById(updatedTable.TableId);
-            if (tableExists != null)
+            ResponseObject<Table> tableExists = new ResponseObject<Table>()
+            {
+                ResponseData = FindById(updatedTable.TableId).ResponseData
+            };
+            if (tableExists.ResponseData != null)
             {
                 return _tablesRepository.Update(updatedTable);
             }
             else
             {
-                return null;
+                return new ResponseObject<Table>() { Message = "Chosen table doesn't exist in the database" };
             }
         }
     }

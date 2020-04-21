@@ -2,8 +2,8 @@
 
 namespace ASPNETapp2.Repositories
 {
-    interface IOrdersRepository : IRepository<Order>
+    interface IOrdersRepository : IRepository<ResponseObject<Order>, Order>
     {
-        void PayForOrder(int orderId);
+        ResponseObject<Order> PayForOrder(int orderId);
     }
 }

@@ -20,8 +20,8 @@ namespace ASPNETapp2.Controllers
         {
             ListOfMealsTables listOfMealsAndTables = new ListOfMealsTables()
             {
-                MealsList = _restaurantFacade.FindAllMeals(new SearchCondition("")).ToList(),
-                TablesList = _restaurantFacade.FindAllTables(new SearchCondition("")).ToList()
+                MealsList = _restaurantFacade.FindAllMeals(new SearchCondition("")).ResponseList.ToList(),
+                TablesList = _restaurantFacade.FindAllTables(new SearchCondition("")).ResponseList.ToList()
             };
             return View(listOfMealsAndTables);
         }
@@ -30,21 +30,21 @@ namespace ASPNETapp2.Controllers
         public JsonResult CreateOrder(OrderDTO receivedOrder)
         {
             double totalPrice = 0;
-            Table chosenTable = _restaurantFacade.FindTableById(receivedOrder.TableNumber);
+            ResponseObject<Table> chosenTable = _restaurantFacade.FindTableById(receivedOrder.TableNumber);
             List<Meal> mealsList = new List<Meal>();
             List<OrderItem> orderItems = new List<OrderItem>();
-            Meal currentMeal;
+            ResponseObject<Meal> currentMeal;
             foreach (var sentOrderItem in receivedOrder.OrderItems)
             {
                 currentMeal = _restaurantFacade.FindMealByName(sentOrderItem.MealName);
-                mealsList.Add(currentMeal);
-                totalPrice += currentMeal.MealUnitPrice * sentOrderItem.Quantity;
+                mealsList.Add(currentMeal.ResponseData);
+                totalPrice += currentMeal.ResponseData.MealUnitPrice * sentOrderItem.Quantity;
             }
             for(var i = 0; i < receivedOrder.OrderItems.Count; i++)
             {
                 orderItems.Add(new OrderItem(mealsList[i], receivedOrder.OrderItems[i].Quantity, mealsList[i].MealUnitPrice * receivedOrder.OrderItems[i].Quantity));
             }
-            _restaurantFacade.AddOrder(new Order(orderItems, totalPrice, chosenTable, Order.OrderStatus.PendingPayment));
+            _restaurantFacade.AddOrder(new Order(orderItems, totalPrice, chosenTable.ResponseData, Order.OrderStatus.PendingPayment));
             return Json("");
         }
 

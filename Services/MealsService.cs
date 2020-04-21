@@ -1,64 +1,73 @@
 ﻿using ASPNETapp2.Models;
 using ASPNETapp2.Repositories;
-using System.Collections.Generic;
 
 namespace ASPNETapp2.Services
 {
-    public class MealsService : IExtendedService<Meal>
+    public class MealsService : IExtendedService<ResponseObject<Meal>,Meal>
     {
-        private readonly IExtendedRepository<Meal> _mealsRepository;
+        private readonly IExtendedRepository<ResponseObject<Meal>,Meal> _mealsRepository;
 
         public MealsService()
         {
             _mealsRepository = new MealsRepository();
         }
 
-        public IEnumerable<Meal> FindAll(SearchCondition condition)
+        public ResponseObject<Meal> FindAll(SearchCondition condition)
         {
             return _mealsRepository.FindAll(condition);
         }
-        public Meal FindById(int mealId)
+        public ResponseObject<Meal> FindById(int mealId)
         {
             return _mealsRepository.FindById(mealId);
         }
-        public Meal FindByName(string mealName)
+        public ResponseObject<Meal> FindByName(string mealName)
         {
             return _mealsRepository.FindByName(mealName);
         }
-        public Meal Add(Meal newMeal)
+        public ResponseObject<Meal> Add(Meal newMeal)
         {
-            Meal mealExists = FindByName(newMeal.MealName);
-            if(mealExists == null)
+            ResponseObject<Meal> mealExists = new ResponseObject<Meal>()
+            {
+                ResponseData = FindByName(newMeal.MealName).ResponseData
+            };
+            if(mealExists.ResponseData == null)
             {
                 return _mealsRepository.Add(newMeal);
-            } else
+            } 
+            else
             {
-                return null;
+                return new ResponseObject<Meal>() { Message = "Meal already exists in the database" };
             }
         }
-        public string Remove(int mealId)
+        public ResponseObject<Meal> Remove(int mealId)
         {
-            Meal mealExists = FindById(mealId);
-            if(mealExists != null)
+            ResponseObject<Meal> mealExists = new ResponseObject<Meal>()
+            {
+                ResponseData = FindById(mealId).ResponseData
+            }; 
+            if(mealExists.ResponseData != null)
             {
                 _mealsRepository.Remove(mealId);
-                return "Pomyślnie usunięto posiłek";
+                return new ResponseObject<Meal>() { Message = "Successfully removed the meal" };
             }
             else
             {
-                return "Wybrany posiłek nie istnieje w bazie posiłków";
+                return new ResponseObject<Meal>() { Message = "Chosen meal doesn't exist in the database" };
             } 
         }
-        public Meal Update(Meal updatedMeal)
+        public ResponseObject<Meal> Update(Meal updatedMeal)
         {
-            Meal mealExists = FindById(updatedMeal.MealId);
+            ResponseObject<Meal> mealExists = new ResponseObject<Meal>()
+            {
+                ResponseData = FindById(updatedMeal.MealId).ResponseData
+            }; 
             if(mealExists != null)
             {
                 return _mealsRepository.Update(updatedMeal);
             }
             else
             {
-                return null;
+                return new ResponseObject<Meal>() { Message = "Chosen meal doesn't exist in the database" };
             }
         }
     }

@@ -1,40 +1,129 @@
 ﻿using ASPNETapp2.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ASPNETapp2.Repositories
 {
-    public class TablesRepository : IExtendedRepository<Table>
+    public class TablesRepository : IExtendedRepository<ResponseObject<Table>,Table>
     {
-        public IEnumerable<Table> FindAll(SearchCondition condition)
+        public ResponseObject<Table> FindAll(SearchCondition condition)
         {
-            return DBConnection.EntityMapper.QueryForList<Table>("GetTablesList", condition);
+            try
+            {
+                IEnumerable<Table> tablesList = DBConnection.EntityMapper.QueryForList<Table>("GetTablesList", condition);
+                if(tablesList == null || !tablesList.Any())
+                {
+                    return new ResponseObject<Table>() { Message = "List of tables is empty" };
+                }
+                else
+                {
+                    return new ResponseObject<Table>() { ResponseList = tablesList };
+                }
+            }
+            catch
+            {
+                return new ResponseObject<Table>(){ Message = "There was an error processing the request. Try again later" };
+            }
         }
 
-        public Table FindById(int tableId)
+        public ResponseObject<Table> FindById(int tableId)
         {
-            return DBConnection.EntityMapper.QueryForObject<Table>("GetTableById", tableId);
+            try
+            {
+                ResponseObject<Table> tableResponse = new ResponseObject<Table>()
+                {
+                    ResponseData = DBConnection.EntityMapper.QueryForObject<Table>("GetTableById", tableId)
+                };
+                if (tableResponse.ResponseData == null)
+                {
+                    tableResponse.Message = "Table with a given id doesn't exist in database";
+                    return tableResponse;
+                }
+                else
+                {
+                    return tableResponse;
+                }
+            }
+            catch
+            {
+                return new ResponseObject<Table>() { Message = "There was an error processing the request. Try again later" };
+            }
         }
 
-        public Table FindByName(string tableName)
+        public ResponseObject<Table> FindByName(string tableName)
         {
-            return DBConnection.EntityMapper.QueryForObject<Table>("GetTableByName", tableName);
+            try
+            {
+                ResponseObject<Table> tableResponse = new ResponseObject<Table>()
+                {
+                    ResponseData = DBConnection.EntityMapper.QueryForObject<Table>("GetTableByName", tableName)
+                };
+                if (tableResponse.ResponseData == null)
+                {
+                    tableResponse.Message = "Table with a given name doesn't exist in database";
+                    return tableResponse;
+                }
+                else
+                {
+                    return tableResponse;
+                }
+            }
+            catch
+            {
+                return new ResponseObject<Table>() { Message = "There was an error processing the request. Try again later" };
+            }
         }
 
-        public Table Add(Table newTable)
+        public ResponseObject<Table> Add(Table newTable)
         {
-            DBConnection.EntityMapper.Insert("AddTable", newTable);
-            return FindById(DBConnection.EntityMapper.QueryForObject<int>("ReturnTable", ""));
+            try
+            {
+                DBConnection.EntityMapper.Insert("AddTable", newTable);
+                ResponseObject<Table> tableResponse = new ResponseObject<Table>()
+                {
+                    ResponseData = FindById(DBConnection.EntityMapper.QueryForObject<int>("ReturnTable", "")).ResponseData
+                };
+                return tableResponse;
+            }
+            catch
+            {
+                return new ResponseObject<Table>() { Message = "There was an error while adding new table. Try again later" };
+            }
         }
 
-        public void Remove(int tableId)
+        public ResponseObject<Table> Remove(int tableId)
         {
-            DBConnection.EntityMapper.Delete("RemoveTable", tableId);
+            try
+            {
+                DBConnection.EntityMapper.Delete("RemoveTable", tableId);
+                ResponseObject<Table> response = new ResponseObject<Table>()
+                {
+                    Message = "Successfully remove the table"
+                };
+                return response;
+            }
+            catch
+            {
+                return new ResponseObject<Table>() { Message = "There was an error while removing the table. Try again later" };
+            }           
         }
 
-        public Table Update(Table updatedTable)
+        public ResponseObject<Table> Update(Table updatedTable)
         {
-            DBConnection.EntityMapper.Update("UpdateTable", updatedTable);
-            return FindById(updatedTable.TableId);
+            try
+            {
+                DBConnection.EntityMapper.Update("UpdateTable", updatedTable);
+                ResponseObject<Table> tableResponse = new ResponseObject<Table>()
+                {
+                    ResponseData = FindById(updatedTable.TableId).ResponseData
+                };
+                tableResponse.Message = "Successfully updated the table";
+                return tableResponse;
+            }
+            catch
+            {
+                return new ResponseObject<Table>() { Message = "There was an error while updating the table. Try again later" };
+            }   
         }
     }
 }

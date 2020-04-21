@@ -2,8 +2,8 @@
 
 namespace ASPNETapp2.Services
 {
-    interface IOrdersService : IService<Order>
+    interface IOrdersService : IService<ResponseObject<Order>,Order>
     {
-        void PayForOrder(int orderId);
+        ResponseObject<Order> PayForOrder(int orderId);
     }
 }

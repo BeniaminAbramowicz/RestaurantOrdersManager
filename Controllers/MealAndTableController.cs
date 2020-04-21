@@ -24,13 +24,13 @@ namespace ASPNETapp2.Controllers
                 case 1:
                     ListOfMealsTables mealsList = new ListOfMealsTables()
                     {
-                        MealsList = _restaurantFacade.FindAllMeals(new SearchCondition("")).ToList()
+                        MealsList = _restaurantFacade.FindAllMeals(new SearchCondition("")).ResponseList.ToList()
                     };
                     return View(mealsList);
                 case 2:
                     ListOfMealsTables tablesList = new ListOfMealsTables()
                     {
-                        TablesList = _restaurantFacade.FindAllTables(new SearchCondition("")).ToList()
+                        TablesList = _restaurantFacade.FindAllTables(new SearchCondition("")).ResponseList.ToList()
                     };
                     return View(tablesList);
                 default:
@@ -67,28 +67,28 @@ namespace ASPNETapp2.Controllers
         [HttpPost]
         public JsonResult AddMeal(MealDTO newMeal)
         {
-            Meal addedMeal = _restaurantFacade.AddMeal(new Meal(newMeal));
+            Meal addedMeal = _restaurantFacade.AddMeal(new Meal(newMeal)).ResponseData;
             return Json(addedMeal);
         }
 
         [HttpPost]
         public JsonResult AddTable(string tableName)
         {
-            Table addedTable = _restaurantFacade.AddTable(new Table(tableName));
+            Table addedTable = _restaurantFacade.AddTable(new Table(tableName)).ResponseData;
             return Json(addedTable);
         }
 
         [HttpPut]
         public JsonResult UpdateMeal(Meal meal)
         {
-            Meal updatedMeal = _restaurantFacade.UpdateMeal(meal);
+            Meal updatedMeal = _restaurantFacade.UpdateMeal(meal).ResponseData;
             return Json(updatedMeal);
         }
 
         [HttpPut]
         public JsonResult UpdateTable(Table table)
         {
-            Table updatedTable = _restaurantFacade.UpdateTable(table);
+            Table updatedTable = _restaurantFacade.UpdateTable(table).ResponseData;
             return Json(updatedTable);
         }
     }

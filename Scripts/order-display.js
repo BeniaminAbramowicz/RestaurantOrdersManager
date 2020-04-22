@@ -19,12 +19,13 @@
     });
 }
 
-function removingPosition(idOfOrder, itemName, complexPositionNumber, positionNumber) {
-    var items = { IdOfOrder: idOfOrder, ItemName: itemName };
+function removingPosition(orderId, orderItemId, complexPositionNumber, positionNumber) {
+    var ids = { OrderId: orderId, OrderItemId: orderItemId };
+    console.log(orderId + " | " + orderItemId);
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(items),
+        data: JSON.stringify(ids),
         url: "/Order/RemovePosition",
         dataType: "json",
         success: function (data) {
@@ -38,8 +39,8 @@ function removingPosition(idOfOrder, itemName, complexPositionNumber, positionNu
         }
     });
 }
-function removeOrder(idOfOrder, positionNumber) {
-    var items = { IdOfOrder: idOfOrder };
+function removeOrder(orderId, positionNumber) {
+    var items = { OrderId: orderId };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",

@@ -4,6 +4,8 @@ namespace ASPNETapp2.Repositories
 {
     interface IOrdersRepository : IRepository<ResponseObject<Order>, Order>
     {
+        ResponseObject<OrderItem> FindOrderItemById(int orderItemId);
+        ResponseObject<Order> RemovePosition(int orderItemId, int orderId);
         ResponseObject<Order> PayForOrder(int orderId);
     }
 }

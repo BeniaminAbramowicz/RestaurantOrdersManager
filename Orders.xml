@@ -2,7 +2,7 @@
 <sqlMap namespace="ASPNETapp2" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
   <statements>
     <statement id="GetOrdersList"  parameterClass="ASPNETapp2.Models.SearchCondition" resultMap="OrderMap">
-      SELECT o.orderId, o.totalPrice, o.tableId, o.status, m.mealId, m.mealName, m.mealUnitPrice, i.quantity, i.price, t.tableName
+      SELECT o.orderId, o.totalPrice, o.tableId, o.status, m.mealId, m.mealName, m.mealUnitPrice, i.quantity, i.price, i.orderItemsId, t.tableName
       FROM orders o
       INNER JOIN  orderItems i ON i.orderId = o.orderId
       INNER JOIN meals m ON m.mealId = i.mealId
@@ -20,12 +20,18 @@
       </dynamic>
     </statement>
     <statement id="GetOrderById" parameterType="int" resultMap="OrderMap">
-      SELECT o.orderId, o.totalPrice, o.tableId, o.status, m.mealId, m.mealName, m.mealUnitPrice, i.quantity, i.price, t.tableName
+      SELECT *
       FROM orders o
-      INNER JOIN  orderItems i ON i.orderId = o.orderId
+      INNER JOIN orderItems i ON i.orderId = o.orderId
       INNER JOIN meals m ON m.mealId = i.mealId
       INNER JOIN tables t ON t.tableId = o.tableId
       WHERE o.orderId = #value#
+    </statement>
+    <statement id="GetOrderItemById" parameterType="int" resultMap="OrderItemList">
+      SELECT * 
+      FROM orderItems o
+      INNER JOIN meals m ON o.mealId = m.mealId
+      WHERE o.orderItemsId = #value#
     </statement>
     <statement id="AddOrder" parameterType="ASPNETapp2.Models.Order">
       INSERT INTO orders(totalPrice, status, tableId)
@@ -34,6 +40,23 @@
     <statement id="AddOrderItems" parameterType="ASPNETapp2.Models.OrderItem">
       INSERT INTO orderItems(mealId, quantity, price, orderId)
       VALUES (#Meal.MealId#, #Quantity#, #Price#, #OrderId#)
+    </statement>
+    <statement id="RemoveOrder" parameterType="int">
+      DELETE FROM orders
+      WHERE orderId = #value#
+    </statement>
+    <statement id="RemoveOrderItems" parameterType="int">
+      DELETE FROM orderItems
+      WHERE orderId = #value#
+    </statement>
+    <statement id="RemoveSingleItem" parameterType="int">
+      DELETE FROM orderItems
+      WHERE orderItemsId = #value#
+    </statement>
+    <statement id="UpdateTotalPrice" parameterType="ASPNETapp2.Models.UpdateOrderPrice">
+      UPDATE orders SET
+      totalPrice = #NewPrice#
+      WHERE orderId = #OrderId#
     </statement>
     <statement id="ReturnOrder" resultType="int">
       SELECT TOP 1 orderId
@@ -51,11 +74,13 @@
       <result property="OrderItems" resultMapping="ASPNETapp2.OrderItemList" /> 
     </resultMap>
     <resultMap id="OrderItemList" class="ASPNETapp2.Models.OrderItem">
+      <result property="OrderItemId" column="orderItemsId" />
       <result property="Meal.MealId" column="mealId" />
       <result property="Meal.MealName" column="mealName" />
       <result property="Meal.MealUnitPrice" column="mealUnitPrice" />
       <result property="Quantity" column="quantity" />
       <result property="Price" column="price" />
+      <result property="OrderId" column="orderId"/>
     </resultMap>
   </resultMaps>
 </sqlMap>

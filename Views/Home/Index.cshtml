@@ -155,14 +155,14 @@ else
                                 if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
                                 {
                                     <td>
-                                        <input type="button" style="visibility:hidden" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j', @i);">
+                                        <input type="button" style="visibility:hidden" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, @Model.OrdersList[i].OrderItems[j].OrderItemId, '@i@j', @i);">
                                     </td>
                                     <td></td>
                                 }
                                 else
                                 {
                                     <td>
-                                        <input type="button" style="visibility:visible" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].Meal.MealName', '@i@j', @i);">
+                                        <input type="button" style="visibility:visible" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].OrderItemId', '@i@j', @i);">
                                     </td>
                                 }
 

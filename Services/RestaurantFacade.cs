@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ASPNETapp2.Models;
+﻿using ASPNETapp2.Models;
 
 namespace ASPNETapp2.Services
 {
@@ -84,6 +83,16 @@ namespace ASPNETapp2.Services
         public ResponseObject<Order> AddOrder(Order newOrder)
         {
             return _ordersService.Add(newOrder);
+        }
+
+        public ResponseObject<Order> RemoveOrder(int orderId)
+        {
+            return _ordersService.Remove(orderId);
+        }
+
+        public ResponseObject<Order> RemovePosition(int orderItemId, int orderId)
+        {
+            return _ordersService.RemovePosition(orderItemId, orderId);
         }
     }
 }

@@ -50,6 +50,30 @@ namespace ASPNETapp2.Repositories
             }
         }
 
+        public ResponseObject<OrderItem> FindOrderItemById(int orderItemId)
+        {
+            try
+            {
+                ResponseObject<OrderItem> orderItemResponse = new ResponseObject<OrderItem>()
+                {
+                    ResponseData = DBConnection.EntityMapper.QueryForObject<OrderItem>("GetOrderItemById", orderItemId)
+                };
+                if(orderItemResponse.ResponseData == null)
+                {
+                    orderItemResponse.Message = "Order item with a given id doesn't exist in database";
+                    return orderItemResponse;
+                }
+                else
+                {
+                    return orderItemResponse;
+                }
+            }
+            catch
+            {
+                return new ResponseObject<OrderItem>() { Message = "There was an error processing the request. Try again later" };
+            }
+        }
+
         public ResponseObject<Order> Add(Order newOrder)
         {
             try
@@ -85,16 +109,33 @@ namespace ASPNETapp2.Repositories
                 DBConnection.EntityMapper.Delete("RemoveOrderItems", orderId);
                 DBConnection.EntityMapper.Delete("RemoveOrder", orderId);
                 DBConnection.EntityMapper.CommitTransaction();
-                ResponseObject<Order> response = new ResponseObject<Order>()
-                {
-                    Message = "Successfully removed the order"
-                };
-                return response;
+                return new ResponseObject<Order>() { Message = "Successfully removed the order" };
             }
             catch
             {
+                DBConnection.EntityMapper.RollBackTransaction();
                 return new ResponseObject<Order>() { Message = "There was an error while removing the order. Try again later" };
             } 
+        }
+
+        public ResponseObject<Order> RemovePosition(int orderItemId, int orderId)
+        {
+            try
+            {
+                DBConnection.EntityMapper.BeginTransaction();
+                Order order = FindById(orderId).ResponseData;
+                double deletedPositionPrice = FindOrderItemById(orderItemId).ResponseData.Price;
+                DBConnection.EntityMapper.Delete("RemoveSingleItem", orderItemId);
+                DBConnection.EntityMapper.Update("UpdateTotalPrice", new UpdateOrderPrice() { OrderId = orderId, NewPrice = order.TotalPrice - deletedPositionPrice });
+                order = FindById(orderId).ResponseData;
+                DBConnection.EntityMapper.CommitTransaction();
+                return new ResponseObject<Order>() { ResponseData = order, Message = "Successfully removed order position" };
+            }
+            catch
+            {
+                DBConnection.EntityMapper.RollBackTransaction();
+                return new ResponseObject<Order>() { Message = "There was an error while removing order position. Try again later" };
+            }
         }
 
         public ResponseObject<Order> Update(Order updatedOrder)
@@ -116,6 +157,7 @@ namespace ASPNETapp2.Repositories
             }
             catch
             {
+                DBConnection.EntityMapper.RollBackTransaction();
                 return new ResponseObject<Order>() { Message = "There was an error while updating the order. Try again later" };
             }
             

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using ASPNETapp2.Models;
@@ -48,21 +47,26 @@ namespace ASPNETapp2.Controllers
             return Json("");
         }
 
-       //[HttpPost]
-       //public JsonResult RemoveOrder(int idOfOrder)
-       // {
-       //     List<Order> currentList = (List<Order>)Session["ListOfOrders"];
-       //     currentList.Remove(currentList.Find(x => x.OrderId == idOfOrder));
-       //     Session["ListOfOrders"] = currentList;
-       //     return Json("");
-       // }
+        [HttpPost]
+        public JsonResult RemovePosition(int orderId, int orderItemId)
+        {
+            double price = _restaurantFacade.RemovePosition(orderItemId, orderId).ResponseData.TotalPrice;
+            return Json(new { data = price });
+        }
 
-       // [HttpPost]
-       // public ActionResult GetSummary(int orderId)
-       // {
-       //     TempData["orderId"] = orderId;
-       //     return Redirect("OrderSummary");
-       // }
+        [HttpPost]
+        public JsonResult RemoveOrder(int orderId)
+        {
+            _restaurantFacade.RemoveOrder(orderId);
+            return Json("");
+        }
+
+        // [HttpPost]
+        // public ActionResult GetSummary(int orderId)
+        // {
+        //     TempData["orderId"] = orderId;
+        //     return Redirect("OrderSummary");
+        // }
         //public ActionResult OrderSummary()
         //{
         //    int orderId = (int)TempData["orderId"];
@@ -84,7 +88,7 @@ namespace ASPNETapp2.Controllers
         //        TempData["orderId"] = orderId;
         //        return View(summaryOrder);
         //    }
-            
+
         //}
 
         //[HttpPost]
@@ -107,20 +111,6 @@ namespace ASPNETapp2.Controllers
         //    Session["ListOfOrders"] = listOfOrders;
         //    TempData["ChosenTable"] = chosenTable;
         //    return Json("");
-        //}
-
-
-        //[HttpPost]
-        //public JsonResult RemovePosition(int idOfOrder, string itemName)
-        //{
-        //    List<Order> currentList = (List<Order>)Session["ListOfOrders"];
-        //    Order order = currentList.Find(x => x.OrderId == idOfOrder);
-        //    order.TotalPrice = Math.Round(order.TotalPrice - order.OrderItems[order.OrderItems.FindIndex(z => z.Meal.MealName.Equals(itemName))].Price, 2);
-        //    order.OrderItems.Remove(order.OrderItems.Find(y => y.Meal.MealName.Equals(itemName)));
-        //    currentList[currentList.FindIndex(x => x.OrderId == idOfOrder)] = order;
-        //    Session["ListOfOrders"] = currentList;
-        //    var data = new { data = order.TotalPrice };
-        //    return Json(data);
         //}
 
         //public ActionResult EditView(int orderId)
@@ -153,7 +143,7 @@ namespace ASPNETapp2.Controllers
 
         //        }
         //        order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity = quantity;
-                
+
         //    }
         //    else if (order.OrderItems.Any(k => k.Meal.MealName.Equals(chosenMeal)))
         //    {

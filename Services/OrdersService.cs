@@ -5,7 +5,7 @@ namespace ASPNETapp2.Services
 {
     public class OrdersService : IOrdersService
     {
-        private readonly IRepository<ResponseObject<Order>,Order> _ordersRepository;
+        private readonly IOrdersRepository _ordersRepository;
 
         public OrdersService()
         {
@@ -29,7 +29,12 @@ namespace ASPNETapp2.Services
 
         public ResponseObject<Order> Remove(int orderId)
         {
-            throw new System.NotImplementedException();
+            return _ordersRepository.Remove(orderId);
+        }
+
+        public ResponseObject<Order> RemovePosition(int orderItemId, int orderId)
+        {
+            return _ordersRepository.RemovePosition(orderItemId, orderId);
         }
 
         public ResponseObject<Order> Update(Order updatedOrder)

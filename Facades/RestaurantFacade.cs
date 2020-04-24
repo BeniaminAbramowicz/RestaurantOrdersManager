@@ -1,6 +1,7 @@
 ﻿using ASPNETapp2.Models;
+using ASPNETapp2.Services;
 
-namespace ASPNETapp2.Services
+namespace ASPNETapp2.Facades 
 {
     public class RestaurantFacade
     {

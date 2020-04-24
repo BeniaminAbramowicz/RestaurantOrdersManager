@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using ASPNETapp2.Models;
-using ASPNETapp2.Services;
+using ASPNETapp2.Facades;
 
 namespace ASPNETapp2.Controllers
 {
@@ -108,16 +108,6 @@ namespace ASPNETapp2.Controllers
             double totalPrice = _restaurantFacade.FindOrderById(orderId).ResponseData.TotalPrice;
             return Json(new { Data = newItem, TotalPrice = totalPrice });
         }
-
-        //public ActionResult EditView(int orderId)
-        //{
-        //    TempData["idOfOrder"] = orderId;
-        //    List<Order> currentList = (List<Order>)Session["ListOfOrders"];
-        //    Order order = currentList.Find(x => x.OrderId == orderId);
-        //    ListOfOrderItemsDTO listOfOrderItems = new ListOfOrderItemsDTO { ItemsList = order.OrderItems };
-
-        //    return View(listOfOrderItems);
-        //}
 
         [HttpPut]
         public JsonResult UpdateOrderItem(int orderItemId, string orderData)

@@ -128,6 +128,7 @@
     <Compile Include="Models\ListOfMealsTables.cs" />
     <Compile Include="Models\MealDTO.cs" />
     <Compile Include="Models\OrderItemDTO.cs" />
+    <Compile Include="Models\OrderItemPartial.cs" />
     <Compile Include="Models\ResponseObject.cs" />
     <Compile Include="Models\SearchCondition.cs" />
     <Compile Include="Models\Table.cs" />
@@ -195,7 +196,6 @@
     <Content Include="Views\Order\AddOrder.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Order\OrderSummary.cshtml" />
-    <Content Include="Views\Order\EditView.cshtml" />
     <Content Include="sqlMap.config" />
     <Content Include="Views\MealAndTable\Index.cshtml" />
     <Content Include="Views\MealAndTable\_MealsPartial.cshtml" />

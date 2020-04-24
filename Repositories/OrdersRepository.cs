@@ -137,6 +137,27 @@ namespace ASPNETapp2.Repositories
             }
         }
 
+        public ResponseObject<OrderItem> UpdateOrderItem(OrderItem updatedOrderItem)
+        {
+            try
+            {
+                DBConnection.EntityMapper.BeginTransaction();
+                double price = FindOrderItemById(updatedOrderItem.OrderItemId).ResponseData.Price;
+                DBConnection.EntityMapper.Update("UpdateOrderItem", updatedOrderItem);
+                Order order = DBConnection.EntityMapper.QueryForObject<Order>("GetOrderByOrderItemId", updatedOrderItem.OrderItemId);
+                order.TotalPrice -= price;
+                DBConnection.EntityMapper.Update("UpdateTotalPrice", new UpdateOrderPrice() { OrderId = order.OrderId, NewPrice = order.TotalPrice + updatedOrderItem.Price });
+                OrderItem updatedPosition = FindOrderItemById(updatedOrderItem.OrderItemId).ResponseData;
+                DBConnection.EntityMapper.CommitTransaction();
+                return new ResponseObject<OrderItem>() { ResponseData = updatedPosition, Message = "Updated chosen position" };
+            }
+            catch
+            {
+                DBConnection.EntityMapper.RollBackTransaction();
+                return new ResponseObject<OrderItem>() { Message = "There was an error while updating order position. Try again later" };
+            }
+        }
+
         public ResponseObject<Order> RemovePosition(int orderItemId, int orderId)
         {
             try

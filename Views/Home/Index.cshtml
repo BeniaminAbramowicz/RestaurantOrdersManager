@@ -146,9 +146,10 @@ else
                             }
                             else
                             {
-                                <td>@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
+                                <td><input type="hidden" value="@Model.OrdersList[i].OrderItems[j].OrderItemId"/></td>
+                                <td class="order-meal-name" onclick="editFieldMode(event)">@Model.OrdersList[i].OrderItems[j].Meal.MealName</td>
                                 <td id="UnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
-                                <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
+                                <td onclick="editFieldMode(event)">@Model.OrdersList[i].OrderItems[j].Quantity</td>
                                 <td id="PositionUnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Price PLN</td>
                                 if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
                                 {

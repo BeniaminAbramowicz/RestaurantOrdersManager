@@ -51,5 +51,15 @@ namespace ASPNETapp2.Services
         {
             throw new System.NotImplementedException();
         }
+
+        public ResponseObject<OrderItem> FindOrderItemById(int orderItemId)
+        {
+            return _ordersRepository.FindOrderItemById(orderItemId);
+        }
+
+        public ResponseObject<OrderItem> UpdateOrderItem(OrderItem updatedOrderItem)
+        {
+            return _ordersRepository.UpdateOrderItem(updatedOrderItem);
+        }
     }
 }

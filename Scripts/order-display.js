@@ -1,4 +1,7 @@
-﻿function addPosition(orderId, passedValue) {
+﻿let storeData = "";
+let editState = 0;
+
+function addPosition(orderId, passedValue) {
     var mealId = $("#select-meal_" + passedValue).val();
     var quantity = $("#quantity_" + passedValue).val();
     var data = { MealId: mealId, Quantity: quantity, OrderId: orderId };
@@ -28,7 +31,47 @@
     });
 }
 
+function editFieldMode(event) {
+    if (editState !== 1) {
+        editState = 1;
+        storeData = $(event.target).html();
+        $(event.target).html(`<input type="${$(event.target).attr("class") === "order-meal-name" ? "text" : "number"}" style="${$(event.target).attr("class") === "order-meal-name" ? "width:30rem" : "width:5rem"}" value="${event.target.innerText}" /><button onclick="updateOrderItem(event)">Edit</button><button onclick="revertValue(event)">X</button>`);
+    }
+}
 
+function revertValue(event) {
+    $(event.target).parent().html(storeData);
+    editState = 0;
+    event.stopPropagation();
+}
+
+function updateOrderItem(event) {
+    var orderItemId = $(event.target).parent().parent().children("td:hidden").children().val();
+    var orderData = $(event.target).parent().children(":first").val();
+    var data = { OrderItemId: orderItemId, OrderData: orderData };
+    $.ajax({
+        type: "PUT",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(data),
+        url: "/MealAndTable/UpdateOrderItem",
+        dataType: "json",
+        success: function (data) {
+            alert("Pomyślnie zaktualizowano zamówienie");
+            if ($(event.target).parent().attr("class") === "order-meal-name") {
+                $(event.target).parent().html(data.Meal.MealName);
+                $("#order-total-price_" + positionNumber).text("Cena zamówienia: " + val + " PLN")
+            } else {
+                $(event.target).parent().html(data.Quantity);
+                $("#order-total-price_" + positionNumber).text("Cena zamówienia: " + val + " PLN")
+            }
+            editState = 0;
+        },
+        error: function () {
+            alert("Wystąpił błąd");
+        }
+    });
+    event.stopPropagation();
+}
 
 function removingPosition(orderId, orderItemId, positionNumber, event) {
     var ids = { OrderId: orderId, OrderItemId: orderItemId };

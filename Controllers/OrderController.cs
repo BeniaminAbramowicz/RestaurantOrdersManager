@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using ASPNETapp2.Models;
 using ASPNETapp2.Services;
@@ -117,50 +119,25 @@ namespace ASPNETapp2.Controllers
         //    return View(listOfOrderItems);
         //}
 
-        //[HttpPost]
-        //public ActionResult EditPosition(string replacedMeal, string chosenMeal, int quantity)
-        //{
-        //    int idOfOrder = (int)TempData["idOfOrder"];
-        //    List<Order> currentList = (List<Order>)Session["ListOfOrders"];
-        //    Order order = currentList.Find(x => x.OrderId == idOfOrder);
-        //    if (replacedMeal == chosenMeal)
-        //    {
-        //        if(order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity > quantity)
-        //        {
-        //            order.OrderItems[order.OrderItems.FindIndex(g => g.Meal.MealName.Equals(chosenMeal))].Price -= MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * (order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity - quantity);
-
-        //        } else if(order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity < quantity)
-        //        {
-        //            order.OrderItems[order.OrderItems.FindIndex(g => g.Meal.MealName.Equals(chosenMeal))].Price += MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * (quantity - order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity);
-        //        } else if(order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity == quantity)
-        //        {
-
-        //        }
-        //        order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity = quantity;
-
-        //    }
-        //    else if (order.OrderItems.Any(k => k.Meal.MealName.Equals(chosenMeal)))
-        //    {
-        //        order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Quantity += quantity;
-        //        order.OrderItems[order.OrderItems.FindIndex(s => s.Meal.MealName.Equals(chosenMeal))].Price += MealsList.theList.Find(u => u.MealName.Equals(chosenMeal)).MealUnitPrice * quantity;
-        //        order.OrderItems.Remove(order.OrderItems[order.OrderItems.FindIndex(w => w.Meal.MealName.Equals(replacedMeal))]);
-        //    } 
-        //    else
-        //    {
-        //        order.OrderItems[order.OrderItems.FindIndex(y => y.Meal.MealName.Equals(replacedMeal))].Meal = MealsList.theList.Find(z => z.MealName.Equals(chosenMeal));
-        //        order.OrderItems[order.OrderItems.FindIndex(y => y.Meal.MealName.Equals(chosenMeal))].Price = MealsList.theList.Find(z => z.MealName.Equals(chosenMeal)).MealUnitPrice * quantity;
-        //        order.OrderItems[order.OrderItems.FindIndex(y => y.Meal.MealName.Equals(chosenMeal))].Quantity = quantity;
-        //    }
-        //    double finalPrice = 0;
-        //    foreach(var t in order.OrderItems)
-        //    {
-        //        finalPrice += t.Price;
-        //    }
-        //    order.TotalPrice = Math.Round((finalPrice), 2);
-        //    currentList[currentList.FindIndex(x => x.OrderId == idOfOrder)] = order;
-        //    Session["ListOfOrders"] = currentList;
-
-        //    return RedirectToAction("Index", "Home");
-        //}
+        [HttpPut]
+        public JsonResult UpdateOrderItem(int orderItemId, string orderData)
+        {
+            
+            OrderItem orderItem = _restaurantFacade.FindOrderItemById(orderItemId).ResponseData;
+            if(Regex.IsMatch(orderData, @"^[0-9]+$"))
+            {
+                orderItem.Quantity = Int32.Parse(orderData);
+                orderItem.Price = orderItem.Meal.MealUnitPrice * orderItem.Quantity;
+            }
+            else
+            {
+                Meal meal = _restaurantFacade.FindMealByName(orderData).ResponseData;
+                orderItem.Meal = meal;
+                orderItem.Price = orderItem.Meal.MealUnitPrice * orderItem.Quantity;
+            }
+            OrderItem updatedOrder = _restaurantFacade.UpdateOrderItem(orderItem).ResponseData;
+            double totalPrice = _restaurantFacade.FindOrderById(orderItem.OrderId).ResponseData.TotalPrice;
+            return Json(new { Data = updatedOrder, TotalPrice = totalPrice });
+        }
     }
 }

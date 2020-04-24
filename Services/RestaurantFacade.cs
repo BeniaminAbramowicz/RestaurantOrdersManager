@@ -99,5 +99,15 @@ namespace ASPNETapp2.Services
         {
             return _ordersService.RemovePosition(orderItemId, orderId);
         }
+
+        public ResponseObject<OrderItem> FindOrderItemById(int orderItemId)
+        {
+            return _ordersService.FindOrderItemById(orderItemId);
+        }
+
+        public ResponseObject<OrderItem> UpdateOrderItem(OrderItem updatedOrderItem)
+        {
+            return _ordersService.UpdateOrderItem(updatedOrderItem);
+        }
     }
 }

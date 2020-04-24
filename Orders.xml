@@ -45,6 +45,17 @@
       DELETE FROM orders
       WHERE orderId = #value#
     </statement>
+    <statement id="GetOrderByOrderItemId" parameterType="int" resultMap="OrderMap">
+      SELECT * 
+      FROM orders o
+      INNER JOIN orderItems i ON o.orderId = i.orderId
+      INNER JOIN meals m ON i.mealId = m.mealId
+      INNER JOIN tables t ON t.tableId = o.tableId
+      WHERE orderItemsId = #value#
+    </statement>
+    <statement id="UpdateOrderItem" parameterType="ASPNETapp2.Models.OrderItem">
+      
+    </statement>
     <statement id="RemoveOrderItems" parameterType="int">
       DELETE FROM orderItems
       WHERE orderId = #value#

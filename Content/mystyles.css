@@ -39,6 +39,11 @@ h2 {
     flex-wrap: wrap;
 }
 
+.table-container{
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
 #meal-quantity-button{
     visibility: hidden;
 }
@@ -52,6 +57,7 @@ h4:first-of-type{
 }
 
 #table td{
+    cursor: text;
     vertical-align: middle;
 }
 

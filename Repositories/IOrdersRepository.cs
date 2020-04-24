@@ -6,6 +6,7 @@ namespace ASPNETapp2.Repositories
     {
         ResponseObject<OrderItem> FindOrderItemById(int orderItemId);
         ResponseObject<Order> RemovePosition(int orderItemId, int orderId);
+        ResponseObject<OrderItem> AddPosition(OrderItem newPosition);
         ResponseObject<Order> PayForOrder(int orderId);
     }
 }

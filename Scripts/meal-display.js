@@ -1,4 +1,7 @@
-﻿function removeMeal(event, mealId) {
+﻿let storeData = "";
+let editState = 0;
+
+function removeMeal(event, mealId) {
     var data = { MealId: mealId }
     $.ajax({
         type: "POST",
@@ -33,7 +36,6 @@ function addMeal(event) {
                     <td style="display: none"><input type="hidden" value="${data.MealId}" /></td>
                     <td>${data.MealName}</td>
                     <td>${data.MealUnitPrice.toFixed(2)} PLN</td>
-                    <td><button class="btn btn-success" onclick="editMeal(event)">Edytuj pozycję</button></td>
                     <td><button class="btn btn-danger" onclick="removeMeal(event, ${data.MealId})">Usuń pozycję</button></td>
                     </tr>`)
                 .insertAfter($("tbody tr:last-child"));
@@ -44,21 +46,24 @@ function addMeal(event) {
     });
 }
 
-function editMeal(event) {
-    $("#update-meal-form").remove();
-    $(`<tr id="update-meal-form">
-            <td><label for="edit-meal-name">Nazwa dania</label><input type="text" class="form-control" id="edit-meal-name"/></td>
-            <td><label for="editMealUnitPrice">Cena dania</label><input type="text" class="form-control" id="edit-meal-unit-price"/></td>
-            <td colspan="2" style="vertical-align: bottom;"><button class="btn btn-primary" onclick="updateMeal(event)">Aktualizuj danie</button></td>
-            </tr>`)
-        .insertAfter($(event.target).parent().parent());
+function editFieldMode(event) {
+    if (editState !== 1) {
+        editState = 1;
+        storeData = $(event.target).html();
+        $(event.target).html(`<input type="text" value="${$(event.target).attr("class") === "meal-name" ? event.target.innerText : $(event.target).text().split(" ")[0] }" /><button onclick="updateMeal(event)">Edit</button><button onclick="revertValue(event)">X</button>`);
+    }
+}
+
+function revertValue(event) {
+    $(event.target).parent().html(storeData);
+    editState = 0;
+    event.stopPropagation();
 }
 
 function updateMeal(event) {
-    var mealId = $(event.target).parent().parent().prev().children(":first").children(":first").val();
-    var mealName = $("#edit-meal-name").val();
-    var mealUnitPrice = $("#edit-meal-unit-price").val();
-    var data = { MealId: mealId, MealName: mealName, MealUnitPrice: mealUnitPrice };
+    var mealId = $(event.target).parent().parent().children("td:hidden").children().val();
+    var mealData = $(event.target).parent().children(":first").val();
+    var data = { MealId: mealId, MealData: mealData };
     $.ajax({
         type: "PUT",
         contentType: "application/json; charset=utf-8",
@@ -67,12 +72,16 @@ function updateMeal(event) {
         dataType: "json",
         success: function (data) {
             alert("Pomyślnie zaktualizowano danie");
-            $(event.target).parent().parent().prev().children(":nth-child(2)").html(data.MealName);
-            $(event.target).parent().parent().prev().children(":nth-child(3)").html(data.MealUnitPrice.toFixed(2) + " PLN");
-            $("#update-meal-form").remove();
+            if ($(event.target).parent().attr("class") === "meal-name") {
+                $(event.target).parent().html(data.MealName);
+            } else {
+                $(event.target).parent().html(data.MealUnitPrice.toFixed(2).replace(".", ",") + " PLN");
+            }
+            editState = 0;
         },
         error: function () {
             alert("Wystąpił błąd");
         }
     });
+    event.stopPropagation();
 }

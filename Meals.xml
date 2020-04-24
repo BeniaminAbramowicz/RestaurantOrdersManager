@@ -25,9 +25,15 @@
     </statement>
     <statement id="UpdateMeal" parameterType="ASPNETapp2.Models.Meal">
      UPDATE meals SET
-     mealName = #MealName#,
-     mealUnitPrice = #MealUnitPrice#
-     WHERE mealId = #MealId#
+     <dynamic>
+      <isNotEmpty property="MealName">
+        mealName = #MealName#
+      </isNotEmpty>
+      <isNotEqual property="MealUnitPrice" compareValue="0">
+        mealUnitPrice = #MealUnitPrice#
+      </isNotEqual>
+     </dynamic>
+      WHERE mealId = #MealId#
     </statement>
     <statement id="ReturnMeal" resultType="int">
       SELECT TOP 1 mealId 

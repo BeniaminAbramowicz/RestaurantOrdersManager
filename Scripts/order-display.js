@@ -1,17 +1,26 @@
-﻿function addInDisplay(idOfOrder, passedValue) {
-    var mealItemId = $("#select-meal_" + passedValue).val();
-    var mealQuantity = $("#quantity_" + passedValue).val();
-    var sendData = { MealItemId: mealItemId, MealQuantity: mealQuantity, IdOfOrder: idOfOrder };
+﻿function addPosition(orderId, passedValue) {
+    var mealId = $("#select-meal_" + passedValue).val();
+    var quantity = $("#quantity_" + passedValue).val();
+    var data = { MealId: mealId, Quantity: quantity, OrderId: orderId };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(sendData),
-        url: "/Order/AddToDisplay",
+        data: JSON.stringify(data),
+        url: "/Order/AddPosition",
         dataType: "json",
-        success: function () {
-            $("#quantity").val("");
+        success: function (data) {
+            $("#select-meal_" + passedValue).val("");
+            $("#quantity_" + passedValue).val("");
             alert("Dodano pozycję do zamówienia");
-            location.href = "/Home/Index";
+            var newMeal = `<tr><td>${data.Data.Meal.MealName}</td>
+                <td>${data.Data.Meal.MealUnitPrice} PLN</td>
+                <td>${data.Data.Quantity}</td>
+                <td>${data.Data.Price} PLN</td>
+                <td>
+                <input type="button" style="visibility:visible" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(${data.Data.OrderId}, ${data.Data.OrderItemId}, ${passedValue}, event)"
+                </td></tr>`
+            $(newMeal).insertBefore("#fourth_" + passedValue);
+            $("#order-total-price_" + passedValue).html("Cena zamówienia: " + data.TotalPrice + " PLN");
         },
         error: function () {
             alert("Wystąpił błąd");
@@ -19,9 +28,10 @@
     });
 }
 
-function removingPosition(orderId, orderItemId, complexPositionNumber, positionNumber) {
+
+
+function removingPosition(orderId, orderItemId, positionNumber, event) {
     var ids = { OrderId: orderId, OrderItemId: orderItemId };
-    console.log(orderId + " | " + orderItemId);
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -29,8 +39,9 @@ function removingPosition(orderId, orderItemId, complexPositionNumber, positionN
         url: "/Order/RemovePosition",
         dataType: "json",
         success: function (data) {
-            $("#" + complexPositionNumber).remove();
+            $(event.target).parent().parent().remove();
             $.each(data, function (key, val) {
+                alert("Removed chosen position");
                 $("#order-total-price_" + positionNumber).text("Cena zamówienia: " + val + " PLN")
             });
         },

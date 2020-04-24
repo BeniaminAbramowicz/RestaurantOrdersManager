@@ -1,4 +1,4 @@
-﻿<div class="container meal-container">
+﻿<div class="table-container">
     <form onsubmit="addTable(event)" class="new-meal-table-form">
         <label for="table-name">Nazwa stolika</label>
         <input class="form-input" type="text" id="table-name" />
@@ -8,7 +8,6 @@
         <thead>
             <tr>
                 <td>Nazwa stolika</td>
-                <td>Edytuj nazwę stolika</td>
                 <td>Usuń Stolik</td>
             </tr>
         </thead>
@@ -17,8 +16,7 @@
             {
                 <tr>
                     <td style="display: none"><input type="hidden" value="@Model.TablesList[i].TableId" /></td>
-                    <td>@Model.TablesList[i].TableName</td>
-                    <td><button class="btn btn-success" onclick="editTable(event)">Edytuj pozycję</button></td>
+                    <td class="meal-details" onclick="editFieldMode(event)">@Model.TablesList[i].TableName</td>
                     <td><button class="btn btn-danger" onclick="removeTable(event, @Model.TablesList[i].TableId)">Usuń pozycję</button></td>
                 </tr>
             }

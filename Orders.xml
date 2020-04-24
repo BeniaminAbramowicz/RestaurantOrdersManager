@@ -63,6 +63,11 @@
       FROM orders
       ORDER BY tableId DESC
     </statement>
+    <statement id="ReturnOrderItem" resultType="int">
+      SELECT TOP 1 orderItemsId
+      FROM orderItems
+      ORDER BY orderItemsId DESC
+    </statement>
   </statements>
   <resultMaps>
     <resultMap id="OrderMap" class="ASPNETapp2.Models.Order" groupBy="OrderId">

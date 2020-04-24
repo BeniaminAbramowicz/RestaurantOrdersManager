@@ -32,6 +32,11 @@ namespace ASPNETapp2.Services
             return _ordersRepository.Remove(orderId);
         }
 
+        public ResponseObject<OrderItem> AddPosition(OrderItem newPosition)
+        {
+            return _ordersRepository.AddPosition(newPosition);
+        }
+
         public ResponseObject<Order> RemovePosition(int orderItemId, int orderId)
         {
             return _ordersRepository.RemovePosition(orderItemId, orderId);

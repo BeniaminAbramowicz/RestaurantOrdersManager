@@ -90,6 +90,11 @@ namespace ASPNETapp2.Services
             return _ordersService.Remove(orderId);
         }
 
+        public ResponseObject<OrderItem> AddPosition(OrderItem newPosition)
+        {
+            return _ordersService.AddPosition(newPosition);
+        }
+
         public ResponseObject<Order> RemovePosition(int orderItemId, int orderId)
         {
             return _ordersService.RemovePosition(orderItemId, orderId);

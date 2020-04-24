@@ -11,7 +11,6 @@
             <tr>
                 <td>Nazwa dania</td>
                 <td>Cena dania</td>
-                <td>Edytuj danie</td>
                 <td>Usuń Danie</td>
             </tr>
         </thead>
@@ -20,9 +19,8 @@
             {
                 <tr>
                     <td style="display: none"><input type="hidden" value="@Model.MealsList[i].MealId" /></td>
-                    <td>@Model.MealsList[i].MealName</td>
-                    <td>@String.Format("{0:0.00}", Model.MealsList[i].MealUnitPrice) PLN</td>
-                    <td><button class="btn btn-success" onclick="editMeal(event)">Edytuj pozycję</button></td>
+                    <td class="meal-name" onclick="editFieldMode(event)">@Model.MealsList[i].MealName</td>
+                    <td class="meal-price" onclick="editFieldMode(event)">@String.Format("{0:0.00}", Model.MealsList[i].MealUnitPrice) PLN</td>
                     <td><button class="btn btn-danger" onclick="removeMeal(event, @Model.MealsList[i].MealId)">Usuń pozycję</button></td>
                 </tr>
             }

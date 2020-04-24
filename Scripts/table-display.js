@@ -1,4 +1,7 @@
-﻿function removeTable(event, tableId) {
+﻿let storeData = "";
+let editState = 0;
+
+function removeTable(event, tableId) {
     var data = { TableId: tableId }
     $.ajax({
         type: "POST",
@@ -42,18 +45,23 @@ function addTable(event) {
     });
 }
 
-function editTable(event) {
-    $("#update-meal-form").remove();
-    $(`<tr id="update-meal-form">
-        <td><label for="edit-table-name">Nazwa stolika</label><input type="text" class="form-control" id="edit-table-name"/></td>
-        <td colspan="2" style="vertical-align: bottom;"><button class="btn btn-primary" onclick="updateTable(event)">Aktualizuj nazwę stolika</button></td>
-        </tr>`)
-        .insertAfter($(event.target).parent().parent());
+function editFieldMode(event) {
+    if (editState !== 1) {
+        editState = 1;
+        storeData = $(event.target).html();
+        $(event.target).html(`<input type="text" value="${event.target.innerText}" /><button onclick="updateTable(event)">Edit</button><button onclick="revertValue(event)">X</button>`);
+    }
+}
+
+function revertValue(event) {
+    $(event.target).parent().html(storeData);
+    editState = 0;
+    event.stopPropagation();
 }
 
 function updateTable(event) {
-    var tableId = $(event.target).parent().parent().prev().children(":first").children(":first").val();
-    var tableName = $("#edit-table-name").val();
+    var tableId = $(event.target).parent().parent().children("td:hidden").children().val();
+    var tableName = $(event.target).parent().children(":first").val();
     var data = { TableId: tableId, TableName: tableName};
     $.ajax({
         type: "PUT",
@@ -63,11 +71,12 @@ function updateTable(event) {
         dataType: "json",
         success: function (data) {
             alert("Pomyślnie zaktualizowano nazwę stolika");
-            $(event.target).parent().parent().prev().children(":nth-child(2)").html(data.TableName);
-            $("#update-meal-form").remove();
+            $(event.target).parent().html(data.TableName);
+            editState = 0;
         },
         error: function () {
             alert("Wystąpił błąd");
         }
     });
+    event.stopPropagation();
 }

@@ -5,7 +5,6 @@
 
     $("#add-meal").click(function () {
         $("#table-button").css('visibility', 'visible');
-        var tableBodyObjects = $("tbody tr");
         var mealItemId = $('#select-meal').val();
         var mealQuantity = $('#quantity').val();
         var mealNamePrice = $('#select-meal :selected').text().split(" | ");

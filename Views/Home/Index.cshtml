@@ -106,7 +106,7 @@ else
                                     </select>
                                     <label for="quantity">Ilość:</label>
                                     <input class="add-in-display" id="quantity_@i" type="number" name="quantity" />
-                                    <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addInDisplay(@Model.OrdersList[i].OrderId, @i)" />
+                                    <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addPosition(@Model.OrdersList[i].OrderId, @i)" />
                                 </form>
                             }
                             else
@@ -123,7 +123,7 @@ else
                                     </select>
                                     <label for="quantity">Ilość:</label>
                                     <input class="add-in-display" id="quantity_@i" type="number" name="quantity" />
-                                    <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addInDisplay(@Model.OrdersList[i].OrderId, @i)" />
+                                    <input type="button" class="btn btn-primary" value="Dodaj pozycję" onclick="addPosition(@Model.OrdersList[i].OrderId, @i)" />
                                 </form>
                             }
                         </td>
@@ -150,19 +150,16 @@ else
                                 <td id="UnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Meal.MealUnitPrice PLN</td>
                                 <td>@Model.OrdersList[i].OrderItems[j].Quantity</td>
                                 <td id="PositionUnitPrice_@i@j">@Model.OrdersList[i].OrderItems[j].Price PLN</td>
-
-
                                 if (Model.OrdersList[i].Status == Order.OrderStatus.BillPaid)
                                 {
                                     <td>
-                                        <input type="button" style="visibility:hidden" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, @Model.OrdersList[i].OrderItems[j].OrderItemId, '@i@j', @i);">
+                                        <input type="button" style="visibility:hidden" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, @Model.OrdersList[i].OrderItems[j].OrderItemId, @i, event);">
                                     </td>
-                                    <td></td>
                                 }
                                 else
                                 {
                                     <td>
-                                        <input type="button" style="visibility:visible" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].OrderItemId', '@i@j', @i);">
+                                        <input type="button" style="visibility:visible" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(@Model.OrdersList[i].OrderId, '@Model.OrdersList[i].OrderItems[j].OrderItemId', @i, event);">
                                     </td>
                                 }
 

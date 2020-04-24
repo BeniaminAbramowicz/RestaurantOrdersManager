@@ -118,6 +118,25 @@ namespace ASPNETapp2.Repositories
             } 
         }
 
+        public ResponseObject<OrderItem> AddPosition(OrderItem newPosition)
+        {
+            try
+            {
+                DBConnection.EntityMapper.BeginTransaction();
+                DBConnection.EntityMapper.Insert("AddOrderItems", newPosition);
+                OrderItem returnedPosition = FindOrderItemById(DBConnection.EntityMapper.QueryForObject<int>("ReturnOrderItem", "")).ResponseData;
+                double totalPrice = FindById(newPosition.OrderId).ResponseData.TotalPrice;
+                DBConnection.EntityMapper.Update("UpdateTotalPrice", new UpdateOrderPrice() { OrderId = newPosition.OrderId, NewPrice = totalPrice + newPosition.Price });
+                DBConnection.EntityMapper.CommitTransaction();
+                return new ResponseObject<OrderItem>() { ResponseData = returnedPosition, Message = "Added new item to order" };
+            }
+            catch
+            {
+                DBConnection.EntityMapper.RollBackTransaction();
+                return new ResponseObject<OrderItem>() { Message = "There was an error while adding new position to the order. Try again later" };
+            }
+        }
+
         public ResponseObject<Order> RemovePosition(int orderItemId, int orderId)
         {
             try

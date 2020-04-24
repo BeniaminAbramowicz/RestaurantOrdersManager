@@ -4,6 +4,8 @@ using ASPNETapp2.Models;
 using System.Web.Mvc;
 using ASPNETapp2.Services;
 using System;
+using System.Text.RegularExpressions;
+using IBatisNet.DataMapper.Configuration.Statements;
 
 namespace ASPNETapp2.Controllers
 {
@@ -79,9 +81,21 @@ namespace ASPNETapp2.Controllers
         }
 
         [HttpPut]
-        public JsonResult UpdateMeal(Meal meal)
+        public JsonResult UpdateMeal(int mealId, string mealData)
         {
-            Meal updatedMeal = _restaurantFacade.UpdateMeal(meal).ResponseData;
+            Meal updateData = new Meal()
+            {
+                MealId = mealId
+            };
+            if (Regex.IsMatch(mealData, @"^[0-9*#+.,]+$"))
+            { 
+                updateData.MealUnitPrice = Double.Parse(mealData);
+            }
+            else
+            {
+                updateData.MealName = mealData;
+            }
+            Meal updatedMeal = _restaurantFacade.UpdateMeal(updateData).ResponseData;
             return Json(updatedMeal);
         }
 

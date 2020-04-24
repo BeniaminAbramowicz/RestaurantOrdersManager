@@ -51,7 +51,7 @@ namespace ASPNETapp2.Controllers
         public JsonResult RemovePosition(int orderId, int orderItemId)
         {
             double price = _restaurantFacade.RemovePosition(orderItemId, orderId).ResponseData.TotalPrice;
-            return Json(new { data = price });
+            return Json(new { Data = price });
         }
 
         [HttpPost]
@@ -91,27 +91,21 @@ namespace ASPNETapp2.Controllers
 
         //}
 
-        //[HttpPost]
-        //public JsonResult AddToDisplay(MealItemDTO mealItem, int idOfOrder)
-        //{
-        //    string chosenTable = (string)TempData["ChosenTable"];
-        //    Meal theMeal = MealsList.theList.Find(x => x.MealId == mealItem.MealItemId);
-        //    List<Order> listOfOrders = (List<Order>)Session["ListOfOrders"];
-        //    Order order = listOfOrders.Find(y => y.OrderId == idOfOrder);
-        //    if(order.OrderItems.Any(k => k.Meal.MealId == mealItem.MealItemId))
-        //    {
-        //        order.OrderItems.Find(j => j.Meal.MealId == mealItem.MealItemId).Quantity += mealItem.MealQuantity;
-        //        order.OrderItems.Find(j => j.Meal.MealId == mealItem.MealItemId).Price += MealsList.theList.Find(l => l.MealId == mealItem.MealItemId).MealUnitPrice * mealItem.MealQuantity;
-        //    } else
-        //    {
-        //        order.OrderItems.Add(new OrderItem(theMeal, mealItem.MealQuantity, theMeal.MealUnitPrice * mealItem.MealQuantity));
-        //    }
-        //    order.TotalPrice += (theMeal.MealUnitPrice * mealItem.MealQuantity);
-        //    listOfOrders[listOfOrders.FindIndex(z => z.OrderId == idOfOrder)] = order;
-        //    Session["ListOfOrders"] = listOfOrders;
-        //    TempData["ChosenTable"] = chosenTable;
-        //    return Json("");
-        //}
+        [HttpPost]
+        public JsonResult AddPosition(int mealId, int quantity, int orderId)
+        {
+            Meal mealToAdd = _restaurantFacade.FindMealById(mealId).ResponseData;
+            OrderItem newPosition = new OrderItem()
+            {
+                Meal = mealToAdd,
+                Price = mealToAdd.MealUnitPrice * quantity,
+                Quantity = quantity,
+                OrderId = orderId
+            };
+            OrderItem newItem = _restaurantFacade.AddPosition(newPosition).ResponseData;
+            double totalPrice = _restaurantFacade.FindOrderById(orderId).ResponseData.TotalPrice;
+            return Json(new { Data = newItem, TotalPrice = totalPrice });
+        }
 
         //public ActionResult EditView(int orderId)
         //{

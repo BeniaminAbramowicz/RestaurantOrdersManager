@@ -154,7 +154,7 @@
     <Compile Include="Services\IOrdersService.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Services\OrdersService.cs" />
-    <Compile Include="Services\RestaurantFacade.cs" />
+    <Compile Include="Facades\RestaurantFacade.cs" />
     <Compile Include="Services\TablesService.cs" />
     <Compile Include="Services\MealsService.cs" />
   </ItemGroup>

@@ -54,7 +54,11 @@
       WHERE orderItemsId = #value#
     </statement>
     <statement id="UpdateOrderItem" parameterType="ASPNETapp2.Models.OrderItem">
-      
+      UPDATE orderItems SET
+      mealId = #Meal.MealId#,
+      quantity = #Quantity#,
+      price = #Price#
+      WHERE orderItemsId = #OrderItemId#
     </statement>
     <statement id="RemoveOrderItems" parameterType="int">
       DELETE FROM orderItems

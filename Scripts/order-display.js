@@ -15,9 +15,10 @@ function addPosition(orderId, passedValue) {
             $("#select-meal_" + passedValue).val("");
             $("#quantity_" + passedValue).val("");
             alert("Dodano pozycję do zamówienia");
-            var newMeal = `<tr><td>${data.Data.Meal.MealName}</td>
+            var newMeal = `<tr><td style="display:none"><input type="hidden" value="${data.Data.OrderItemId}"/></td>
+                <td class="order-meal-name" onclick="editFieldMode(event)">${data.Data.Meal.MealName}</td>
                 <td>${data.Data.Meal.MealUnitPrice} PLN</td>
-                <td>${data.Data.Quantity}</td>
+                <td onclick="editFieldMode(event)">${data.Data.Quantity}</td>
                 <td>${data.Data.Price} PLN</td>
                 <td>
                 <input type="button" style="visibility:visible" class="btn btn-warning" value="Usuń pozycję" onclick="removingPosition(${data.Data.OrderId}, ${data.Data.OrderItemId}, ${passedValue}, event)"
@@ -31,11 +32,16 @@ function addPosition(orderId, passedValue) {
     });
 }
 
-function editFieldMode(event) {
+function editFieldMode(event, positionNumber) {
     if (editState !== 1) {
         editState = 1;
         storeData = $(event.target).html();
-        $(event.target).html(`<input type="${$(event.target).attr("class") === "order-meal-name" ? "text" : "number"}" style="${$(event.target).attr("class") === "order-meal-name" ? "width:30rem" : "width:5rem"}" value="${event.target.innerText}" /><button onclick="updateOrderItem(event)">Edit</button><button onclick="revertValue(event)">X</button>`);
+        if ($(event.target).attr("class") === "order-meal-name") {
+            let selectMeal = $(".add-in-display:first").html();
+            $(event.target).html(`<select id="change-meal-select">${selectMeal}</select><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
+        } else {
+            $(event.target).html(`<input type="text" style="${$(event.target).attr("class") === "order-meal-name" ? "width:30rem" : "width:5rem"}" value="${event.target.innerText}" /><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
+        }
     }
 }
 
@@ -45,24 +51,32 @@ function revertValue(event) {
     event.stopPropagation();
 }
 
-function updateOrderItem(event) {
+function updateOrderItem(event, positionNumber) {
+    
     var orderItemId = $(event.target).parent().parent().children("td:hidden").children().val();
-    var orderData = $(event.target).parent().children(":first").val();
-    var data = { OrderItemId: orderItemId, OrderData: orderData };
+    var orderData = "";
+    if ($(event.target).parent().attr("class") === "order-meal-name") {
+        orderData = $(event.target).parent().children(":first").children("option:selected").text().split(" | ")[0];
+    } else {
+        orderData = $(event.target).parent().children(":first").val();
+    }
+    var itemData = { OrderItemId: orderItemId, OrderData: orderData };
     $.ajax({
         type: "PUT",
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(data),
-        url: "/MealAndTable/UpdateOrderItem",
+        data: JSON.stringify(itemData),
+        url: "/Order/UpdateOrderItem",
         dataType: "json",
         success: function (data) {
             alert("Pomyślnie zaktualizowano zamówienie");
             if ($(event.target).parent().attr("class") === "order-meal-name") {
-                $(event.target).parent().html(data.Meal.MealName);
-                $("#order-total-price_" + positionNumber).text("Cena zamówienia: " + val + " PLN")
+                $("#fourth_" + positionNumber).children(":first").children(":first").text("Cena zamówienia: " + data.TotalPrice + " PLN");
+                $(event.target).parent().next().text(data.Data.Price + " PLN");
+                $(event.target).parent().text(data.Data.Meal.MealName); 
             } else {
-                $(event.target).parent().html(data.Quantity);
-                $("#order-total-price_" + positionNumber).text("Cena zamówienia: " + val + " PLN")
+                $("#fourth_" + positionNumber).children(":first").children(":first").text("Cena zamówienia: " + data.TotalPrice + " PLN");
+                $(event.target).parent().next().text(data.Data.Price + " PLN");
+                $(event.target).parent().text(data.Data.Quantity);
             }
             editState = 0;
         },

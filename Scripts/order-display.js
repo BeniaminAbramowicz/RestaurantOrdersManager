@@ -16,8 +16,7 @@ function addPosition(orderId, passedValue) {
             $("#quantity_" + passedValue).val("");
             alert("Dodano pozycję do zamówienia");
             var newMeal = `<tr><td style="display:none"><input type="hidden" value="${data.Data.OrderItemId}"/></td>
-                <td class="order-meal-name" onclick="editFieldMode(event)">${data.Data.Meal.MealName}</td>
-                <td>${data.Data.Meal.MealUnitPrice} PLN</td>
+                <td colspan="2" class="order-meal-name" onclick="editFieldMode(event)">${data.Data.Meal.MealName} | ${data.Data.Meal.MealUnitPrice} PLN</td>
                 <td onclick="editFieldMode(event)">${data.Data.Quantity}</td>
                 <td>${data.Data.Price} PLN</td>
                 <td>
@@ -52,7 +51,6 @@ function revertValue(event) {
 }
 
 function updateOrderItem(event, positionNumber) {
-    
     var orderItemId = $(event.target).parent().parent().children("td:hidden").children().val();
     var orderData = "";
     if ($(event.target).parent().attr("class") === "order-meal-name") {
@@ -71,8 +69,8 @@ function updateOrderItem(event, positionNumber) {
             alert("Pomyślnie zaktualizowano zamówienie");
             if ($(event.target).parent().attr("class") === "order-meal-name") {
                 $("#fourth_" + positionNumber).children(":first").children(":first").text("Cena zamówienia: " + data.TotalPrice + " PLN");
-                $(event.target).parent().next().text(data.Data.Price + " PLN");
-                $(event.target).parent().text(data.Data.Meal.MealName); 
+                $(event.target).parent().siblings(".position-price").text(data.Data.Price + " PLN");
+                $(event.target).parent().text(data.Data.Meal.MealName + " | " + data.Data.Meal.MealUnitPrice + " PLN");
             } else {
                 $("#fourth_" + positionNumber).children(":first").children(":first").text("Cena zamówienia: " + data.TotalPrice + " PLN");
                 $(event.target).parent().next().text(data.Data.Price + " PLN");

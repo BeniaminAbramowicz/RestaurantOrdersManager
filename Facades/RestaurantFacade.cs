@@ -110,5 +110,10 @@ namespace ASPNETapp2.Facades
         {
             return _ordersService.UpdateOrderItem(updatedOrderItem);
         }
+
+        public ResponseObject<Order> UpdateStatus(int orderId)
+        {
+            return _ordersService.UpdateStatus(orderId);
+        }
     }
 }

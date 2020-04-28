@@ -2,9 +2,9 @@
 let editState = 0;
 
 function addPosition(orderId, passedValue) {
-    var mealId = $("#select-meal_" + passedValue).val();
-    var quantity = $("#quantity_" + passedValue).val();
-    var data = { MealId: mealId, Quantity: quantity, OrderId: orderId };
+    let mealId = $("#select-meal_" + passedValue).val();
+    let quantity = $("#quantity_" + passedValue).val();
+    let data = { MealId: mealId, Quantity: quantity, OrderId: orderId };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -15,7 +15,7 @@ function addPosition(orderId, passedValue) {
             $("#select-meal_" + passedValue).val("");
             $("#quantity_" + passedValue).val("");
             alert("Dodano pozycję do zamówienia");
-            var newMeal = `<tr><td style="display:none"><input type="hidden" value="${data.Data.OrderItemId}"/></td>
+            let newMeal = `<tr><td style="display:none"><input type="hidden" value="${data.Data.OrderItemId}"/></td>
                 <td colspan="2" class="order-meal-name" onclick="editFieldMode(event)">${data.Data.Meal.MealName} | ${data.Data.Meal.MealUnitPrice} PLN</td>
                 <td onclick="editFieldMode(event)">${data.Data.Quantity}</td>
                 <td>${data.Data.Price} PLN</td>
@@ -31,17 +31,19 @@ function addPosition(orderId, passedValue) {
     });
 }
 
-function editFieldMode(event, positionNumber) {
-    if (editState !== 1) {
-        editState = 1;
-        storeData = $(event.target).html();
-        if ($(event.target).attr("class") === "order-meal-name") {
-            let selectMeal = $(".add-in-display:first").html();
-            $(event.target).html(`<select id="change-meal-select">${selectMeal}</select><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
-        } else {
-            $(event.target).html(`<input type="text" style="${$(event.target).attr("class") === "order-meal-name" ? "width:30rem" : "width:5rem"}" value="${event.target.innerText}" /><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
+function editFieldMode(event, positionNumber, orderStatus) {
+    if (orderStatus === "PendingPayment") {
+        if (editState !== 1) {
+            editState = 1;
+            storeData = $(event.target).html();
+            if ($(event.target).attr("class") === "order-meal-name") {
+                let selectMeal = $(".add-in-display:first").html();
+                $(event.target).html(`<select id="change-meal-select">${selectMeal}</select><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
+            } else {
+                $(event.target).html(`<input type="text" style="${$(event.target).attr("class") === "order-meal-name" ? "width:30rem" : "width:5rem"}" value="${event.target.innerText}" /><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
+            }
         }
-    }
+    }  
 }
 
 function revertValue(event) {
@@ -51,14 +53,14 @@ function revertValue(event) {
 }
 
 function updateOrderItem(event, positionNumber) {
-    var orderItemId = $(event.target).parent().parent().children("td:hidden").children().val();
-    var orderData = "";
+    let orderItemId = $(event.target).parent().parent().children("td:hidden").children().val();
+    let orderData = "";
     if ($(event.target).parent().attr("class") === "order-meal-name") {
         orderData = $(event.target).parent().children(":first").children("option:selected").text().split(" | ")[0];
     } else {
         orderData = $(event.target).parent().children(":first").val();
     }
-    var itemData = { OrderItemId: orderItemId, OrderData: orderData };
+    let itemData = { OrderItemId: orderItemId, OrderData: orderData };
     $.ajax({
         type: "PUT",
         contentType: "application/json; charset=utf-8",
@@ -86,7 +88,7 @@ function updateOrderItem(event, positionNumber) {
 }
 
 function removingPosition(orderId, orderItemId, positionNumber, event) {
-    var ids = { OrderId: orderId, OrderItemId: orderItemId };
+    let ids = { OrderId: orderId, OrderItemId: orderItemId };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -106,7 +108,7 @@ function removingPosition(orderId, orderItemId, positionNumber, event) {
     });
 }
 function removeOrder(orderId, positionNumber) {
-    var items = { OrderId: orderId };
+    let items = { OrderId: orderId };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",

@@ -83,6 +83,11 @@
       FROM orderItems
       ORDER BY orderItemsId DESC
     </statement>
+    <statement id="ChangeStatusToPaid" parameterType="int">
+      UPDATE orders SET
+      status = 'BillPaid'
+      WHERE orderId = #value#
+    </statement>
   </statements>
   <resultMaps>
     <resultMap id="OrderMap" class="ASPNETapp2.Models.Order" groupBy="OrderId">

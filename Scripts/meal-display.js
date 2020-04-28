@@ -2,7 +2,7 @@
 let editState = 0;
 
 function removeMeal(event, mealId) {
-    var data = { MealId: mealId }
+    let data = { MealId: mealId }
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -21,9 +21,9 @@ function removeMeal(event, mealId) {
 
 function addMeal(event) {
     event.preventDefault();
-    var mealName = $("#meal-name").val();
-    var mealUnitPrice = $("#meal-unit-price").val();
-    var data = { MealName: mealName, MealUnitPrice: mealUnitPrice };
+    let mealName = $("#meal-name").val();
+    let mealUnitPrice = $("#meal-unit-price").val();
+    let data = { MealName: mealName, MealUnitPrice: mealUnitPrice };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -61,9 +61,9 @@ function revertValue(event) {
 }
 
 function updateMeal(event) {
-    var mealId = $(event.target).parent().parent().children("td:hidden").children().val();
-    var mealData = $(event.target).parent().children(":first").val();
-    var data = { MealId: mealId, MealData: mealData };
+    let mealId = $(event.target).parent().parent().children("td:hidden").children().val();
+    let mealData = $(event.target).parent().children(":first").val();
+    let data = { MealId: mealId, MealData: mealData };
     $.ajax({
         type: "PUT",
         contentType: "application/json; charset=utf-8",

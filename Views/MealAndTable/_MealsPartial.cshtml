@@ -1,17 +1,17 @@
 ﻿<div class="container meal-container">
     <form onsubmit="addMeal(event)" class="new-meal-table-form">
-        <label for="meal-name">Nazwa dania</label>
+        <label for="meal-name">Meal name</label>
         <input class="form-input" type="text" id="meal-name" />
-        <label for="meal-unit-price">Cena dania (PLN)</label>
+        <label for="meal-unit-price">Meal price (PLN)</label>
         <input class="form-input" type="text" id="meal-unit-price" />
-        <input type="submit" class="btn btn-primary" value="Dodaj danie" />
+        <input type="submit" class="btn btn-primary" value="Add Meal" />
     </form>
     <table id="table" class="table">
         <thead>
             <tr>
-                <td>Nazwa dania</td>
-                <td>Cena dania</td>
-                <td>Usuń Danie</td>
+                <td>Meal name</td>
+                <td>Meal price</td>
+                <td>Remove meal</td>
             </tr>
         </thead>
         <tbody>
@@ -21,7 +21,7 @@
                     <td style="display: none"><input type="hidden" value="@Model.MealsList[i].MealId" /></td>
                     <td class="meal-name" onclick="editFieldMode(event)">@Model.MealsList[i].MealName</td>
                     <td class="meal-price" onclick="editFieldMode(event)">@String.Format("{0:0.00}", Model.MealsList[i].MealUnitPrice) PLN</td>
-                    <td><button class="btn btn-danger" onclick="removeMeal(event, @Model.MealsList[i].MealId)">Usuń pozycję</button></td>
+                    <td><button class="btn btn-danger" onclick="removeMeal(event, @Model.MealsList[i].MealId)">Remove position</button></td>
                 </tr>
             }
         </tbody>

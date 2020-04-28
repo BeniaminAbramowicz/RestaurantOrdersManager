@@ -203,17 +203,21 @@ namespace ASPNETapp2.Repositories
             
         }
 
-        public ResponseObject<Order> PayForOrder(int orderId)
+        public ResponseObject<Order> UpdateStatus(int orderId)
         {
             try
             {
-                DBConnection.EntityMapper.Update("PayForOrder", orderId);
-                return new ResponseObject<Order>() { Message = "Order status has been changed to Paid" };
+                DBConnection.EntityMapper.BeginTransaction();
+                DBConnection.EntityMapper.Update("ChangeStatusToPaid", orderId);
+                Order order = FindById(orderId).ResponseData;
+                DBConnection.EntityMapper.CommitTransaction();
+                return new ResponseObject<Order>() { ResponseData = order, Message = "Order status has been changed to 'bill paid'" };
             }
             catch
             {
-                return new ResponseObject<Order>() { Message = "There was an error while updating status of the order. Try again later" };
-            } 
+                DBConnection.EntityMapper.RollBackTransaction();
+                return new ResponseObject<Order>() { Message = "There was an error while updating order's status. Try again later" };
+            }
         }
     }
 }

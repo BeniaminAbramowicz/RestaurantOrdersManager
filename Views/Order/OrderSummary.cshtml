@@ -1,54 +1,23 @@
 ﻿@model ASPNETapp2.Models.Order
 @{
-    ViewBag.Title = "Podsumowanie zamówienia";
+    ViewBag.Title = "Order summary";
 }
 
     <h2>
-        Podsumowanie zamówienia nr: @Model.OrderId <br />
-        dla stolika: @switch (Model.Table.TableId)
-        {
-            case 1:
-                <span>Niebieskiego</span>
-                break;
-            case 2:
-                <span>Zielonego</span>
-                break;
-            case 3:
-                <span>Żółtego</span>
-                break;
-            case 4:
-                <span>Czerwonego</span>
-                break;
-            case 5:
-                <span>Fioletowego</span>
-                break;
-            case 6:
-                <span>Pomarańczowego</span>
-                break;
-            case 7:
-                <span>Turkusowego</span>
-                break;
-        }
+        Order summary for nr: @Model.OrderId <br />
+        for table: @Model.Table.TableName
     </h2>
 <br />
-<h4>Lista dań:</h4>
+<h4>Positions list:</h4>
 <ol>
-    @for(int i = 0; i < Model.OrderItems.Count; i++)
+    @for (int i = 0; i < Model.OrderItems.Count; i++)
     {
-        if (i == Model.OrderItems.Count - 1)
-        {
-            <li>Dodatkowa pozycja: @Model.OrderItems[i].Meal.MealName | 
-                Wartość napiwku: @Model.OrderItems[i].Price PLN
-            </li>
-        }
-        else
-        {
-        <li>Nazwa dania: @Model.OrderItems[i].Meal.MealName | 
-            Cena jednostkowa: @Model.OrderItems[i].Meal.MealUnitPrice PLN | 
-            Ilość: @Model.OrderItems[i].Quantity | 
-            Cena pozycji: @Model.OrderItems[i].Price PLN
+        <li>
+            <b>Meal name:</b> @Model.OrderItems[i].Meal.MealName |
+            <b>Unit price:</b> @Model.OrderItems[i].Meal.MealUnitPrice PLN |
+            <b>Quantity:</b>  @Model.OrderItems[i].Quantity |
+            <b>Position price:</b> @Model.OrderItems[i].Price PLN
         </li>
-        }
     }
 </ol>
 <br />

@@ -8,6 +8,6 @@ namespace ASPNETapp2.Services
         ResponseObject<OrderItem> FindOrderItemById(int orderItemId);
         ResponseObject<OrderItem> AddPosition(OrderItem newPosition);
         ResponseObject<OrderItem> UpdateOrderItem(OrderItem updatedOrderItem);
-        ResponseObject<Order> PayForOrder(int orderId);
+        ResponseObject<Order> UpdateStatus(int orderId);
     }
 }

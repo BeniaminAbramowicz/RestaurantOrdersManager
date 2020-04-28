@@ -19,7 +19,7 @@ namespace ASPNETapp2.Controllers
 
         public ActionResult Index()
         {
-            int? choice = Int32.Parse(TempData["choice"] == null ? "0" : TempData["choice"].ToString());
+            int choice = Int32.Parse(TempData["choice"] == null ? "0" : TempData["choice"].ToString());
             switch (choice)
             {
                 case 1:

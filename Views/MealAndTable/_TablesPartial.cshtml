@@ -1,14 +1,14 @@
 ﻿<div class="table-container">
     <form onsubmit="addTable(event)" class="new-meal-table-form">
-        <label for="table-name">Nazwa stolika</label>
+        <label for="table-name">Table name</label>
         <input class="form-input" type="text" id="table-name" />
-        <input type="submit" class="btn btn-primary" value="Dodaj stolik" />
+        <input type="submit" class="btn btn-primary" value="Add table" />
     </form>
     <table id="table" class="table">
         <thead>
             <tr>
-                <td>Nazwa stolika</td>
-                <td>Usuń Stolik</td>
+                <td>Table name</td>
+                <td>Remove table</td>
             </tr>
         </thead>
         <tbody>
@@ -17,7 +17,7 @@
                 <tr>
                     <td style="display: none"><input type="hidden" value="@Model.TablesList[i].TableId" /></td>
                     <td class="meal-details" onclick="editFieldMode(event)">@Model.TablesList[i].TableName</td>
-                    <td><button class="btn btn-danger" onclick="removeTable(event, @Model.TablesList[i].TableId)">Usuń pozycję</button></td>
+                    <td><button class="btn btn-danger" onclick="removeTable(event, @Model.TablesList[i].TableId)">Remove position</button></td>
                 </tr>
             }
         </tbody>

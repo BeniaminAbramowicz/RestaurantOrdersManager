@@ -8,6 +8,6 @@ namespace ASPNETapp2.Repositories
         ResponseObject<OrderItem> UpdateOrderItem(OrderItem updatedOrderItem);
         ResponseObject<Order> RemovePosition(int orderItemId, int orderId);
         ResponseObject<OrderItem> AddPosition(OrderItem newPosition);
-        ResponseObject<Order> PayForOrder(int orderId);
+        ResponseObject<Order> UpdateStatus(int orderId);
     }
 }

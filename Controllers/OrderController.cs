@@ -63,36 +63,6 @@ namespace ASPNETapp2.Controllers
             return Json("");
         }
 
-        // [HttpPost]
-        // public ActionResult GetSummary(int orderId)
-        // {
-        //     TempData["orderId"] = orderId;
-        //     return Redirect("OrderSummary");
-        // }
-        //public ActionResult OrderSummary()
-        //{
-        //    int orderId = (int)TempData["orderId"];
-        //    List<Order> currentList = (List<Order>)Session["ListOfOrders"];
-        //    Order summaryOrder = currentList.Find(x => x.OrderId == orderId);
-        //    if (summaryOrder.OrderItems.Exists(z => z.Meal.MealName.Equals("Napiwek 5%")))
-        //    {
-        //        TempData["orderId"] = orderId;
-        //        return View(summaryOrder);
-        //    }
-        //    else
-        //    {
-        //        OrderItem tipItem = new OrderItem(new Meal("Napiwek 5%"), Math.Round(summaryOrder.TotalPrice * 0.05, 2));
-        //        summaryOrder.TotalPrice = Math.Round(summaryOrder.TotalPrice * 1.05, 2);  
-        //        summaryOrder.OrderItems.Add(tipItem);
-        //        summaryOrder.Status = Order.OrderStatus.BillPaid;
-        //        currentList[currentList.FindIndex(y => y.OrderId == orderId)] = summaryOrder;
-        //        Session["ListOfOrders"] = currentList;
-        //        TempData["orderId"] = orderId;
-        //        return View(summaryOrder);
-        //    }
-
-        //}
-
         [HttpPost]
         public JsonResult AddPosition(int mealId, int quantity, int orderId)
         {
@@ -128,6 +98,20 @@ namespace ASPNETapp2.Controllers
             OrderItem updatedOrder = _restaurantFacade.UpdateOrderItem(orderItem).ResponseData;
             double totalPrice = _restaurantFacade.FindOrderById(orderItem.OrderId).ResponseData.TotalPrice;
             return Json(new { Data = updatedOrder, TotalPrice = totalPrice });
+        }
+
+        [HttpPost]
+        public ActionResult GetSummary(int orderId)
+        {
+            TempData["orderId"] = orderId;
+            _restaurantFacade.UpdateStatus(orderId);
+            return Redirect("OrderSummary");
+        }
+        public ActionResult OrderSummary()
+        {
+            int orderId = Int32.Parse(TempData["orderId"] == null ? "0" : TempData["orderId"].ToString());
+            Order order = _restaurantFacade.FindOrderById(orderId).ResponseData;
+            return View(order);
         }
     }
 }

@@ -2,7 +2,7 @@
 let editState = 0;
 
 function removeTable(event, tableId) {
-    var data = { TableId: tableId }
+    let data = { TableId: tableId }
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -21,8 +21,8 @@ function removeTable(event, tableId) {
 
 function addTable(event) {
     event.preventDefault();
-    var tableName = $("#table-name").val();
-    var data = { TableName: tableName };
+    let tableName = $("#table-name").val();
+    let data = { TableName: tableName };
     $.ajax({
         type: "POST",
         contentType: "application/json; charset=utf-8",
@@ -60,9 +60,9 @@ function revertValue(event) {
 }
 
 function updateTable(event) {
-    var tableId = $(event.target).parent().parent().children("td:hidden").children().val();
-    var tableName = $(event.target).parent().children(":first").val();
-    var data = { TableId: tableId, TableName: tableName};
+    let tableId = $(event.target).parent().parent().children("td:hidden").children().val();
+    let tableName = $(event.target).parent().children(":first").val();
+    let data = { TableId: tableId, TableName: tableName};
     $.ajax({
         type: "PUT",
         contentType: "application/json; charset=utf-8",

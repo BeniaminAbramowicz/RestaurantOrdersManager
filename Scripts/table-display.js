@@ -49,7 +49,7 @@ function editFieldMode(event) {
     if (editState !== 1) {
         editState = 1;
         storeData = $(event.target).html();
-        $(event.target).html(`<input type="text" value="${event.target.innerText}" /><button onclick="updateTable(event)">Edit</button><button onclick="revertValue(event)">X</button>`);
+        $(event.target).html(`<input type="text" value="${event.target.innerText}" /><button class="btn btn-success update-item-button" onclick="updateTable(event)">Edit</button><button class="btn btn-primary update-item-button" onclick="revertValue(event)">X</button>`);
     }
 }
 

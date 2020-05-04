@@ -1,13 +1,13 @@
 ﻿using ASPNETapp2.Models;
 
-namespace ASPNETapp2.Repositories
+namespace ASPNETapp2.RepositoriesEF
 {
-    public interface IRepository<T,K>
+    interface IRepository<T,K>
     {
         T FindAll(SearchCondition condition);
         T FindById(int id);
         T Add(K newObject);
         T Remove(int id);
-        T Update(K updatedObject);
+        T Update(K updatedObject); 
     }
 }

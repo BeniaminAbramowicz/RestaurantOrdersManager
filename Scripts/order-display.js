@@ -38,9 +38,9 @@ function editFieldMode(event, positionNumber, orderStatus) {
             storeData = $(event.target).html();
             if ($(event.target).attr("class") === "order-meal-name") {
                 let selectMeal = $(".add-in-display:first").html();
-                $(event.target).html(`<select id="change-meal-select">${selectMeal}</select><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
+                $(event.target).html(`<select id="change-meal-select">${selectMeal}</select><button class="btn btn-success update-item-button" onclick="updateOrderItem(event,${positionNumber})">Edit</button><button class="btn btn-primary update-item-button" onclick="revertValue(event)">X</button>`);
             } else {
-                $(event.target).html(`<input type="text" style="${$(event.target).attr("class") === "order-meal-name" ? "width:30rem" : "width:5rem"}" value="${event.target.innerText}" /><button onclick="updateOrderItem(event,${positionNumber})">Edit</button><button onclick="revertValue(event)">X</button>`);
+                $(event.target).html(`<input type="text" style="${$(event.target).attr("class") === "order-meal-name" ? "width:30rem" : "width:5rem"}" value="${event.target.innerText}" /><button class="btn btn-success update-item-button" onclick="updateOrderItem(event,${positionNumber})">Edit</button><button class="btn btn-primary update-item-button" onclick="revertValue(event)">X</button>`);
             }
         }
     }  

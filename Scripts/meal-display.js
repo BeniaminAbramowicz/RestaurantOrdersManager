@@ -50,7 +50,7 @@ function editFieldMode(event) {
     if (editState !== 1) {
         editState = 1;
         storeData = $(event.target).html();
-        $(event.target).html(`<input type="text" value="${$(event.target).attr("class") === "meal-name" ? event.target.innerText : $(event.target).text().split(" ")[0] }" /><button onclick="updateMeal(event)">Edit</button><button onclick="revertValue(event)">X</button>`);
+        $(event.target).html(`<input type="text" value="${$(event.target).attr("class") === "meal-name" ? event.target.innerText : $(event.target).text().split(" ")[0] }" /><button class="btn btn-success update-item-button" onclick="updateMeal(event)">Edit</button><button class="btn btn-primary update-item-button" onclick="revertValue(event)">X</button>`);
     }
 }
 
